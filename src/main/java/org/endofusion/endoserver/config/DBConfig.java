@@ -16,7 +16,7 @@ public class DBConfig {
         HikariConfig config = new HikariConfig();
         HikariDataSource ds;
      // config.setJdbcUrl("jdbc:mysql://localhost:3306/endo?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC");
-        config.setJdbcUrl("postgres://otijcczdwueera:d187dba3ff481ebf5dd93e9d55d8b5e01b51df2cd30eca0f97998b4e7c56d741@ec2-52-73-184-24.compute-1.amazonaws.com:5432/ddc63hifqf59ok");
+        config.setJdbcUrl("jdbc:postgres://otijcczdwueera:d187dba3ff481ebf5dd93e9d55d8b5e01b51df2cd30eca0f97998b4e7c56d741@ec2-52-73-184-24.compute-1.amazonaws.com:5432/ddc63hifqf59ok");
         config.setUsername("otijcczdwueera");
         config.setPassword("d187dba3ff481ebf5dd93e9d55d8b5e01b51df2cd30eca0f97998b4e7c56d741");
         ds = new HikariDataSource(config);
