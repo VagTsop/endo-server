@@ -19,27 +19,8 @@ public class DBConfig {
     @Value("${spring.datasource.password}")
     private String dbPassword;
 
-    @Profile("dev")
     @Bean
-    public DataSource getDevDataSource() {
-        HikariConfig config = new HikariConfig();
-        HikariDataSource ds;
-        config.setJdbcUrl(dbUrl);
-        config.setUsername(dbUsername);
-        config.setPassword(dbPassword);
-        ds = new HikariDataSource(config);
-        return ds;
-    }
-    @Profile("dev")
-    @Bean
-    public NamedParameterJdbcTemplate namedParamDevJdbcTemplate() {
-        NamedParameterJdbcTemplate namedParamJdbcTemplate =
-                new NamedParameterJdbcTemplate(getDevDataSource());
-        return namedParamJdbcTemplate;
-    }
-    @Profile("prod")
-    @Bean
-    public DataSource getProdDataSource() {
+    public DataSource getDataSource() {
         HikariConfig config = new HikariConfig();
         HikariDataSource ds;
         config.setJdbcUrl(dbUrl);
@@ -48,14 +29,13 @@ public class DBConfig {
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        ds = new HikariDataSource(config);//
+        ds = new HikariDataSource(config);
         return ds;
     }
-    @Profile("prod")
     @Bean
-    public NamedParameterJdbcTemplate namedParamProdJdbcTemplate() {
+    public NamedParameterJdbcTemplate namedParamDevJdbcTemplate() {
         NamedParameterJdbcTemplate namedParamJdbcTemplate =
-                new NamedParameterJdbcTemplate(getProdDataSource());
+                new NamedParameterJdbcTemplate(getDataSource());
         return namedParamJdbcTemplate;
     }
 }
