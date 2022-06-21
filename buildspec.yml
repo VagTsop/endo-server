@@ -1,0 +1,24 @@
+spring:
+  session:
+    jdbc:
+      initialize-schema: always
+  datasource:
+    username: root
+    url: jdbc:mysql://endoaws.cfc5eajyvbwx.us-east-2.rds.amazonaws.com:3306/endoAWS?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    password: shadowdancer6653!6
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+  profiles:
+    active: prod
+management:
+  security:
+    enabled: 'false'
+security:
+  basic:
+    enabled: 'false'
+server:
+  port: '5000'

@@ -1,7 +1,0 @@
-server:
-    port: 5000
-spring:
-    datasource:
-        password: shadowdancer6653!6
-        url: jdbc:mysql://endoaws.cfc5eajyvbwx.us-east-2.rds.amazonaws.com:3306/endoAWS?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC
-        username: root
