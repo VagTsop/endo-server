@@ -76,7 +76,7 @@ public class InstrumentController {
         return ResponseEntity.status(HttpStatus.OK).body(instrumentService.updateInstrument(instrumentDto));
     }
 
-    @RequestMapping("")
+    @RequestMapping("/delete-instrument")
     public ResponseEntity<Boolean> deleteInstrument(@RequestBody Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(instrumentService.deleteInstrument(id));
     }
