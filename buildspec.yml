@@ -17,12 +17,28 @@ spring:
     active: prod
 management:
   security:
-    enabled: 'false'
+    enabled: "false"
 security:
   basic:
-    enabled: 'false'
+    enabled: "false"
 server:
-  port: '5000'
+  port: "5000"
+phases:
+  install:
+    runtime-versions:
+      java: corretto8
+  pre_build:
+    commands:
+      - echo In the pre_build phase...
+  build:
+    commands:
+      - echo Build started on `date`
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - mvn package
+      - mv target/endo-server-0.0.1-SNAPSHOT.jar endo-server-0.0.1-SNAPSHOT.jar
 artifacts:
   files:
-    - '**/*'
+    - endo-server-0.0.1-SNAPSHOT.jar
+    - .ebextensions/**/*
