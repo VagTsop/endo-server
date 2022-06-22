@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository("InstrumentSeriesRepository")
-public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepository {//
+public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepository {
 
     @Autowired
     protected NamedParameterJdbcTemplate namedParameterJdbcTemplate;
