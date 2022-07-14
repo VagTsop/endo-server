@@ -23,13 +23,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-// JWTTokenProvider --> Generates token, verify user token and user information
 public class JWTTokenProvider {
     @Value("${jwt.secret}")
-    private String secret; // usually you would have this in some secure server and then you would have it propably in your property file and then you would ge that information each time you need from that secure server.
-    // if this is compromised all the token can be decoded and you can see everything all the information and the token in plain text
+    private String secret;
 
-    // 1 - after user succesfully authenticated generate the token - takes a userprinciple when they logged in and returns a token
     public String generateJwtToken(UserPrincipal userPrincipal) {
         String[] claims = getClaimsFromUser(userPrincipal);
         return JWT.create().withIssuer(ENDOFUSION_MANAGEMENT_PLATFORM)
@@ -41,8 +38,6 @@ public class JWTTokenProvider {
                 .sign(HMAC512(secret.getBytes()));
     }
 
-    // 3 it gets the token and from the token we will need to get all the authorities. For example when the user is tying to aceess information we need.
-    // Determines what authorities that they have before we can let them access cartain thngs
     public List<GrantedAuthority> getAuthorities(String token) {
         String[] claims = getClaimsFromToken(token);
         return stream(claims).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
@@ -70,15 +65,11 @@ public class JWTTokenProvider {
         return expiration.before(new Date());
     }
 
-   //stream --> technically loop over some collection - claims is an array so we call stream -
-   // we call map because we want to transform every single item in the actual collection
-
     private String[] getClaimsFromToken(String token) {
         JWTVerifier verifier = getJWTVerifier();
         return verifier.verify(token).getClaim(AUTHORITIES).asArray(String.class);
     }
 
-    //4
     private JWTVerifier getJWTVerifier() {
         JWTVerifier verifier;
         try {
@@ -90,7 +81,6 @@ public class JWTTokenProvider {
         return verifier;
     }
 
-    // 2 - takes the claims from user that has succesfully authenticate
     private String[] getClaimsFromUser(UserPrincipal user) {
         List<String> authorities = new ArrayList<>();
         for (GrantedAuthority grantedAuthority : user.getAuthorities()) {

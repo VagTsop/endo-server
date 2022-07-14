@@ -80,6 +80,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return user;
     }
 
+    @Override
+    public List<User> getUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User findUserByUsername(String username) {
+        return userRepository.findUserByUsername(username);
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return userRepository.findUserByEmail(email);
+    }
+
     private String getTemporaryProfileImageUrl() {
         return ServletUriComponentsBuilder.fromCurrentContextPath().path(DEFAULT_USER_IMAGE_PATH).toUriString();
     }
@@ -88,7 +103,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return passwordEncoder.encode(password);
     }
 
-
     private String generatePassword() {
         return RandomStringUtils.randomNumeric(10);
     }
@@ -96,7 +110,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private String generateUserId() {
         return RandomStringUtils.randomNumeric(10);
     }
-
 
     private User validateNewUsernameAndEmail(String currentUsername, String newUsername, String newEmail) throws UserNotFoundException, UsernameExistException, EmailExistException {
         User userByNewUsername = findUserByUsername(newUsername);
@@ -123,20 +136,5 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             }
             return null;
         }
-    }
-
-    @Override
-    public List<User> getUsers() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public User findUserByUsername(String username) {
-        return userRepository.findUserByUsername(username);
-    }
-
-    @Override
-    public User findUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
     }
 }
