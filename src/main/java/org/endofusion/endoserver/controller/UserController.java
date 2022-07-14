@@ -40,6 +40,12 @@ public class UserController extends ExceptionHandling {
         return new ResponseEntity<>(loginUser, jwtHeader, OK);
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<User> register(@RequestBody User user) throws UserNotFoundException, UsernameExistException, EmailExistException {
+        User newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail());
+        return new ResponseEntity<>(newUser, HttpStatus.OK);
+    }
+
     private void authenticate(String username, String password) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
     }
@@ -48,12 +54,5 @@ public class UserController extends ExceptionHandling {
         HttpHeaders headers = new HttpHeaders();
         headers.add(JWT_TOKEN_HEADER, jwtTokenProvider.generateJwtToken(user));
         return headers;
-    }
-
-
-    @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) throws UserNotFoundException, UsernameExistException, EmailExistException {
-        User newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail());
-        return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
 }
