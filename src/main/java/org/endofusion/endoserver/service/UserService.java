@@ -5,10 +5,11 @@ import org.endofusion.endoserver.exception.domain.EmailExistException;
 import org.endofusion.endoserver.exception.domain.UserNotFoundException;
 import org.endofusion.endoserver.exception.domain.UsernameExistException;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 public interface UserService {
-    User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException;
+    User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException;
 
     List<User> getUsers();
 

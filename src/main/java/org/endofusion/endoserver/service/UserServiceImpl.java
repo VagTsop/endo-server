@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.endofusion.endoserver.domain.User;
 import org.endofusion.endoserver.domain.UserPrincipal;
 import org.endofusion.endoserver.exception.domain.EmailExistException;
+import org.endofusion.endoserver.exception.domain.EmailNotFoundException;
 import org.endofusion.endoserver.exception.domain.UserNotFoundException;
 import org.endofusion.endoserver.exception.domain.UsernameExistException;
 import org.endofusion.endoserver.repository.UserRepository;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -35,13 +37,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private LoginAttemptService loginAttemptService;
-
+    private EmailService emailService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, LoginAttemptService loginAttemptService) {
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, LoginAttemptService loginAttemptService, EmailService emailService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.loginAttemptService = loginAttemptService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -62,7 +65,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException {
+    public User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException {
         validateNewUsernameAndEmail(StringUtils.EMPTY, username, email);
         User user = new User();
         user.setUserId(generateUserId());
@@ -81,6 +84,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setProfileImageUrl(getTemporaryProfileImageUrl());
         userRepository.save(user);
         LOGGER.info(NEW_USER_PASSWORD + password);
+        emailService.sendNewPasswordEmail(firstName,password,email);
         return user;
     }
 
