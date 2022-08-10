@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
-    User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException;
+    User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException;
 
     List<User> getUsers();
 
@@ -23,7 +23,7 @@ public interface UserService {
 
     void deleteUser(String username) throws IOException;
 
-    void resetPassword(String email) throws MessagingException, EmailNotFoundException;
+    void resetPassword(String email) throws MessagingException, EmailNotFoundException, IOException;
 
     User updateProfileImage(String username, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException;
 }
