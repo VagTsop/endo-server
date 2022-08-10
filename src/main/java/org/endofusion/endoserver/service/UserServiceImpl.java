@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException {
+    public User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException {
         validateNewUsernameAndEmail(EMPTY, username, email);
         User user = new User();
         user.setUserId(generateUserId());
@@ -135,7 +135,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void resetPassword(String email) throws MessagingException, EmailNotFoundException {
+    public void resetPassword(String email) throws MessagingException, EmailNotFoundException, IOException {
         User user = userRepository.findUserByEmail(email);
         if (user == null) {
             throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
