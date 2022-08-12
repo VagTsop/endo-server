@@ -24,12 +24,14 @@ public class User implements Serializable {
                                           // permissions        // permissions
     private String role; // ROLE_USER{ read, edit }, ROLE_ADMIN { delete }
     private String[] authorities;
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
     private boolean isActive;
     private boolean isNotLocked;
 
     public User() {}
 
-    public User(Long id, String userId, String firstName, String lastName, String username, String password, String email, String profileImageUrl, Date lastLoginDate, Date lastLoginDateDisplay, Date joinDate, String role, String[] authorities, boolean isActive, boolean isNotLocked) {
+    public User(Long id, String userId, String firstName, String lastName, String username, String password, String email, String profileImageUrl, Date lastLoginDate, Date lastLoginDateDisplay, Date joinDate, String role, String[] authorities, String verificationCode, boolean isActive, boolean isNotLocked) {
         this.id = id;
         this.userId = userId;
         this.firstName = firstName;
@@ -43,6 +45,7 @@ public class User implements Serializable {
         this.joinDate = joinDate;
         this.role = role;
         this.authorities = authorities;
+        this.verificationCode = verificationCode;
         this.isActive = isActive;
         this.isNotLocked = isNotLocked;
     }
@@ -149,6 +152,14 @@ public class User implements Serializable {
 
     public void setAuthorities(String[] authorities) {
         this.authorities = authorities;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
     }
 
     public boolean isActive() {

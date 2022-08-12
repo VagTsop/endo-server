@@ -1,6 +1,7 @@
 package org.endofusion.endoserver.service;
 
 import com.sun.mail.smtp.SMTPTransport;
+import org.endofusion.endoserver.domain.User;
 import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
@@ -67,6 +68,39 @@ public class EmailService {
         message.setSentDate(new Date());
         message.saveChanges();
         return message;
+    }
+
+    public void sendVerificationEmail(User user, String siteURL)
+            throws MessagingException, IOException {
+
+        Message message = new MimeMessage(getEmailSession());
+        MimeMultipart content = new MimeMultipart("related");
+        // ContentID is used by both parts
+        String cid = ContentIdGenerator.getContentId();
+        MimeBodyPart mainPart = new MimeBodyPart();
+        String verifyURL = siteURL + "/verify/" + user.getVerificationCode();
+        mainPart.setText("Dear " + user.getFirstName() + ",<br>\n" +
+                "Please click the link below to verify your registration:<br>\n" +
+                "<h3><a href= " + verifyURL + " target=\"_self\">Activate Your Account</a></h3>\n" +
+                "Thank you,<br>\n" +
+                "Your company name","US-ASCII", "html");
+        content.addBodyPart(mainPart);
+        // Image part
+        MimeBodyPart imagePart = new MimeBodyPart();
+        imagePart.attachFile("src/endofusion.jpg");
+        imagePart.setContentID("<" + cid + ">");
+        imagePart.setDisposition(MimeBodyPart.INLINE);
+        content.addBodyPart(imagePart);
+        message.setFrom(new InternetAddress(FROM_EMAIL));
+        message.setRecipients(TO, InternetAddress.parse(user.getEmail(), false));
+        message.setSubject(EMAIL_SUBJECT);
+        message.setContent(content);
+        message.setSentDate(new Date());
+        message.saveChanges();
+        SMTPTransport smtpTransport = (SMTPTransport) getEmailSession().getTransport(SIMPLE_MAIL_TRANSFER_PROTOCOL);
+        smtpTransport.connect(OUTLOOK_SMTP_SERVER, USERNAME, PASSWORD);
+        smtpTransport.sendMessage(message, message.getAllRecipients());
+        smtpTransport.close();
     }
 
     private Session getEmailSession() {

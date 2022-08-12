@@ -6,6 +6,7 @@ import org.endofusion.endoserver.exception.domain.*;
 import org.endofusion.endoserver.provider.JWTTokenProvider;
 import org.endofusion.endoserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -56,9 +58,27 @@ public class UserController extends ExceptionHandling {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException {
-        User newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail());
+    public ResponseEntity<User> register(@RequestBody User user, HttpServletRequest request) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException {
+        User newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail(), getSiteURL(request));
         return new ResponseEntity<>(newUser, OK);
+    }
+
+    private String getSiteURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+        String port = Integer.toString(request.getLocalPort());
+
+        return siteURL.replace(port, "4200").replace(request.getServletPath(),"/register");
+    }
+
+    @RequestMapping("/verify")
+    public ResponseEntity<User> verifyUser(@RequestParam("code") String code) {
+        User verifiedUser = userService.verify(code);
+        return new ResponseEntity<>(verifiedUser, OK);
+//        if (userService.verify(code)) {
+//            return ResponseEntity.status(HttpStatus.OK).body(true);
+//        } else {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+//        }
     }
 
     @PostMapping("/add")
