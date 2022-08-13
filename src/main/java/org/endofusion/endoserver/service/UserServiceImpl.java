@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return user;
     }
 
-    public User verify(String verificationCode) {
+    public User verify(String verificationCode) throws IOException, MessagingException {
         User user =  userRepository.findByVerificationCode(verificationCode);
 
         if (user == null || user.isActive()) {
@@ -108,6 +108,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             user.setVerificationCode(null);
             user.setActive(true);
             userRepository.save(user);
+            emailService.sendNewPasswordEmail(user.getFirstName(),user.getPassword(),user.getEmail());
             return user;
         }
     }
