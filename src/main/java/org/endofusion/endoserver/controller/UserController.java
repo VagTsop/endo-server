@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -70,8 +71,8 @@ public class UserController extends ExceptionHandling {
         return siteURL.replace(port, "4200").replace(request.getServletPath(),"/register");
     }
 
-    @RequestMapping("/verify")
-    public ResponseEntity<User> verifyUser(@RequestParam("code") String code) {
+    @RequestMapping(value = "/verify",  method = RequestMethod.POST)
+    public ResponseEntity<User> verifyUser(@PathParam("code") String code) {
         User verifiedUser = userService.verify(code);
         return new ResponseEntity<>(verifiedUser, OK);
 //        if (userService.verify(code)) {

@@ -11,6 +11,8 @@ public class SecurityConstant {
     public static final String FORBIDDEN_MESSAGE = "You need to log in to access this page";
     public static final String ACCESS_DENIED_MESSAGE = "You do not have permission to access this page";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
-    public static final String[] PUBLIC_URLS = { "/api/user/login", "/api/user/register","/api/user/verify/**","/api/user/image/**" };
-   // public static final String[] PUBLIC_URLS = { "**" };
-}
+   // public static final String[] PUBLIC_URLS = { "/api/user/login", "/api/user/register","/api/user/verify**","/api/user/image/**" };
+    public static final String[] PUBLIC_URLS = { "**" };
+}//http://localhost:8080/api/user/verify?code=FaKY0nubAK3akaGnLrENw7I81N4b9ld4LNqlrQJOP3O7bD3qLnyijQrnOYJfQ1re
+
+//.regexMatchers("/.*lang=.*").permitAll()
