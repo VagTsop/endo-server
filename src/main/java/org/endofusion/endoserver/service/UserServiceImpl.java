@@ -1,5 +1,6 @@
 package org.endofusion.endoserver.service;
 
+import net.bytebuddy.utility.RandomString;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -73,7 +74,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User register(String firstName, String lastName, String username, String email) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException {
+    public User register(String firstName, String lastName, String username, String email, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException {
         validateNewUsernameAndEmail(EMPTY, username, email);
         User user = new User();
         user.setUserId(generateUserId());
@@ -84,15 +85,32 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setEmail(email);
         user.setJoinDate(new Date());
         user.setPassword(encodePassword(password));
-        user.setActive(true);
+        user.setActive(false);
         user.setNotLocked(true);
         user.setRole(ROLE_USER.name());
         user.setAuthorities(ROLE_USER.getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
+        String randomCode = RandomString.make(64);
+        user.setVerificationCode(randomCode);
         userRepository.save(user);
+        emailService.sendVerificationEmail(user, siteURL);
         LOGGER.info("New user password: " + password);
-        emailService.sendNewPasswordEmail(firstName, password, email);
+      //  emailService.sendNewPasswordEmail(firstName, password, email);
         return user;
+    }
+
+    public User verify(String verificationCode) throws IOException, MessagingException {
+        User user =  userRepository.findByVerificationCode(verificationCode);
+
+        if (user == null || user.isActive()) {
+            return null;
+        } else {
+            user.setVerificationCode(null);
+            user.setActive(true);
+            userRepository.save(user);
+            emailService.sendNewPasswordEmail(user.getFirstName(),user.getPassword(),user.getEmail());
+            return user;
+        }
     }
 
     @Override
