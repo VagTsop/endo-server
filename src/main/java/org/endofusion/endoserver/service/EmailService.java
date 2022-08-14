@@ -79,7 +79,8 @@ public class EmailService {
         String cid = ContentIdGenerator.getContentId();
         MimeBodyPart mainPart = new MimeBodyPart();
         String verifyURL = siteURL + "/verify/" + user.getVerificationCode();
-        mainPart.setText("Dear " + user.getFirstName() + ",<br>\n" +
+        mainPart.setText("<div><img style=\"width:150px;margin-top:10px\" src=\"cid:"+cid + "\" /></div>\n"+
+                "Dear " + user.getFirstName() + ",<br>\n" +
                 "Please click the link below to verify your registration:<br>\n" +
                 "<h3><a href= " + verifyURL + " target=\"_self\">Activate Your Account</a></h3>\n" +
                 "Thank you,<br>\n" +
