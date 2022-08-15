@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 randomCode,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(1),
+                LocalDateTime.now().plusMinutes(20),
                 user
         );
 
@@ -131,7 +131,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         confirmationTokenService.setConfirmedAt(verificationCode);
 
-        System.out.println(confirmationToken.getUser().getEmail());
         enableUser(confirmationToken.getUser().getEmail());
         emailService.sendNewPasswordEmail(confirmationToken.getUser().getFirstName(), confirmationToken.getUser().getPassword(), confirmationToken.getUser().getEmail());
         return true;
