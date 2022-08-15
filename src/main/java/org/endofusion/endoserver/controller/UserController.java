@@ -1,4 +1,5 @@
 package org.endofusion.endoserver.controller;
+
 import org.endofusion.endoserver.domain.HttpResponse;
 import org.endofusion.endoserver.domain.User;
 import org.endofusion.endoserver.domain.UserPrincipal;
@@ -6,7 +7,6 @@ import org.endofusion.endoserver.exception.domain.*;
 import org.endofusion.endoserver.provider.JWTTokenProvider;
 import org.endofusion.endoserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +34,7 @@ import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 
 @RestController
-@RequestMapping(path={"/", "/api/user"})
+@RequestMapping(path = {"/", "/api/user"})
 public class UserController extends ExceptionHandling {
     public static final String EMAIL_SENT = "An email with a new password was sent to: ";
     public static final String USER_DELETED_SUCCESSFULLY = "User deleted successfully";
@@ -68,18 +68,13 @@ public class UserController extends ExceptionHandling {
         String siteURL = request.getRequestURL().toString();
         String port = Integer.toString(request.getLocalPort());
 
-        return siteURL.replace(port, "4200").replace(request.getServletPath(),"/register");
+        return siteURL.replace(port, "4200").replace(request.getServletPath(), "/register");
     }
 
-    @RequestMapping(value = "/verify",  method = RequestMethod.POST)
-    public ResponseEntity<User> verifyUser(@PathParam("code") String code) throws IOException, MessagingException {
-        User verifiedUser = userService.verify(code);
-        return new ResponseEntity<>(verifiedUser, OK);
-//        if (userService.verify(code)) {
-//            return ResponseEntity.status(HttpStatus.OK).body(true);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
-//        }
+    @RequestMapping(value = "/verify", method = RequestMethod.POST)
+    public ResponseEntity<HttpResponse> verifyUser(@PathParam("code") String code) throws IOException, MessagingException {
+        userService.verify(code);
+        return new ResponseEntity<>(OK);
     }
 
     @PostMapping("/add")
@@ -91,7 +86,7 @@ public class UserController extends ExceptionHandling {
                                            @RequestParam("isActive") String isActive,
                                            @RequestParam("isNonLocked") String isNonLocked,
                                            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException {
-        User newUser = userService.addNewUser(firstName, lastName, username,email, role, Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImage);
+        User newUser = userService.addNewUser(firstName, lastName, username, email, role, Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImage);
         return new ResponseEntity<>(newUser, OK);
     }
 
@@ -105,7 +100,7 @@ public class UserController extends ExceptionHandling {
                                        @RequestParam("isActive") String isActive,
                                        @RequestParam("isNonLocked") String isNonLocked,
                                        @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException {
-        User updatedUser = userService.updateUser(currentUsername, firstName, lastName, username,email, role, Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImage);
+        User updatedUser = userService.updateUser(currentUsername, firstName, lastName, username, email, role, Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImage);
         return new ResponseEntity<>(updatedUser, OK);
     }
 
@@ -152,7 +147,7 @@ public class UserController extends ExceptionHandling {
         try (InputStream inputStream = url.openStream()) {
             int bytesRead;
             byte[] chunk = new byte[1024];
-            while((bytesRead = inputStream.read(chunk)) > 0) {
+            while ((bytesRead = inputStream.read(chunk)) > 0) {
                 byteArrayOutputStream.write(chunk, 0, bytesRead);
             }
         }

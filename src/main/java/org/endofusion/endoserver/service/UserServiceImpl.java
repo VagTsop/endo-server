@@ -1,14 +1,15 @@
 package org.endofusion.endoserver.service;
 
-import net.bytebuddy.utility.RandomString;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.endofusion.endoserver.domain.User;
 import org.endofusion.endoserver.domain.UserPrincipal;
+import org.endofusion.endoserver.domain.token.ConfirmationToken;
 import org.endofusion.endoserver.enumeration.Role;
 import org.endofusion.endoserver.exception.domain.*;
 import org.endofusion.endoserver.repository.UserRepository;
+import org.endofusion.endoserver.service.token.ConfirmationTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -48,13 +50,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final BCryptPasswordEncoder passwordEncoder;
     private LoginAttemptService loginAttemptService;
     private EmailService emailService;
+    private ConfirmationTokenService confirmationTokenService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, LoginAttemptService loginAttemptService, EmailService emailService) {
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, LoginAttemptService loginAttemptService, EmailService emailService, ConfirmationTokenService confirmationTokenService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.loginAttemptService = loginAttemptService;
         this.emailService = emailService;
+        this.confirmationTokenService = confirmationTokenService;
     }
 
     @Override
@@ -92,26 +96,48 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setAuthorities(ROLE_USER.getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
         String randomCode = UUID.randomUUID().toString();
-        user.setVerificationCode(randomCode);
         userRepository.save(user);
-        emailService.sendVerificationEmail(user, siteURL);
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                randomCode,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(20),
+                user
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        emailService.sendVerificationEmail(user, siteURL, confirmationToken);
         LOGGER.info("New user password: " + password);
-      //  emailService.sendNewPasswordEmail(firstName, password, email);
+        emailService.sendNewPasswordEmail(firstName, password, email);
         return user;
     }
 
-    public User verify(String verificationCode) throws IOException, MessagingException {
-        User user =  userRepository.findByVerificationCode(verificationCode);
+    public void verify(String verificationCode)  {
 
-        if (user == null || user.isActive()) {
-            return null;
-        } else {
-            user.setVerificationCode(null);
-            user.setActive(true);
-            userRepository.save(user);
-            emailService.sendNewPasswordEmail(user.getFirstName(),user.getPassword(),user.getEmail());
-            return user;
+        ConfirmationToken confirmationToken = confirmationTokenService
+                .getToken(verificationCode)
+                .orElseThrow(() ->
+                        new IllegalStateException("token not found"));
+
+        if (confirmationToken.getConfirmedAt() != null) {
+            throw new IllegalStateException("email already confirmed");
         }
+
+        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("token expired");
+        }
+
+        confirmationTokenService.setConfirmedAt(verificationCode);
+
+        System.out.println(confirmationToken.getUser().getEmail());
+        enableUser(confirmationToken.getUser().getEmail());
+    }
+
+    private int enableUser(String email) {
+        return userRepository.enableAppUser(email);
     }
 
     @Override
