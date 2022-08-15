@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.apache.logging.log4j.util.Strings.EMPTY;
@@ -90,7 +91,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setRole(ROLE_USER.name());
         user.setAuthorities(ROLE_USER.getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
-        String randomCode = RandomString.make(64);
+        String randomCode = UUID.randomUUID().toString();
         user.setVerificationCode(randomCode);
         userRepository.save(user);
         emailService.sendVerificationEmail(user, siteURL);
