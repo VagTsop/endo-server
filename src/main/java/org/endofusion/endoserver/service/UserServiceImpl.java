@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 randomCode,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(20),
+                LocalDateTime.now().plusMinutes(1),
                 user
         );
 
@@ -112,22 +112,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return user;
     }
 
-    public boolean verify(String verificationCode) throws IOException, MessagingException {
+    public boolean verify(String verificationCode) throws IOException, MessagingException, EmailAlreadyVerifiedException, EmailVerificationTokenExpiredException, TokenNotFoundException {
 
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(verificationCode)
                 .orElseThrow(() ->
-                        new IllegalStateException("token not found"));
+         new TokenNotFoundException(TOKEN_NOT_FOUND));
 
         if (confirmationToken.getConfirmedAt() != null) {
-            throw new IllegalStateException("email already confirmed");
+            throw new EmailAlreadyVerifiedException(EMAIL_ALREADY_VERIFIED + confirmationToken.getUser().getUsername());
         }
 
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
         if (expiredAt.isBefore(LocalDateTime.now())) {
-
-            throw new IllegalStateException("token expired");
+            throw new EmailVerificationTokenExpiredException(EMAIL_VERIFICATION_TOKEN_EXPIRED + confirmationToken.getUser().getUsername());
         }
 
         confirmationTokenService.setConfirmedAt(verificationCode);
