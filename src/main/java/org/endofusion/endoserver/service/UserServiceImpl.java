@@ -109,11 +109,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         emailService.sendVerificationEmail(user, siteURL, confirmationToken);
         LOGGER.info("New user password: " + password);
-        emailService.sendNewPasswordEmail(firstName, password, email);
         return user;
     }
 
-    public void verify(String verificationCode)  {
+    public boolean verify(String verificationCode) throws IOException, MessagingException {
 
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(verificationCode)
@@ -127,6 +126,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
         if (expiredAt.isBefore(LocalDateTime.now())) {
+
             throw new IllegalStateException("token expired");
         }
 
@@ -134,10 +134,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         System.out.println(confirmationToken.getUser().getEmail());
         enableUser(confirmationToken.getUser().getEmail());
+        emailService.sendNewPasswordEmail(confirmationToken.getUser().getFirstName(), confirmationToken.getUser().getPassword(), confirmationToken.getUser().getEmail());
+        return true;
     }
 
-    private int enableUser(String email) {
-        return userRepository.enableAppUser(email);
+    private void enableUser(String email) {
+        userRepository.enableAppUser(email);
     }
 
     @Override

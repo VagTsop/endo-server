@@ -27,5 +27,5 @@ public interface UserService {
 
     User updateProfileImage(String username, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException;
 
-    void verify(String verificationCode) throws IOException, MessagingException;
+    boolean verify(String verificationCode) throws IOException, MessagingException;
 }

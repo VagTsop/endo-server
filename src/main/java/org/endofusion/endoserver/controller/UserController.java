@@ -72,9 +72,9 @@ public class UserController extends ExceptionHandling {
     }
 
     @RequestMapping(value = "/verify", method = RequestMethod.POST)
-    public ResponseEntity<HttpResponse> verifyUser(@PathParam("code") String code) throws IOException, MessagingException {
-        userService.verify(code);
-        return new ResponseEntity<>(OK);
+    public ResponseEntity<Boolean> verifyUser(@PathParam("code") String code) throws IOException, MessagingException {
+        Boolean isVerified = userService.verify(code);
+        return new ResponseEntity<>(isVerified, OK);
     }
 
     @PostMapping("/add")
