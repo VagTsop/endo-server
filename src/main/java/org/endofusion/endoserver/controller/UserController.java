@@ -38,6 +38,7 @@ import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 public class UserController extends ExceptionHandling {
     public static final String EMAIL_SENT = "An email with a new password was sent to: ";
     public static final String USER_DELETED_SUCCESSFULLY = "User deleted successfully";
+    public static final String RESEND_VERIFICATION_EMAIL = "A New Verification Email has been sent to your Email Account";
     private AuthenticationManager authenticationManager;
     private UserService userService;
     private JWTTokenProvider jwtTokenProvider;
@@ -78,9 +79,9 @@ public class UserController extends ExceptionHandling {
     }
 
     @RequestMapping(value = "/resend", method = RequestMethod.POST)
-    public ResponseEntity<Boolean> resendToken(@PathParam("code") String code, HttpServletRequest request) throws IOException, MessagingException, EmailAlreadyVerifiedException, TokenNotFoundException, EmailVerificationTokenExpiredException {
-        Boolean isVerified = userService.resend(code, getSiteURL(request));
-        return new ResponseEntity<>(isVerified, OK);
+    public ResponseEntity<HttpResponse> resendToken(@PathParam("code") String code, HttpServletRequest request) throws IOException, MessagingException, EmailAlreadyVerifiedException, TokenNotFoundException, EmailVerificationTokenExpiredException {
+        userService.resend(code, getSiteURL(request));
+        return response( OK, RESEND_VERIFICATION_EMAIL);
     }
 
     @PostMapping("/add")
