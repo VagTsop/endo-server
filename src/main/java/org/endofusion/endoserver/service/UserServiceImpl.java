@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 randomCode,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(20),
+                LocalDateTime.now().plusMinutes(1),
                 user
         );
 
@@ -112,7 +112,26 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return user;
     }
 
-    public boolean verify(String verificationCode) throws IOException, MessagingException, EmailAlreadyVerifiedException, EmailVerificationTokenExpiredException, TokenNotFoundException {
+    public boolean resend(String verificationCode, String siteURL) throws TokenNotFoundException, IOException, MessagingException {
+        if (verificationCode != null) {
+            ConfirmationToken confirmationToken = confirmationTokenService
+                    .getToken(verificationCode)
+                    .orElseThrow(() ->
+                            new TokenNotFoundException(TOKEN_NOT_FOUND));
+
+            confirmationToken.setToken(UUID.randomUUID().toString());
+            confirmationToken.setCreatedAt(LocalDateTime.now());
+            confirmationToken.setExpiresAt(LocalDateTime.now().plusMinutes(1));
+
+            confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+            emailService.sendVerificationEmail(confirmationToken.getUser(), siteURL, confirmationToken);
+        }
+
+        return true;
+    }
+
+        public boolean verify(String verificationCode) throws IOException, MessagingException, EmailAlreadyVerifiedException, EmailVerificationTokenExpiredException, TokenNotFoundException {
 
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(verificationCode)

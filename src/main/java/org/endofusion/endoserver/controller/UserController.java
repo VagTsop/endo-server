@@ -77,6 +77,12 @@ public class UserController extends ExceptionHandling {
         return new ResponseEntity<>(isVerified, OK);
     }
 
+    @RequestMapping(value = "/resend", method = RequestMethod.POST)
+    public ResponseEntity<Boolean> resendToken(@PathParam("code") String code, HttpServletRequest request) throws IOException, MessagingException, EmailAlreadyVerifiedException, TokenNotFoundException, EmailVerificationTokenExpiredException {
+        Boolean isVerified = userService.resend(code, getSiteURL(request));
+        return new ResponseEntity<>(isVerified, OK);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<User> addNewUser(@RequestParam("firstName") String firstName,
                                            @RequestParam("lastName") String lastName,
