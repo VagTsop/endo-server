@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 randomCode,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(1),
+                LocalDateTime.now().plusMinutes(10),
                 user
         );
 
@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
             confirmationToken.setToken(UUID.randomUUID().toString());
             confirmationToken.setCreatedAt(LocalDateTime.now());
-            confirmationToken.setExpiresAt(LocalDateTime.now().plusMinutes(1));
+            confirmationToken.setExpiresAt(LocalDateTime.now().plusMinutes(10));
 
             confirmationTokenService.saveConfirmationToken(confirmationToken);
 
