@@ -3,6 +3,7 @@ package org.endofusion.endoserver.service;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.endofusion.endoserver.constant.EmailStatus;
 import org.endofusion.endoserver.domain.User;
 import org.endofusion.endoserver.domain.UserPrincipal;
 import org.endofusion.endoserver.domain.token.ConfirmationToken;
@@ -101,7 +102,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 randomCode,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(20),
+                LocalDateTime.now().plusMinutes(1),
                 user
         );
 
@@ -121,7 +122,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
             confirmationToken.setToken(UUID.randomUUID().toString());
             confirmationToken.setCreatedAt(LocalDateTime.now());
-            confirmationToken.setExpiresAt(LocalDateTime.now().plusMinutes(20));
+            confirmationToken.setExpiresAt(LocalDateTime.now().plusMinutes(1));
 
             confirmationTokenService.saveConfirmationToken(confirmationToken);
 
@@ -131,7 +132,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return true;
     }
 
-        public boolean verify(String verificationCode) throws IOException, MessagingException, EmailAlreadyVerifiedException, EmailVerificationTokenExpiredException, TokenNotFoundException {
+        public String verify(String verificationCode) throws IOException, MessagingException, EmailAlreadyVerifiedException, EmailVerificationTokenExpiredException, TokenNotFoundException {
 
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(verificationCode)
@@ -139,20 +140,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
          new TokenNotFoundException(TOKEN_NOT_FOUND));
 
         if (confirmationToken.getConfirmedAt() != null) {
-            throw new EmailAlreadyVerifiedException(EMAIL_ALREADY_VERIFIED + confirmationToken.getUser().getUsername());
+            return EmailStatus.ALREADY_CONFIRMED;
         }
 
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
         if (expiredAt.isBefore(LocalDateTime.now())) {
-            throw new EmailVerificationTokenExpiredException(EMAIL_VERIFICATION_TOKEN_EXPIRED + confirmationToken.getUser().getUsername());
+            return EmailStatus.EXPIRED;
         }
 
         confirmationTokenService.setConfirmedAt(verificationCode);
 
         enableUser(confirmationToken.getUser().getEmail());
         emailService.sendNewPasswordEmail(confirmationToken.getUser().getFirstName(), confirmationToken.getUser().getPassword(), confirmationToken.getUser().getEmail());
-        return true;
+        return EmailStatus.VALID;
     }
 
     private void enableUser(String email) {
