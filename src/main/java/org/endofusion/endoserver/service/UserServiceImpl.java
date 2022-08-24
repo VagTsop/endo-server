@@ -7,6 +7,7 @@ import org.endofusion.endoserver.constant.EmailStatus;
 import org.endofusion.endoserver.domain.User;
 import org.endofusion.endoserver.domain.UserPrincipal;
 import org.endofusion.endoserver.domain.token.ConfirmationToken;
+import org.endofusion.endoserver.dto.UserDto;
 import org.endofusion.endoserver.enumeration.Role;
 import org.endofusion.endoserver.exception.domain.*;
 import org.endofusion.endoserver.repository.UserRepository;
@@ -15,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -49,9 +52,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private LoginAttemptService loginAttemptService;
-    private EmailService emailService;
-    private ConfirmationTokenService confirmationTokenService;
+    private final LoginAttemptService loginAttemptService;
+    private final EmailService emailService;
+    private final ConfirmationTokenService confirmationTokenService;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, LoginAttemptService loginAttemptService, EmailService emailService, ConfirmationTokenService confirmationTokenService) {
@@ -102,7 +105,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 randomCode,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(1),
+                LocalDateTime.now().plusMinutes(20),
                 user
         );
 
@@ -122,7 +125,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
             confirmationToken.setToken(UUID.randomUUID().toString());
             confirmationToken.setCreatedAt(LocalDateTime.now());
-            confirmationToken.setExpiresAt(LocalDateTime.now().plusMinutes(1));
+            confirmationToken.setExpiresAt(LocalDateTime.now().plusMinutes(20));
 
             confirmationTokenService.saveConfirmationToken(confirmationToken);
 
@@ -132,7 +135,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return true;
     }
 
-        public String verify(String verificationCode) throws IOException, MessagingException, EmailAlreadyVerifiedException, EmailVerificationTokenExpiredException, TokenNotFoundException {
+        public String verify(String verificationCode) throws IOException, MessagingException, TokenNotFoundException {
 
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(verificationCode)
@@ -161,7 +164,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User addNewUser(String firstName, String lastName, String username, String email, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException {
+    public User addNewUser(String firstName, String lastName, String username, String email, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException {
         validateNewUsernameAndEmail(EMPTY, username, email);
         User user = new User();
         String password = generatePassword();
@@ -184,8 +187,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername, String newEmail, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException {
+    public User updateUser(String currentUsername, String newFirstName, String newLastName, String newUsername, String newEmail, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException {
         User currentUser = validateNewUsernameAndEmail(currentUsername, newUsername, newEmail);
+        assert currentUser != null;
         currentUser.setFirstName(newFirstName);
         currentUser.setLastName(newLastName);
         currentUser.setUsername(newUsername);
@@ -213,7 +217,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User updateProfileImage(String username, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException {
+    public User updateProfileImage(String username, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException {
         User user = validateNewUsernameAndEmail(username, null, null);
         saveProfileImage(user, profileImage);
         return user;
@@ -242,7 +246,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.deleteById(user.getId());
     }
 
-    private void saveProfileImage(User user, MultipartFile profileImage) throws IOException, NotAnImageFileException {
+    private void saveProfileImage(User user, MultipartFile profileImage) throws IOException {
         if (profileImage != null) {
             Path userFolder = Paths.get(USER_FOLDER + user.getUsername()).toAbsolutePath().normalize();
             if (!Files.exists(userFolder)) {
@@ -284,11 +288,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private void validateLoginAttempt(User user) {
         if (user.isNotLocked()) {
-            if (loginAttemptService.hasExceededMaxAttempts(user.getUsername())) {
-                user.setNotLocked(false);
-            } else {
-                user.setNotLocked(true);
-            }
+            user.setNotLocked(!loginAttemptService.hasExceededMaxAttempts(user.getUsername()));
         } else {
             loginAttemptService.evictUserFromLoginAttemptCache(user.getUsername());
         }
@@ -318,5 +318,32 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             }
             return null;
         }
+    }
+
+    @Override
+    public Page<UserDto> getUsersList(Pageable pageable, Long usernameId, String username,
+                                      String firstName,
+                                      String lastName, String email, Boolean status) {
+        return userRepository.getUsersList(pageable, new UserDto(usernameId, username, firstName, lastName, email, status));
+    }
+
+    @Override
+    public List<UserDto> fetchFirstNames() {
+        return userRepository.fetchFirstNames();
+    }
+
+    @Override
+    public List<UserDto> fetchLastNames() {
+        return userRepository.fetchLastNames();
+    }
+
+    @Override
+    public List<UserDto> fetchUsernames() {
+        return userRepository.fetchUsernames();
+    }
+
+    @Override
+    public List<UserDto> fetchEmails() {
+        return userRepository.fetchEmails();
     }
 }

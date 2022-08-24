@@ -3,10 +3,13 @@ package org.endofusion.endoserver.controller;
 import org.endofusion.endoserver.domain.HttpResponse;
 import org.endofusion.endoserver.domain.User;
 import org.endofusion.endoserver.domain.UserPrincipal;
+import org.endofusion.endoserver.dto.UserDto;
 import org.endofusion.endoserver.exception.domain.*;
 import org.endofusion.endoserver.provider.JWTTokenProvider;
 import org.endofusion.endoserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +30,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 import static org.endofusion.endoserver.constant.FileConstant.*;
 import static org.endofusion.endoserver.constant.SecurityConstant.JWT_TOKEN_HEADER;
@@ -174,5 +178,40 @@ public class UserController extends ExceptionHandling {
 
     private void authenticate(String username, String password) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+    }
+
+    @RequestMapping("/get-users-list")
+    public ResponseEntity<Page<UserDto>> getUsersList(
+            Pageable pageable,
+            @RequestParam Optional<Long> userId,
+            @RequestParam Optional<String> username,
+            @RequestParam Optional<String> firstName,
+            @RequestParam Optional<String> lastName,
+            @RequestParam Optional<String> email,
+            @RequestParam Optional<Boolean> status
+            ) {
+        Page<UserDto> retVal = userService.getUsersList(pageable, userId.orElse(null), username.orElse(null), firstName.orElse(null), lastName.orElse(null), email.orElse(null), status.orElse(null));
+        return ResponseEntity.status(HttpStatus.OK).body(retVal);
+    }
+
+    @GetMapping("/fetch-usernames")
+    public ResponseEntity<List<UserDto>> fetchUsernames() {
+        List<UserDto> retVal = userService.fetchUsernames();
+        return ResponseEntity.status(HttpStatus.OK).body(retVal);
+    }
+    @GetMapping("/fetch-firstnames")
+    public ResponseEntity<List<UserDto>> fetchFirstNames() {
+        List<UserDto> retVal = userService.fetchFirstNames();
+        return ResponseEntity.status(HttpStatus.OK).body(retVal);
+    }
+    @GetMapping("/fetch-lastnames")
+    public ResponseEntity<List<UserDto>> fetchLastNames() {
+        List<UserDto> retVal = userService.fetchLastNames();
+        return ResponseEntity.status(HttpStatus.OK).body(retVal);
+    }
+    @GetMapping("/fetch-emails")
+    public ResponseEntity<List<UserDto>> fetchEmails() {
+        List<UserDto> retVal = userService.fetchEmails();
+        return ResponseEntity.status(HttpStatus.OK).body(retVal);
     }
 }
