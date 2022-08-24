@@ -2,6 +2,7 @@ package org.endofusion.endoserver.service;
 
 import com.sun.mail.smtp.SMTPTransport;
 import org.endofusion.endoserver.domain.User;
+import org.endofusion.endoserver.domain.token.ConfirmationToken;
 import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
@@ -14,6 +15,7 @@ import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
+
 import static javax.mail.Message.RecipientType.CC;
 import static javax.mail.Message.RecipientType.TO;
 import static org.endofusion.endoserver.constant.EmailConstant.*;
@@ -37,7 +39,7 @@ public class EmailService {
         String cid = ContentIdGenerator.getContentId();
         MimeBodyPart mainPart = new MimeBodyPart();
         mainPart.setText("<section>\n" +
-                " <div><img style=\"width:150px;margin-top:10px\" src=\"cid:"+cid + "\" /></div>\n"+
+                " <div><img style=\"width:150px;margin-top:10px\" src=\"cid:" + cid + "\" /></div>\n" +
                 " <p>Hello " + firstName + ",</p>\n" +
                 " <p>Welcome to [product name, service, subscription, etc.]! Thanks so much for [buying, joining, subscribing, signing-up for, etc.] We're looking forward to [helping you with X, supporting your X efforts, providing you with X], so you can [outcome of using our product, service, subscription, etc.].</p>\n" +
                 " <p>[Optional section: Where words are underlined, add hyperlinks]</p>\n" +
@@ -50,7 +52,7 @@ public class EmailService {
                 " </ul>\n" +
                 " <p>We're here to help! If you have any questions, please reply to this email or call our customer service team at 1-800-123-4567. We're available Monday through Friday, from 7 a.m. to 9 p.m. CST.</p>\n" +
                 " <p>Sincerely,<br>Chris Smith, customer service agent</p>\n" +
-                " </section>","US-ASCII", "html");
+                " </section>", "US-ASCII", "html");
 
         content.addBodyPart(mainPart);
         // Image part
@@ -64,13 +66,12 @@ public class EmailService {
         message.setRecipients(CC, InternetAddress.parse(CC_EMAIL, false));
         message.setSubject(EMAIL_SUBJECT);
         message.setContent(content);
-  //    message.setText("Hello " + firstName + ", \n \n Your new account password is: " + password + "\n \n The Support Team");
         message.setSentDate(new Date());
         message.saveChanges();
         return message;
     }
 
-    public void sendVerificationEmail(User user, String siteURL)
+    public void sendVerificationEmail(User user, String siteURL, ConfirmationToken confirmationToken)
             throws MessagingException, IOException {
 
         Message message = new MimeMessage(getEmailSession());
@@ -78,12 +79,13 @@ public class EmailService {
         // ContentID is used by both parts
         String cid = ContentIdGenerator.getContentId();
         MimeBodyPart mainPart = new MimeBodyPart();
-        String verifyURL = siteURL + "/verify/" + user.getVerificationCode();
-        mainPart.setText("Dear " + user.getFirstName() + ",<br>\n" +
+        String verifyURL = siteURL + "/verify/" + confirmationToken.getToken();
+        mainPart.setText("<div><img style=\"width:150px;margin-top:10px\" src=\"cid:" + cid + "\" /></div>\n" +
+                "Dear " + user.getFirstName() + ",<br>\n" +
                 "Please click the link below to verify your registration:<br>\n" +
                 "<h3><a href= " + verifyURL + " target=\"_self\">Activate Your Account</a></h3>\n" +
                 "Thank you,<br>\n" +
-                "Your company name","US-ASCII", "html");
+                "Your company name", "US-ASCII", "html");
         content.addBodyPart(mainPart);
         // Image part
         MimeBodyPart imagePart = new MimeBodyPart();

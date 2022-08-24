@@ -1,12 +1,15 @@
 package org.endofusion.endoserver.controller;
+
 import org.endofusion.endoserver.domain.HttpResponse;
 import org.endofusion.endoserver.domain.User;
 import org.endofusion.endoserver.domain.UserPrincipal;
+import org.endofusion.endoserver.dto.UserDto;
 import org.endofusion.endoserver.exception.domain.*;
 import org.endofusion.endoserver.provider.JWTTokenProvider;
 import org.endofusion.endoserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +30,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 
 import static org.endofusion.endoserver.constant.FileConstant.*;
 import static org.endofusion.endoserver.constant.SecurityConstant.JWT_TOKEN_HEADER;
@@ -34,10 +38,11 @@ import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 
 @RestController
-@RequestMapping(path={"/", "/api/user"})
+@RequestMapping(path = {"/", "/api/user"})
 public class UserController extends ExceptionHandling {
     public static final String EMAIL_SENT = "An email with a new password was sent to: ";
     public static final String USER_DELETED_SUCCESSFULLY = "User deleted successfully";
+    public static final String RESEND_VERIFICATION_EMAIL = "A New Verification Email has been sent to your Email Account";
     private AuthenticationManager authenticationManager;
     private UserService userService;
     private JWTTokenProvider jwtTokenProvider;
@@ -68,18 +73,19 @@ public class UserController extends ExceptionHandling {
         String siteURL = request.getRequestURL().toString();
         String port = Integer.toString(request.getLocalPort());
 
-        return siteURL.replace(port, "4200").replace(request.getServletPath(),"/register");
+        return siteURL.replace(port, "4200").replace(request.getServletPath(), "/register");
     }
 
-    @RequestMapping(value = "/verify",  method = RequestMethod.POST)
-    public ResponseEntity<User> verifyUser(@PathParam("code") String code) throws IOException, MessagingException {
-        User verifiedUser = userService.verify(code);
-        return new ResponseEntity<>(verifiedUser, OK);
-//        if (userService.verify(code)) {
-//            return ResponseEntity.status(HttpStatus.OK).body(true);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
-//        }
+    @RequestMapping(value = "/verify", method = RequestMethod.POST)
+    public ResponseEntity<HttpResponse> verifyUser(@PathParam("code") String code) throws IOException, MessagingException, EmailAlreadyVerifiedException, TokenNotFoundException, EmailVerificationTokenExpiredException {
+        String message = userService.verify(code);
+        return response(OK, message);
+    }
+
+    @RequestMapping(value = "/resend", method = RequestMethod.POST)
+    public ResponseEntity<HttpResponse> resendToken(@PathParam("code") String code, HttpServletRequest request) throws IOException, MessagingException, EmailAlreadyVerifiedException, TokenNotFoundException, EmailVerificationTokenExpiredException {
+        userService.resend(code, getSiteURL(request));
+        return response( OK, RESEND_VERIFICATION_EMAIL);
     }
 
     @PostMapping("/add")
@@ -91,7 +97,7 @@ public class UserController extends ExceptionHandling {
                                            @RequestParam("isActive") String isActive,
                                            @RequestParam("isNonLocked") String isNonLocked,
                                            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException {
-        User newUser = userService.addNewUser(firstName, lastName, username,email, role, Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImage);
+        User newUser = userService.addNewUser(firstName, lastName, username, email, role, Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImage);
         return new ResponseEntity<>(newUser, OK);
     }
 
@@ -105,7 +111,7 @@ public class UserController extends ExceptionHandling {
                                        @RequestParam("isActive") String isActive,
                                        @RequestParam("isNonLocked") String isNonLocked,
                                        @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException {
-        User updatedUser = userService.updateUser(currentUsername, firstName, lastName, username,email, role, Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImage);
+        User updatedUser = userService.updateUser(currentUsername, firstName, lastName, username, email, role, Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImage);
         return new ResponseEntity<>(updatedUser, OK);
     }
 
@@ -152,7 +158,7 @@ public class UserController extends ExceptionHandling {
         try (InputStream inputStream = url.openStream()) {
             int bytesRead;
             byte[] chunk = new byte[1024];
-            while((bytesRead = inputStream.read(chunk)) > 0) {
+            while ((bytesRead = inputStream.read(chunk)) > 0) {
                 byteArrayOutputStream.write(chunk, 0, bytesRead);
             }
         }
@@ -172,5 +178,40 @@ public class UserController extends ExceptionHandling {
 
     private void authenticate(String username, String password) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+    }
+
+    @RequestMapping("/get-users-list")
+    public ResponseEntity<Page<UserDto>> getUsersList(
+            Pageable pageable,
+            @RequestParam Optional<Long> userId,
+            @RequestParam Optional<String> username,
+            @RequestParam Optional<String> firstName,
+            @RequestParam Optional<String> lastName,
+            @RequestParam Optional<String> email,
+            @RequestParam Optional<Boolean> status
+            ) {
+        Page<UserDto> retVal = userService.getUsersList(pageable, userId.orElse(null), username.orElse(null), firstName.orElse(null), lastName.orElse(null), email.orElse(null), status.orElse(null));
+        return ResponseEntity.status(HttpStatus.OK).body(retVal);
+    }
+
+    @GetMapping("/fetch-usernames")
+    public ResponseEntity<List<UserDto>> fetchUsernames() {
+        List<UserDto> retVal = userService.fetchUsernames();
+        return ResponseEntity.status(HttpStatus.OK).body(retVal);
+    }
+    @GetMapping("/fetch-firstnames")
+    public ResponseEntity<List<UserDto>> fetchFirstNames() {
+        List<UserDto> retVal = userService.fetchFirstNames();
+        return ResponseEntity.status(HttpStatus.OK).body(retVal);
+    }
+    @GetMapping("/fetch-lastnames")
+    public ResponseEntity<List<UserDto>> fetchLastNames() {
+        List<UserDto> retVal = userService.fetchLastNames();
+        return ResponseEntity.status(HttpStatus.OK).body(retVal);
+    }
+    @GetMapping("/fetch-emails")
+    public ResponseEntity<List<UserDto>> fetchEmails() {
+        List<UserDto> retVal = userService.fetchEmails();
+        return ResponseEntity.status(HttpStatus.OK).body(retVal);
     }
 }

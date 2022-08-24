@@ -1,9 +1,11 @@
 package org.endofusion.endoserver.service;
 
 import org.endofusion.endoserver.domain.User;
+import org.endofusion.endoserver.dto.UserDto;
 import org.endofusion.endoserver.exception.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.List;
@@ -27,5 +29,18 @@ public interface UserService {
 
     User updateProfileImage(String username, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException;
 
-    User verify(String verificationCode) throws IOException, MessagingException;
-    }
+    String verify(String verificationCode) throws IOException, MessagingException, EmailAlreadyVerifiedException, EmailVerificationTokenExpiredException, TokenNotFoundException;
+
+    boolean resend(String code, String verificationCode) throws IOException, MessagingException, EmailAlreadyVerifiedException, EmailVerificationTokenExpiredException, TokenNotFoundException;
+
+    ////
+    Page<UserDto> getUsersList(Pageable pageable, Long userId, String username, String firstName, String lastName, String email, Boolean status);
+
+    List<UserDto> fetchUsernames();
+
+    List<UserDto> fetchFirstNames();
+
+    List<UserDto> fetchLastNames();
+
+    List<UserDto> fetchEmails();
+}

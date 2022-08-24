@@ -7,7 +7,13 @@ public class SortField {
         INSTRUMENT_LOT("i.lot"),
         INSTRUMENT_MANUFACTURER("i.manufacturer"),
         INSTRUMENT_PURCHASE_DATE("i.purchase_date"),
-        INSTRUMENT_SERIES_CODE("os.instrument_series_qr_code");
+        INSTRUMENT_SERIES_CODE("os.instrument_series_qr_code"),
+        ID("u.user_id"),
+        FIRST_NAME("u.first_name"),
+        LAST_NAME("u.last_name"),
+        USERNAME("u.username"),
+        EMAIL("u.email"),
+        STATUS("u.is_active");
 
         private String value;
 
