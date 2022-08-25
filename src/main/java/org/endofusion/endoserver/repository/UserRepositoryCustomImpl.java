@@ -1,11 +1,12 @@
 package org.endofusion.endoserver.repository;
 
-import org.endofusion.endoserver.domain.User;
 import org.endofusion.endoserver.dto.SortField;
 import org.endofusion.endoserver.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
-import org.springframework.data.repository.query.FluentQuery;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -13,29 +14,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Repository("UserRepository")
-public class UserRepositoryImpl implements UserRepository {
+@Repository("UserRepositoryCustom")
+public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 
     @Autowired
     protected NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    @Override
-    public User findUserByUsername(String username) {
-        return null;
-    }
-
-    @Override
-    public User findUserByEmail(String email) {
-        return null;
-    }
-
-    @Override
-    public void enableAppUser(String email) {
-    }
 
     @Override
     public List<UserDto> fetchFirstNames() {
@@ -154,150 +139,4 @@ public class UserRepositoryImpl implements UserRepository {
 
         return new PageImpl<>(res, pageable, total);
     }
-
-    @Override
-    public List<User> findAll() {
-        return null;
-    }
-
-    @Override
-    public List<User> findAll(Sort sort) {
-        return null;
-    }
-
-    @Override
-    public Page<User> findAll(Pageable pageable) {
-        return null;
-    }
-
-    @Override
-    public List<User> findAllById(Iterable<Long> longs) {
-        return null;
-    }
-
-    @Override
-    public long count() {
-        return 0;
-    }
-
-    @Override
-    public void deleteById(Long aLong) {
-
-    }
-
-    @Override
-    public void delete(User entity) {
-
-    }
-
-    @Override
-    public void deleteAllById(Iterable<? extends Long> longs) {
-
-    }
-
-    @Override
-    public void deleteAll(Iterable<? extends User> entities) {
-
-    }
-
-    @Override
-    public void deleteAll() {
-
-    }
-
-    @Override
-    public <S extends User> S save(S entity) {
-        return null;
-    }
-
-    @Override
-    public <S extends User> List<S> saveAll(Iterable<S> entities) {
-        return null;
-    }
-
-    @Override
-    public Optional<User> findById(Long aLong) {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean existsById(Long aLong) {
-        return false;
-    }
-
-    @Override
-    public void flush() {
-
-    }
-
-    @Override
-    public <S extends User> S saveAndFlush(S entity) {
-        return null;
-    }
-
-    @Override
-    public <S extends User> List<S> saveAllAndFlush(Iterable<S> entities) {
-        return null;
-    }
-
-    @Override
-    public void deleteAllInBatch(Iterable<User> entities) {
-
-    }
-
-    @Override
-    public void deleteAllByIdInBatch(Iterable<Long> longs) {
-
-    }
-
-    @Override
-    public void deleteAllInBatch() {
-
-    }
-
-    @Override
-    public User getOne(Long aLong) {
-        return null;
-    }
-
-    @Override
-    public User getById(Long aLong) {
-        return null;
-    }
-
-    @Override
-    public <S extends User> Optional<S> findOne(Example<S> example) {
-        return Optional.empty();
-    }
-
-    @Override
-    public <S extends User> List<S> findAll(Example<S> example) {
-        return null;
-    }
-
-    @Override
-    public <S extends User> List<S> findAll(Example<S> example, Sort sort) {
-        return null;
-    }
-
-    @Override
-    public <S extends User> Page<S> findAll(Example<S> example, Pageable pageable) {
-        return null;
-    }
-
-    @Override
-    public <S extends User> long count(Example<S> example) {
-        return 0;
-    }
-
-    @Override
-    public <S extends User> boolean exists(Example<S> example) {
-        return false;
-    }
-
-    @Override
-    public <S extends User, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
-        return null;
-    }
 }
-
