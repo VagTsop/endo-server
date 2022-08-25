@@ -28,15 +28,15 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
     public List<InstrumentSeriesDto> getInstrumentSeriesList() {
 
         String sqlFromClause = "From instruments as i\n" +
-                " INNER JOIN instruments_series AS ins ON i.instrument_series_id = ins.instrument_series_id \n";
+                " INNER JOIN instruments_series AS ins ON i.instrument_series_id = ins.id \n";
 
-        String sqlWhereClause = "WHERE i.instrument_id is not null\n";
+        String sqlWhereClause = "WHERE i.id is not null\n";
 
         String groupByClause = "GROUP BY instrumentSeriesCode, instrumentName, instrumentDescription  order by instrumentSeriesCode \n";
 
         MapSqlParameterSource in = new MapSqlParameterSource();
 
-        String sqlQuery = "Select i.name AS instrumentName, i.description AS instrumentDescription, ins.instrument_series_id AS instrumentSeriesId,\n" +
+        String sqlQuery = "Select i.name AS instrumentName, i.description AS instrumentDescription, ins.id AS instrumentSeriesId,\n" +
                 "ins.instrument_series_qr_code  AS instrumentSeriesCode,  COUNT(name) as instrumentsCount \n" +
                 sqlFromClause + sqlWhereClause + groupByClause;
 

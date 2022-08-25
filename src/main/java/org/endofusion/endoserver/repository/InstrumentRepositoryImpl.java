@@ -62,9 +62,9 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
         String sqlFromClause = "From instruments as i\n" +
-                "left join instruments_series as os on i.instrument_series_id = os.instrument_series_id\n";
+                "left join instruments_series as os on i.instrument_series_id = os.id\n";
 
-        String sqlWhereClause = "WHERE i.instrument_id is not null\n";
+        String sqlWhereClause = "WHERE i.id is not null\n";
 
         MapSqlParameterSource in = new MapSqlParameterSource();
 
@@ -122,7 +122,7 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
         int total = this.namedParameterJdbcTemplate.queryForObject(
                 rowCountSql, in, Integer.class);
 
-        String sqlQuery = "Select i.instrument_id as instrumentId, i.name as instrumentName, i.description as instrumentDescription,\n" +
+        String sqlQuery = "Select i.id as instrumentId, i.name as instrumentName, i.description as instrumentDescription,\n" +
                 "i.ref as instrumentRef, i.lot as instrumentLot, i.manufacturer as instrumentManufacturer,\n" +
                 "i.purchase_date as instrumentPurchaseDate, i.notes as instrumentNotes,\n" +
                 "os.instrument_series_qr_code as instrumentSeriesQrCode \n" +
@@ -186,7 +186,7 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
                 "purchase_date = :instrumentPurchaseDate,\n " +
                 "user_photo = :userPhoto,\n " +
                 "notes = :instrumentNotes\n " +
-                "WHERE instrument_id = :instrumentId";
+                "WHERE id = :instrumentId";
 
         MapSqlParameterSource in = new MapSqlParameterSource();
         in.addValue("instrumentId", instrumentDto.getInstrumentId());
@@ -205,7 +205,7 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
     @Override
     public InstrumentDto getInstrumentById(long id) {
 
-        String sqlQuery = "SELECT i.instrument_id as instrumentId,\n" +
+        String sqlQuery = "SELECT i.id as instrumentId,\n" +
                 "i.name as instrumentName,\n" +
                 "i.description as instrumentDescription,\n" +
                 "i.ref as instrumentRef,\n" +
@@ -215,7 +215,7 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
                 "i.user_photo as userPhoto,\n" +
                 "i.notes as instrumentNotes \n" +
                 "FROM instruments AS i\n" +
-                "WHERE i.instrument_Id = :instrumentId";
+                "WHERE i.id = :instrumentId";
 
         MapSqlParameterSource in = new MapSqlParameterSource("instrumentId", id);
 
@@ -238,7 +238,7 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
     @Override
     public boolean deleteInstrument(Long id) {
         MapSqlParameterSource in = new MapSqlParameterSource("id", id);
-        String sqlQuery = "DELETE FROM instruments WHERE instrument_id = :id";
+        String sqlQuery = "DELETE FROM instruments WHERE id = :id";
         return namedParameterJdbcTemplate.update(sqlQuery, in) > 0;
     }
 }
