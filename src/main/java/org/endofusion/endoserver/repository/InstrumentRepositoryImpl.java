@@ -29,7 +29,7 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
     @Override
     public List<InstrumentDto> fetchInstruments() {
 
-        String sqlQuery = "select distinct(i.name) as instrumentName \n" +
+        String sqlQuery = "select distinct(i.name) as name \n" +
                 "from instruments as i\n" +
                 "order by i.name asc";
         return namedParameterJdbcTemplate.query(sqlQuery, new BeanPropertyRowMapper<>(InstrumentDto.class));
@@ -48,7 +48,7 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
 
         MapSqlParameterSource in = new MapSqlParameterSource();
 
-        String sqlQuery = "Select i.name as instrumentName\n" +
+        String sqlQuery = "Select i.name as name\n" +
                 "From instruments as i \n" +
                 "where i.instrument_series_id = :qrCode \n";
         in.addValue("qrCode", qrCode);
@@ -68,9 +68,9 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
 
         MapSqlParameterSource in = new MapSqlParameterSource();
 
-        if (dto.getInstrumentName() != null && !dto.getInstrumentName().isEmpty()) {
-            sqlWhereClause += "AND i.name like :instrumentName\n";
-            in.addValue("instrumentName", "%" + dto.getInstrumentName() + "%");
+        if (dto.getName() != null && !dto.getName().isEmpty()) {
+            sqlWhereClause += "AND i.name like :name\n";
+            in.addValue("name", "%" + dto.getName() + "%");
         }
 
         if (dto.getPurchaseDateFrom() != null) {
@@ -122,7 +122,7 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
         int total = this.namedParameterJdbcTemplate.queryForObject(
                 rowCountSql, in, Integer.class);
 
-        String sqlQuery = "Select i.id as instrumentId, i.name as instrumentName, i.description as instrumentDescription,\n" +
+        String sqlQuery = "Select i.id as id, i.name as name, i.description as description,\n" +
                 "i.ref as instrumentRef, i.lot as instrumentLot, i.manufacturer as instrumentManufacturer,\n" +
                 "i.purchase_date as instrumentPurchaseDate, i.notes as instrumentNotes,\n" +
                 "os.instrument_series_qr_code as instrumentSeriesQrCode \n" +
@@ -147,8 +147,8 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
                 "user_photo,\n" +
                 "notes\n" +
                 ") VALUES (\n" +
-                ":instrumentName,\n" +
-                ":instrumentDescription,\n" +
+                ":name,\n" +
+                ":description,\n" +
                 ":instrumentRef,\n" +
                 ":instrumentLot,\n" +
                 ":instrumentManufacturer,\n" +
@@ -158,8 +158,8 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
                 ")";
 
         MapSqlParameterSource in = new MapSqlParameterSource();
-        in.addValue("instrumentName", instrumentDto.getInstrumentName());
-        in.addValue("instrumentDescription", instrumentDto.getInstrumentDescription());
+        in.addValue("name", instrumentDto.getName());
+        in.addValue("description", instrumentDto.getDescription());
         in.addValue("instrumentRef", instrumentDto.getInstrumentRef());
         in.addValue("instrumentLot", instrumentDto.getInstrumentLot());
         in.addValue("instrumentLot", instrumentDto.getInstrumentLot());
@@ -178,20 +178,20 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
     public boolean updateInstrument(InstrumentDto instrumentDto) {
 
         String sqlQuery = "UPDATE instruments SET\n " +
-                "name = :instrumentName,\n " +
-                "description = :instrumentDescription,\n " +
+                "name = :name,\n " +
+                "description = :description,\n " +
                 "ref = :instrumentRef,\n " +
                 "lot = :instrumentLot,\n " +
                 "manufacturer = :instrumentManufacturer,\n " +
                 "purchase_date = :instrumentPurchaseDate,\n " +
                 "user_photo = :userPhoto,\n " +
                 "notes = :instrumentNotes\n " +
-                "WHERE id = :instrumentId";
+                "WHERE id = :id";
 
         MapSqlParameterSource in = new MapSqlParameterSource();
-        in.addValue("instrumentId", instrumentDto.getInstrumentId());
-        in.addValue("instrumentName", instrumentDto.getInstrumentName());
-        in.addValue("instrumentDescription", instrumentDto.getInstrumentDescription());
+        in.addValue("id", instrumentDto.getId());
+        in.addValue("name", instrumentDto.getName());
+        in.addValue("description", instrumentDto.getDescription());
         in.addValue("instrumentRef", instrumentDto.getInstrumentRef());
         in.addValue("instrumentLot", instrumentDto.getInstrumentLot());
         in.addValue("instrumentManufacturer", instrumentDto.getInstrumentManufacturer());
@@ -205,9 +205,9 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
     @Override
     public InstrumentDto getInstrumentById(long id) {
 
-        String sqlQuery = "SELECT i.id as instrumentId,\n" +
-                "i.name as instrumentName,\n" +
-                "i.description as instrumentDescription,\n" +
+        String sqlQuery = "SELECT i.id as id,\n" +
+                "i.name as name,\n" +
+                "i.description as description,\n" +
                 "i.ref as instrumentRef,\n" +
                 "i.lot as instrumentLot,\n" +
                 "i.manufacturer as instrumentManufacturer,\n" +
@@ -222,9 +222,9 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
         return namedParameterJdbcTemplate.queryForObject(sqlQuery, in, (resultSet, i) -> {
 
             InstrumentDto instrumentDto = new InstrumentDto();
-            instrumentDto.setInstrumentId(resultSet.getLong("instrumentId"));
-            instrumentDto.setInstrumentName(resultSet.getNString("instrumentName"));
-            instrumentDto.setInstrumentDescription(resultSet.getNString("instrumentDescription"));
+            instrumentDto.setId(resultSet.getLong("id"));
+            instrumentDto.setName(resultSet.getNString("name"));
+            instrumentDto.setDescription(resultSet.getNString("description"));
             instrumentDto.setInstrumentRef(resultSet.getNString("instrumentRef"));
             instrumentDto.setInstrumentLot(resultSet.getNString("instrumentLot"));
             instrumentDto.setInstrumentManufacturer(resultSet.getNString("instrumentManufacturer"));

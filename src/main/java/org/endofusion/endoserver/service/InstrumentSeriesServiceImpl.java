@@ -47,8 +47,8 @@ public class InstrumentSeriesServiceImpl implements InstrumentSeriesService {
                     continue;
                 } else {
                     InstrumentSeriesDetails instrumentSeriesDetails = new InstrumentSeriesDetails();
-                    instrumentSeriesDetails.setInstrumentName(tempInstrumentSeriesDto.getInstrumentName());
-                    instrumentSeriesDetails.setInstrumentDescription(tempInstrumentSeriesDto.getInstrumentDescription());
+                    instrumentSeriesDetails.setInstrumentName(tempInstrumentSeriesDto.getName());
+                    instrumentSeriesDetails.setInstrumentDescription(tempInstrumentSeriesDto.getDescription());
                     instrumentSeriesDetails.setInstrumentsCount(tempInstrumentSeriesDto.getInstrumentsCount());
                     instrumentSeriesDetailsList.add(instrumentSeriesDetails);
                 }

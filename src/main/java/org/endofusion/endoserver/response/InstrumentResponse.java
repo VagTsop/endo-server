@@ -2,14 +2,12 @@ package org.endofusion.endoserver.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.endofusion.endoserver.dto.InstrumentDto;
+import org.endofusion.endoserver.request.GenericRequest;
 
 import java.util.Date;
 
-public class InstrumentResponse {
+public class InstrumentResponse extends GenericRequest {
 
-    private Long instrumentId;
-    private String instrumentName;
-    private String instrumentDescription;
     private String instrumentRef;
     private String instrumentLot;
     private String instrumentManufacturer;
@@ -18,37 +16,12 @@ public class InstrumentResponse {
     @JsonProperty("userPhoto")
     private byte[] userPhoto;
 
-
-    public Long getInstrumentId() {
-        return instrumentId;
-    }
-
-    public void setInstrumentId(Long instrumentId) {
-        this.instrumentId = instrumentId;
-    }
-
     public byte[] getUserPhoto() {
         return userPhoto;
     }
 
     public void setUserPhoto(byte[] userPhoto) {
         this.userPhoto = userPhoto;
-    }
-
-    public String getInstrumentName() {
-        return instrumentName;
-    }
-
-    public void setInstrumentName(String instrumentName) {
-        this.instrumentName = instrumentName;
-    }
-
-    public String getInstrumentDescription() {
-        return instrumentDescription;
-    }
-
-    public void setInstrumentDescription(String instrumentDescription) {
-        this.instrumentDescription = instrumentDescription;
     }
 
     public String getInstrumentRef() {
@@ -92,9 +65,9 @@ public class InstrumentResponse {
     }
 
     public InstrumentResponse(InstrumentDto instrumentDto) {
-        this.setInstrumentId(instrumentDto.getInstrumentId());
-        this.setInstrumentName(instrumentDto.getInstrumentName());
-        this.setInstrumentDescription(instrumentDto.getInstrumentDescription());
+        this.setId(instrumentDto.getId());
+        this.setName(instrumentDto.getName());
+        this.setDescription(instrumentDto.getDescription());
         this.setInstrumentRef(instrumentDto.getInstrumentRef());
         this.setInstrumentLot(instrumentDto.getInstrumentLot());
         this.setInstrumentManufacturer(instrumentDto.getInstrumentManufacturer());

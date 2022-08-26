@@ -32,11 +32,11 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
 
         String sqlWhereClause = "WHERE i.id is not null\n";
 
-        String groupByClause = "GROUP BY instrumentSeriesCode, instrumentName, instrumentDescription  order by instrumentSeriesCode \n";
+        String groupByClause = "GROUP BY instrumentSeriesCode, name, description  order by instrumentSeriesCode \n";
 
         MapSqlParameterSource in = new MapSqlParameterSource();
 
-        String sqlQuery = "Select i.name AS instrumentName, i.description AS instrumentDescription, ins.id AS instrumentSeriesId,\n" +
+        String sqlQuery = "Select i.name AS name, i.description AS description, ins.id AS id,\n" +
                 "ins.instrument_series_qr_code  AS instrumentSeriesCode,  COUNT(name) as instrumentsCount \n" +
                 sqlFromClause + sqlWhereClause + groupByClause;
 

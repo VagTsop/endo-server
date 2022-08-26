@@ -4,11 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 
-public class InstrumentRequest {
-
-    private String instrumentName;
-
-    private String instrumentDescription;
+public class InstrumentRequest extends GenericRequest {
 
     private String instrumentRef;
 
@@ -23,28 +19,12 @@ public class InstrumentRequest {
     @JsonProperty("userPhoto")
     private byte[] userPhoto;
 
-    public String getInstrumentName() {
-        return instrumentName;
-    }
-
     public byte[] getUserPhoto() {
         return userPhoto;
     }
 
     public void setUserPhoto(byte[] userPhoto) {
         this.userPhoto = userPhoto;
-    }
-
-    public void setInstrumentName(String instrumentName) {
-        this.instrumentName = instrumentName;
-    }
-
-    public String getInstrumentDescription() {
-        return instrumentDescription;
-    }
-
-    public void setInstrumentDescription(String instrumentDescription) {
-        this.instrumentDescription = instrumentDescription;
     }
 
     public String getInstrumentRef() {

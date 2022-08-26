@@ -1,23 +1,18 @@
 package org.endofusion.endoserver.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.endofusion.endoserver.request.GenericRequest;
 import org.endofusion.endoserver.request.InstrumentRequest;
 
 import java.util.Collection;
 import java.util.Date;
 
-public class InstrumentDto {
-
-    private Long instrumentId;
+public class InstrumentDto extends GenericRequest {
 
     private Long instrumentSeriesId;
 
-    private String instrumentName;
-
     @JsonProperty("userPhoto")
     private byte[] userPhoto;
-
-    private String instrumentDescription;
 
     private String instrumentRef;
 
@@ -42,16 +37,16 @@ public class InstrumentDto {
     public InstrumentDto() {
     }
 
-    public InstrumentDto(String instrumentName, Date purchaseDateFrom, Date purchaseDateTo, Collection<Long> instrumentSeriesCodesList) {
-        this.instrumentName = instrumentName;
+    public InstrumentDto(String name, Date purchaseDateFrom, Date purchaseDateTo, Collection<Long> instrumentSeriesCodesList) {
+        this.name = name;
         this.purchaseDateFrom = purchaseDateFrom;
         this.purchaseDateTo = purchaseDateTo;
         this.instrumentSeriesCodesList = instrumentSeriesCodesList;
     }
 
     public InstrumentDto(InstrumentRequest request, Long id, boolean isUpdate) {
-        this.setInstrumentName(request.getInstrumentName());
-        this.setInstrumentDescription(request.getInstrumentDescription());
+        this.setName(request.getName());
+        this.setDescription(request.getDescription());
         this.setInstrumentRef(request.getInstrumentRef());
         this.setInstrumentLot(request.getInstrumentLot());
         this.setInstrumentManufacturer(request.getInstrumentManufacturer());
@@ -59,7 +54,7 @@ public class InstrumentDto {
         this.setUserPhoto(request.getUserPhoto());
         this.setInstrumentNotes(request.getInstrumentNotes());
         if (isUpdate) {
-            this.setInstrumentId(id);
+            this.setId(id);
         }
     }
 
@@ -71,36 +66,12 @@ public class InstrumentDto {
         this.userPhoto = userPhoto;
     }
 
-    public Long getInstrumentId() {
-        return instrumentId;
-    }
-
-    public void setInstrumentId(Long instrumentId) {
-        this.instrumentId = instrumentId;
-    }
-
     public Long getInstrumentSeriesId() {
         return instrumentSeriesId;
     }
 
     public void setInstrumentSeriesId(Long instrumentSeriesId) {
         this.instrumentSeriesId = instrumentSeriesId;
-    }
-
-    public String getInstrumentName() {
-        return instrumentName;
-    }
-
-    public void setInstrumentName(String instrumentName) {
-        this.instrumentName = instrumentName;
-    }
-
-    public String getInstrumentDescription() {
-        return instrumentDescription;
-    }
-
-    public void setInstrumentDescription(String instrumentDescription) {
-        this.instrumentDescription = instrumentDescription;
     }
 
     public String getInstrumentRef() {
