@@ -63,16 +63,6 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());
     }
 
-    @ExceptionHandler(EmailAlreadyVerifiedException.class)
-    public ResponseEntity<HttpResponse> emailAlreadyVerifiedException(EmailAlreadyVerifiedException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
-    }
-
-    @ExceptionHandler(EmailVerificationTokenExpiredException.class)
-    public ResponseEntity<HttpResponse> EmailVerificationTokenExpiredException(EmailVerificationTokenExpiredException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
-    }
-
     @ExceptionHandler(TokenNotFoundException.class)
     public ResponseEntity<HttpResponse> TokenNotFoundException(TokenNotFoundException exception) {
         return createHttpResponse(BAD_REQUEST, exception.getMessage());

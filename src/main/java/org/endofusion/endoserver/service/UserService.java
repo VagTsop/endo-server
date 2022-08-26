@@ -29,9 +29,9 @@ public interface UserService {
 
     User updateProfileImage(String username, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException;
 
-    String verify(String verificationCode) throws IOException, MessagingException, EmailAlreadyVerifiedException, EmailVerificationTokenExpiredException, TokenNotFoundException;
+    String verify(String verificationCode) throws IOException, MessagingException, TokenNotFoundException;
 
-    boolean resend(String code, String verificationCode) throws IOException, MessagingException, EmailAlreadyVerifiedException, EmailVerificationTokenExpiredException, TokenNotFoundException;
+    boolean resend(String code, String verificationCode) throws IOException, MessagingException, TokenNotFoundException;
 
     ////
     Page<UserDto> getUsersList(Pageable pageable, Long userId, String username, String firstName, String lastName, String email, Boolean status);

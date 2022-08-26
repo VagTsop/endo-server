@@ -77,13 +77,13 @@ public class UserController extends ExceptionHandling {
     }
 
     @RequestMapping(value = "/verify", method = RequestMethod.POST)
-    public ResponseEntity<HttpResponse> verifyUser(@PathParam("code") String code) throws IOException, MessagingException, EmailAlreadyVerifiedException, TokenNotFoundException, EmailVerificationTokenExpiredException {
+    public ResponseEntity<HttpResponse> verifyUser(@PathParam("code") String code) throws IOException, MessagingException,TokenNotFoundException {
         String message = userService.verify(code);
         return response(OK, message);
     }
 
     @RequestMapping(value = "/resend", method = RequestMethod.POST)
-    public ResponseEntity<HttpResponse> resendToken(@PathParam("code") String code, HttpServletRequest request) throws IOException, MessagingException, EmailAlreadyVerifiedException, TokenNotFoundException, EmailVerificationTokenExpiredException {
+    public ResponseEntity<HttpResponse> resendToken(@PathParam("code") String code, HttpServletRequest request) throws IOException, MessagingException, TokenNotFoundException {
         userService.resend(code, getSiteURL(request));
         return response( OK, RESEND_VERIFICATION_EMAIL);
     }
