@@ -321,10 +321,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Page<UserDto> getUsersList(Pageable pageable, Long usernameId, String username,
+    public Page<UserDto> getUsersList(Pageable pageable, String userId, String username,
                                       String firstName,
                                       String lastName, String email, Boolean status) {
-        return userRepository.getUsersList(pageable, new UserDto(usernameId, username, firstName, lastName, email, status));
+        return userRepository.getUsersList(pageable, new UserDto(userId, username, firstName, lastName, email, status));
     }
 
     @Override
@@ -345,5 +345,26 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public List<UserDto> fetchEmails() {
         return userRepository.fetchEmails();
+    }
+
+    @Override
+    public long createUser(UserDto dto) {
+
+        return userRepository.createUser(dto);
+    }
+
+    @Override
+    public boolean updateUser(UserDto dto) {
+
+        return userRepository.updateUser(dto);
+    }
+
+    @Override
+    public UserDto getUserById(long id) {
+        return userRepository.getUserById(id);
+    }
+    @Override
+    public boolean deleteUser(Long id) {
+        return userRepository.deleteUser(id);
     }
 }

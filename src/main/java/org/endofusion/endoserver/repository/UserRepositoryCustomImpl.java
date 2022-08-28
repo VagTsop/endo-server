@@ -1,5 +1,6 @@
 package org.endofusion.endoserver.repository;
 
+import org.endofusion.endoserver.dto.InstrumentDto;
 import org.endofusion.endoserver.dto.SortField;
 import org.endofusion.endoserver.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Repository("UserRepositoryCustom")
@@ -138,5 +142,101 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         List<UserDto> res = namedParameterJdbcTemplate.query(sqlQuery, in, new BeanPropertyRowMapper<>(UserDto.class));
 
         return new PageImpl<>(res, pageable, total);
+    }
+
+
+    @Override
+    public long createUser(UserDto userDto) {
+
+        String sqlQuery = " INSERT INTO user (\n" +
+                "user_id,\n" +
+                "username,\n" +
+                "first_name,\n" +
+                "last_name,\n" +
+                "email,\n" +
+                "is_active\n" +
+                ") VALUES (\n" +
+                ":userId,\n" +
+                ":username,\n" +
+                ":firstName,\n" +
+                ":lastName,\n" +
+                ":email,\n" +
+                ":status" +
+                ")";
+
+        MapSqlParameterSource in = new MapSqlParameterSource();
+        in.addValue("userId", userDto.getUserId());
+        in.addValue("username", userDto.getUsername());
+        in.addValue("firstName", userDto.getFirstName());
+        in.addValue("lastName", userDto.getLastName());
+        in.addValue("email", userDto.getEmail());
+        in.addValue("status", userDto.getStatus());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update(sqlQuery, in, keyHolder);
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
+
+    }
+
+    @Override
+    public boolean updateUser(UserDto userDto) {
+
+        String sqlQuery = "UPDATE user SET\n " +
+                "user_id = :userId,\n " +
+                "username = :username,\n " +
+                "first_name = :firstName,\n " +
+                "last_name = :lastName,\n " +
+                "email = :email,\n " +
+                "is_active = :status\n " +
+                "WHERE id = :id";
+
+        MapSqlParameterSource in = new MapSqlParameterSource();
+        in.addValue("id", userDto.getId());
+        in.addValue("userId", userDto.getUserId());
+        in.addValue("username", userDto.getUsername());
+        in.addValue("firstName", userDto.getFirstName());
+        in.addValue("lastName", userDto.getLastName());
+        in.addValue("email", userDto.getEmail());
+        in.addValue("status", userDto.getStatus());
+
+
+        return namedParameterJdbcTemplate.update(sqlQuery, in) > 0;
+    }
+
+    @Override
+    public UserDto getUserById(long id) {
+
+        String sqlQuery = "SELECT u.id as id,\n" +
+                "u.user_id as userId,\n" +
+                "u.username as username,\n" +
+                "u.first_name as firstName,\n" +
+                "u.last_name as lastName,\n" +
+                "u.email as email,\n" +
+                "u.is_active as status \n" +
+                "FROM user AS u\n" +
+                "WHERE u.id = :id";
+
+        MapSqlParameterSource in = new MapSqlParameterSource("id", id);
+
+        return namedParameterJdbcTemplate.queryForObject(sqlQuery, in, (resultSet, i) -> {
+
+            UserDto userDto = new UserDto();
+            userDto.setId(resultSet.getLong("id"));
+            userDto.setUserId(resultSet.getNString("userId"));
+            userDto.setUsername(resultSet.getNString("username"));
+            userDto.setFirstName(resultSet.getNString("firstName"));
+            userDto.setLastName(resultSet.getNString("lastName"));
+            userDto.setEmail(resultSet.getNString("email"));
+            userDto.setStatus(resultSet.getBoolean("status"));
+
+            return userDto;
+        });
+    }
+
+    @Override
+    public boolean deleteUser(Long id) {
+        MapSqlParameterSource in = new MapSqlParameterSource("id", id);
+        String sqlQuery = "DELETE FROM user WHERE id = :id";
+        return namedParameterJdbcTemplate.update(sqlQuery, in) > 0;
     }
 }

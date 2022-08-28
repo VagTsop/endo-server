@@ -1,6 +1,7 @@
 package org.endofusion.endoserver.service;
 
 import org.endofusion.endoserver.domain.User;
+import org.endofusion.endoserver.dto.InstrumentDto;
 import org.endofusion.endoserver.dto.UserDto;
 import org.endofusion.endoserver.exception.domain.*;
 import org.springframework.data.domain.Page;
@@ -34,7 +35,7 @@ public interface UserService {
     boolean resend(String code, String verificationCode) throws IOException, MessagingException, TokenNotFoundException;
 
     ////
-    Page<UserDto> getUsersList(Pageable pageable, Long userId, String username, String firstName, String lastName, String email, Boolean status);
+    Page<UserDto> getUsersList(Pageable pageable, String userId, String username, String firstName, String lastName, String email, Boolean status);
 
     List<UserDto> fetchUsernames();
 
@@ -43,4 +44,12 @@ public interface UserService {
     List<UserDto> fetchLastNames();
 
     List<UserDto> fetchEmails();
+
+    long createUser(UserDto dto);
+
+    boolean updateUser(UserDto dto);
+
+    UserDto getUserById(long id);
+
+    boolean deleteUser(Long id);
 }

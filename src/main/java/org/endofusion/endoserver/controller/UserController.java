@@ -6,6 +6,8 @@ import org.endofusion.endoserver.domain.UserPrincipal;
 import org.endofusion.endoserver.dto.UserDto;
 import org.endofusion.endoserver.exception.domain.*;
 import org.endofusion.endoserver.provider.JWTTokenProvider;
+import org.endofusion.endoserver.request.UserRequest;
+import org.endofusion.endoserver.response.UserResponse;
 import org.endofusion.endoserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -77,7 +79,7 @@ public class UserController extends ExceptionHandling {
     }
 
     @RequestMapping(value = "/verify", method = RequestMethod.POST)
-    public ResponseEntity<HttpResponse> verifyUser(@PathParam("code") String code) throws IOException, MessagingException,TokenNotFoundException {
+    public ResponseEntity<HttpResponse> verifyUser(@PathParam("code") String code) throws IOException, MessagingException, TokenNotFoundException {
         String message = userService.verify(code);
         return response(OK, message);
     }
@@ -85,7 +87,7 @@ public class UserController extends ExceptionHandling {
     @RequestMapping(value = "/resend", method = RequestMethod.POST)
     public ResponseEntity<HttpResponse> resendToken(@PathParam("code") String code, HttpServletRequest request) throws IOException, MessagingException, TokenNotFoundException {
         userService.resend(code, getSiteURL(request));
-        return response( OK, RESEND_VERIFICATION_EMAIL);
+        return response(OK, RESEND_VERIFICATION_EMAIL);
     }
 
     @PostMapping("/add")
@@ -183,13 +185,13 @@ public class UserController extends ExceptionHandling {
     @RequestMapping("/get-users-list")
     public ResponseEntity<Page<UserDto>> getUsersList(
             Pageable pageable,
-            @RequestParam Optional<Long> userId,
+            @RequestParam Optional<String> userId,
             @RequestParam Optional<String> username,
             @RequestParam Optional<String> firstName,
             @RequestParam Optional<String> lastName,
             @RequestParam Optional<String> email,
             @RequestParam Optional<Boolean> status
-            ) {
+    ) {
         Page<UserDto> retVal = userService.getUsersList(pageable, userId.orElse(null), username.orElse(null), firstName.orElse(null), lastName.orElse(null), email.orElse(null), status.orElse(null));
         return ResponseEntity.status(HttpStatus.OK).body(retVal);
     }
@@ -199,19 +201,45 @@ public class UserController extends ExceptionHandling {
         List<UserDto> retVal = userService.fetchUsernames();
         return ResponseEntity.status(HttpStatus.OK).body(retVal);
     }
+
     @GetMapping("/fetch-firstnames")
     public ResponseEntity<List<UserDto>> fetchFirstNames() {
         List<UserDto> retVal = userService.fetchFirstNames();
         return ResponseEntity.status(HttpStatus.OK).body(retVal);
     }
+
     @GetMapping("/fetch-lastnames")
     public ResponseEntity<List<UserDto>> fetchLastNames() {
         List<UserDto> retVal = userService.fetchLastNames();
         return ResponseEntity.status(HttpStatus.OK).body(retVal);
     }
+
     @GetMapping("/fetch-emails")
     public ResponseEntity<List<UserDto>> fetchEmails() {
         List<UserDto> retVal = userService.fetchEmails();
         return ResponseEntity.status(HttpStatus.OK).body(retVal);
+    }
+
+    @RequestMapping(value = "/create-user", method = RequestMethod.POST)
+    public ResponseEntity<Long> createUser(@RequestBody UserRequest request) {
+        UserDto userDto = new UserDto(request, null, false);
+        return ResponseEntity.status(HttpStatus.OK).body(userService.createUser(userDto));
+    }
+
+    @PutMapping("/update-user")
+    public ResponseEntity<Boolean> updateUser(@RequestParam long id, @RequestBody UserRequest request) {
+        UserDto userDto = new UserDto(request, id, true);
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(userDto));
+    }
+
+    @GetMapping("/get-user-by-id")
+    public ResponseEntity<UserResponse> getUserById(@RequestParam Long id) {
+        UserDto userDto = userService.getUserById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(new UserResponse(userDto));
+    }
+
+    @RequestMapping("/delete-user")
+    public ResponseEntity<Boolean> deleteUser(@RequestBody Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.deleteUser(id));
     }
 }
