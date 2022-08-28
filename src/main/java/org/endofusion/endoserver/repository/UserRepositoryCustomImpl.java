@@ -236,7 +236,13 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     @Override
     public boolean deleteUser(Long id) {
         MapSqlParameterSource in = new MapSqlParameterSource("id", id);
-        String sqlQuery = "DELETE FROM user WHERE id = :id";
-        return namedParameterJdbcTemplate.update(sqlQuery, in) > 0;
+
+        String sqlQueryOne = "DELETE FROM confirmation_token where user_id = :id";
+        namedParameterJdbcTemplate.update(sqlQueryOne, in);
+
+        String sqlQueryTwo = "DELETE FROM user WHERE id = :id";
+        namedParameterJdbcTemplate.update(sqlQueryTwo, in);
+
+        return true;
     }
 }
