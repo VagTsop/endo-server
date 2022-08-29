@@ -1,9 +1,6 @@
-package org.endofusion.endoserver.dto;
+package org.endofusion.endoserver.request;
 
-import org.endofusion.endoserver.request.GenericRequest;
-import org.endofusion.endoserver.request.UserRequest;
-
-public class UserDto extends GenericRequest {
+public class UserRequest extends GenericRequest{
 
     private String userId;
 
@@ -17,31 +14,6 @@ public class UserDto extends GenericRequest {
 
     private Boolean status;
 
-    public UserDto() {
-    }
-
-    public UserDto(String userId, String username, String firstName, String lastName, String email, Boolean status) {
-        this.userId = userId;
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.status = status;
-    }
-
-    public UserDto(UserRequest request, Long id, boolean isUpdate) {
-        this.setName(request.getName());
-        this.setDescription(request.getDescription());
-        this.setUserId(request.getUserId());
-        this.setFirstName(request.getFirstName());
-        this.setLastName(request.getLastName());
-        this.setUsername(request.getUsername());
-        this.setEmail(request.getEmail());
-        this.setStatus(request.getStatus());
-        if (isUpdate) {
-            this.setId(id);
-        }
-    }
 
     public String getUserId() {
         return userId;

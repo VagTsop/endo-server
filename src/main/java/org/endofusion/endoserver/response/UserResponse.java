@@ -1,46 +1,25 @@
-package org.endofusion.endoserver.dto;
+package org.endofusion.endoserver.response;
 
+import org.endofusion.endoserver.dto.UserDto;
 import org.endofusion.endoserver.request.GenericRequest;
-import org.endofusion.endoserver.request.UserRequest;
 
-public class UserDto extends GenericRequest {
+public class UserResponse extends GenericRequest {
 
     private String userId;
-
     private String username;
-
     private String firstName;
-
     private String lastName;
-
     private String email;
-
     private Boolean status;
 
-    public UserDto() {
-    }
-
-    public UserDto(String userId, String username, String firstName, String lastName, String email, Boolean status) {
-        this.userId = userId;
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.status = status;
-    }
-
-    public UserDto(UserRequest request, Long id, boolean isUpdate) {
-        this.setName(request.getName());
-        this.setDescription(request.getDescription());
-        this.setUserId(request.getUserId());
-        this.setFirstName(request.getFirstName());
-        this.setLastName(request.getLastName());
-        this.setUsername(request.getUsername());
-        this.setEmail(request.getEmail());
-        this.setStatus(request.getStatus());
-        if (isUpdate) {
-            this.setId(id);
-        }
+    public UserResponse(UserDto userDto) {
+        this.setId(userDto.getId());
+        this.setUserId(userDto.getUserId());
+        this.setUsername(userDto.getUsername());
+        this.setFirstName(userDto.getFirstName());
+        this.setLastName(userDto.getLastName());
+        this.setEmail(userDto.getEmail());
+        this.setStatus(userDto.getStatus());
     }
 
     public String getUserId() {

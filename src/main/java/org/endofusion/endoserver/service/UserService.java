@@ -29,12 +29,12 @@ public interface UserService {
 
     User updateProfileImage(String username, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException;
 
-    String verify(String verificationCode) throws IOException, MessagingException, EmailAlreadyVerifiedException, EmailVerificationTokenExpiredException, TokenNotFoundException;
+    String verify(String verificationCode) throws IOException, MessagingException, TokenNotFoundException;
 
-    boolean resend(String code, String verificationCode) throws IOException, MessagingException, EmailAlreadyVerifiedException, EmailVerificationTokenExpiredException, TokenNotFoundException;
+    boolean resend(String code, String verificationCode) throws IOException, MessagingException, TokenNotFoundException;
 
     ////
-    Page<UserDto> getUsersList(Pageable pageable, Long userId, String username, String firstName, String lastName, String email, Boolean status);
+    Page<UserDto> getUsersList(Pageable pageable, String userId, String username, String firstName, String lastName, String email, Boolean status);
 
     List<UserDto> fetchUsernames();
 
@@ -43,4 +43,12 @@ public interface UserService {
     List<UserDto> fetchLastNames();
 
     List<UserDto> fetchEmails();
+
+    long createUser(UserDto dto, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, MessagingException;
+
+    boolean updateUser(UserDto dto);
+
+    UserDto getUserById(long id);
+
+    boolean deleteUser(Long id);
 }

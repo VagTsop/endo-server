@@ -29,13 +29,13 @@ public class InstrumentController {
     @RequestMapping("/get-instruments-list")
     public ResponseEntity<Page<InstrumentDto>> getInstrumentList(
             Pageable pageable,
-            @RequestParam Optional<String> instrumentName,
+            @RequestParam Optional<String> name,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<Date> purchaseDateFrom,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<Date> purchaseDateTo,
             @RequestParam Optional<Collection<Long>> instrumentSeriesCodesList
 
     ) {
-        Page<InstrumentDto> retVal = instrumentService.getInstrumentsList(pageable, instrumentName.orElse(null), purchaseDateFrom.orElse(null), purchaseDateTo.orElse(null), instrumentSeriesCodesList.orElse(null));
+        Page<InstrumentDto> retVal = instrumentService.getInstrumentsList(pageable, name.orElse(null), purchaseDateFrom.orElse(null), purchaseDateTo.orElse(null), instrumentSeriesCodesList.orElse(null));
         return ResponseEntity.status(HttpStatus.OK).body(retVal);
     }
 

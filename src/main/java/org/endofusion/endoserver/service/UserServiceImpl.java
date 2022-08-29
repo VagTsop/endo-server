@@ -321,10 +321,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Page<UserDto> getUsersList(Pageable pageable, Long usernameId, String username,
+    public Page<UserDto> getUsersList(Pageable pageable, String userId, String username,
                                       String firstName,
                                       String lastName, String email, Boolean status) {
-        return userRepository.getUsersList(pageable, new UserDto(usernameId, username, firstName, lastName, email, status));
+        return userRepository.getUsersList(pageable, new UserDto(userId, username, firstName, lastName, email, status));
     }
 
     @Override
@@ -345,5 +345,56 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public List<UserDto> fetchEmails() {
         return userRepository.fetchEmails();
+    }
+
+    @Override
+    public long createUser(UserDto dto, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, MessagingException {
+
+        validateNewUsernameAndEmail(EMPTY, dto.getUsername(),  dto.getEmail());
+        User user = new User();
+        user.setUserId(generateUserId());
+        String password = generatePassword();
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setJoinDate(new Date());
+        user.setPassword(encodePassword(password));
+        user.setActive(false);
+        user.setNotLocked(true);
+        user.setRole(ROLE_USER.name());
+        user.setAuthorities(ROLE_USER.getAuthorities());
+        user.setProfileImageUrl(getTemporaryProfileImageUrl(dto.getUsername()));
+        String randomCode = UUID.randomUUID().toString();
+        userRepository.save(user);
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                randomCode,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(20),
+                user
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        emailService.sendVerificationEmail(user, siteURL, confirmationToken);
+        LOGGER.info("New user password: " + password);
+
+        return user.getId();
+    }
+
+    @Override
+    public boolean updateUser(UserDto dto) {
+
+        return userRepository.updateUser(dto);
+    }
+
+    @Override
+    public UserDto getUserById(long id) {
+        return userRepository.getUserById(id);
+    }
+    @Override
+    public boolean deleteUser(Long id) {
+        return userRepository.deleteUser(id);
     }
 }

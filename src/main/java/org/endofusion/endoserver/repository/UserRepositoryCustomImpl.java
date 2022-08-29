@@ -1,41 +1,30 @@
 package org.endofusion.endoserver.repository;
 
-import org.endofusion.endoserver.domain.User;
+import org.endofusion.endoserver.dto.InstrumentDto;
 import org.endofusion.endoserver.dto.SortField;
 import org.endofusion.endoserver.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
-import org.springframework.data.repository.query.FluentQuery;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Repository("UserRepository")
-public class UserRepositoryImpl implements UserRepository {
+@Repository("UserRepositoryCustom")
+public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 
     @Autowired
     protected NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    @Override
-    public User findUserByUsername(String username) {
-        return null;
-    }
-
-    @Override
-    public User findUserByEmail(String email) {
-        return null;
-    }
-
-    @Override
-    public void enableAppUser(String email) {
-    }
 
     @Override
     public List<UserDto> fetchFirstNames() {
@@ -155,149 +144,105 @@ public class UserRepositoryImpl implements UserRepository {
         return new PageImpl<>(res, pageable, total);
     }
 
-    @Override
-    public List<User> findAll() {
-        return null;
-    }
 
     @Override
-    public List<User> findAll(Sort sort) {
-        return null;
-    }
+    public long createUser(UserDto userDto) {
 
-    @Override
-    public Page<User> findAll(Pageable pageable) {
-        return null;
-    }
+        String sqlQuery = " INSERT INTO user (\n" +
+                "user_id,\n" +
+                "username,\n" +
+                "first_name,\n" +
+                "last_name,\n" +
+                "email,\n" +
+                "is_active\n" +
+                ") VALUES (\n" +
+                ":userId,\n" +
+                ":username,\n" +
+                ":firstName,\n" +
+                ":lastName,\n" +
+                ":email,\n" +
+                ":status" +
+                ")";
 
-    @Override
-    public List<User> findAllById(Iterable<Long> longs) {
-        return null;
-    }
+        MapSqlParameterSource in = new MapSqlParameterSource();
+        in.addValue("userId", userDto.getUserId());
+        in.addValue("username", userDto.getUsername());
+        in.addValue("firstName", userDto.getFirstName());
+        in.addValue("lastName", userDto.getLastName());
+        in.addValue("email", userDto.getEmail());
+        in.addValue("status", userDto.getStatus());
 
-    @Override
-    public long count() {
-        return 0;
-    }
-
-    @Override
-    public void deleteById(Long aLong) {
-
-    }
-
-    @Override
-    public void delete(User entity) {
-
-    }
-
-    @Override
-    public void deleteAllById(Iterable<? extends Long> longs) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update(sqlQuery, in, keyHolder);
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
 
     }
 
     @Override
-    public void deleteAll(Iterable<? extends User> entities) {
+    public boolean updateUser(UserDto userDto) {
 
+        String sqlQuery = "UPDATE user SET\n " +
+                "user_id = :userId,\n " +
+                "username = :username,\n " +
+                "first_name = :firstName,\n " +
+                "last_name = :lastName,\n " +
+                "email = :email,\n " +
+                "is_active = :status\n " +
+                "WHERE id = :id";
+
+        MapSqlParameterSource in = new MapSqlParameterSource();
+        in.addValue("id", userDto.getId());
+        in.addValue("userId", userDto.getUserId());
+        in.addValue("username", userDto.getUsername());
+        in.addValue("firstName", userDto.getFirstName());
+        in.addValue("lastName", userDto.getLastName());
+        in.addValue("email", userDto.getEmail());
+        in.addValue("status", userDto.getStatus());
+
+
+        return namedParameterJdbcTemplate.update(sqlQuery, in) > 0;
     }
 
     @Override
-    public void deleteAll() {
+    public UserDto getUserById(long id) {
 
+        String sqlQuery = "SELECT u.id as id,\n" +
+                "u.user_id as userId,\n" +
+                "u.username as username,\n" +
+                "u.first_name as firstName,\n" +
+                "u.last_name as lastName,\n" +
+                "u.email as email,\n" +
+                "u.is_active as status \n" +
+                "FROM user AS u\n" +
+                "WHERE u.id = :id";
+
+        MapSqlParameterSource in = new MapSqlParameterSource("id", id);
+
+        return namedParameterJdbcTemplate.queryForObject(sqlQuery, in, (resultSet, i) -> {
+
+            UserDto userDto = new UserDto();
+            userDto.setId(resultSet.getLong("id"));
+            userDto.setUserId(resultSet.getNString("userId"));
+            userDto.setUsername(resultSet.getNString("username"));
+            userDto.setFirstName(resultSet.getNString("firstName"));
+            userDto.setLastName(resultSet.getNString("lastName"));
+            userDto.setEmail(resultSet.getNString("email"));
+            userDto.setStatus(resultSet.getBoolean("status"));
+
+            return userDto;
+        });
     }
 
     @Override
-    public <S extends User> S save(S entity) {
-        return null;
-    }
+    public boolean deleteUser(Long id) {
+        MapSqlParameterSource in = new MapSqlParameterSource("id", id);
 
-    @Override
-    public <S extends User> List<S> saveAll(Iterable<S> entities) {
-        return null;
-    }
+        String sqlQueryOne = "DELETE FROM confirmation_token where user_id = :id";
+        namedParameterJdbcTemplate.update(sqlQueryOne, in);
 
-    @Override
-    public Optional<User> findById(Long aLong) {
-        return Optional.empty();
-    }
+        String sqlQueryTwo = "DELETE FROM user WHERE id = :id";
+        namedParameterJdbcTemplate.update(sqlQueryTwo, in);
 
-    @Override
-    public boolean existsById(Long aLong) {
-        return false;
-    }
-
-    @Override
-    public void flush() {
-
-    }
-
-    @Override
-    public <S extends User> S saveAndFlush(S entity) {
-        return null;
-    }
-
-    @Override
-    public <S extends User> List<S> saveAllAndFlush(Iterable<S> entities) {
-        return null;
-    }
-
-    @Override
-    public void deleteAllInBatch(Iterable<User> entities) {
-
-    }
-
-    @Override
-    public void deleteAllByIdInBatch(Iterable<Long> longs) {
-
-    }
-
-    @Override
-    public void deleteAllInBatch() {
-
-    }
-
-    @Override
-    public User getOne(Long aLong) {
-        return null;
-    }
-
-    @Override
-    public User getById(Long aLong) {
-        return null;
-    }
-
-    @Override
-    public <S extends User> Optional<S> findOne(Example<S> example) {
-        return Optional.empty();
-    }
-
-    @Override
-    public <S extends User> List<S> findAll(Example<S> example) {
-        return null;
-    }
-
-    @Override
-    public <S extends User> List<S> findAll(Example<S> example, Sort sort) {
-        return null;
-    }
-
-    @Override
-    public <S extends User> Page<S> findAll(Example<S> example, Pageable pageable) {
-        return null;
-    }
-
-    @Override
-    public <S extends User> long count(Example<S> example) {
-        return 0;
-    }
-
-    @Override
-    public <S extends User> boolean exists(Example<S> example) {
-        return false;
-    }
-
-    @Override
-    public <S extends User, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
-        return null;
+        return true;
     }
 }
-
