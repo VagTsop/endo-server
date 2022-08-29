@@ -18,7 +18,7 @@ public class UserResponse extends GenericRequest {
         this.setUsername(userDto.getUsername());
         this.setFirstName(userDto.getFirstName());
         this.setLastName(userDto.getLastName());
-        this.setEmail(userDto.getUsername());
+        this.setEmail(userDto.getEmail());
         this.setStatus(userDto.getStatus());
     }
 

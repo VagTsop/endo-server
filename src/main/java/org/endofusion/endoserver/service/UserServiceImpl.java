@@ -348,9 +348,39 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public long createUser(UserDto dto) {
+    public long createUser(UserDto dto, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, MessagingException {
 
-        return userRepository.createUser(dto);
+        validateNewUsernameAndEmail(EMPTY, dto.getUsername(),  dto.getEmail());
+        User user = new User();
+        user.setUserId(generateUserId());
+        String password = generatePassword();
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setUsername(dto.getUsername());
+        user.setEmail(dto.getEmail());
+        user.setJoinDate(new Date());
+        user.setPassword(encodePassword(password));
+        user.setActive(false);
+        user.setNotLocked(true);
+        user.setRole(ROLE_USER.name());
+        user.setAuthorities(ROLE_USER.getAuthorities());
+        user.setProfileImageUrl(getTemporaryProfileImageUrl(dto.getUsername()));
+        String randomCode = UUID.randomUUID().toString();
+        userRepository.save(user);
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                randomCode,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(20),
+                user
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        emailService.sendVerificationEmail(user, siteURL, confirmationToken);
+        LOGGER.info("New user password: " + password);
+
+        return user.getId();
     }
 
     @Override

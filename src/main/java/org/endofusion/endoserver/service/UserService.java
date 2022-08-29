@@ -1,7 +1,6 @@
 package org.endofusion.endoserver.service;
 
 import org.endofusion.endoserver.domain.User;
-import org.endofusion.endoserver.dto.InstrumentDto;
 import org.endofusion.endoserver.dto.UserDto;
 import org.endofusion.endoserver.exception.domain.*;
 import org.springframework.data.domain.Page;
@@ -45,7 +44,7 @@ public interface UserService {
 
     List<UserDto> fetchEmails();
 
-    long createUser(UserDto dto);
+    long createUser(UserDto dto, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, MessagingException;
 
     boolean updateUser(UserDto dto);
 

@@ -221,9 +221,9 @@ public class UserController extends ExceptionHandling {
     }
 
     @RequestMapping(value = "/create-user", method = RequestMethod.POST)
-    public ResponseEntity<Long> createUser(@RequestBody UserRequest request) {
-        UserDto userDto = new UserDto(request, null, false);
-        return ResponseEntity.status(HttpStatus.OK).body(userService.createUser(userDto));
+    public ResponseEntity<Long> createUser(@RequestBody UserRequest userRequest, HttpServletRequest request) throws UserNotFoundException, UsernameExistException, MessagingException, EmailExistException, IOException {
+        UserDto userDto = new UserDto(userRequest, null, false);
+        return ResponseEntity.status(HttpStatus.OK).body(userService.createUser(userDto,getSiteURL(request)));
     }
 
     @PutMapping("/update-user")
