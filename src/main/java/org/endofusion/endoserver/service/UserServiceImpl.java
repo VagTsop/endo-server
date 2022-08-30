@@ -365,6 +365,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setRole(ROLE_USER.name());
         user.setAuthorities(ROLE_USER.getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileImageUrl(dto.getUsername()));
+        user.setProfileImage(dto.getProfileImage());
+
         String randomCode = UUID.randomUUID().toString();
         userRepository.save(user);
 

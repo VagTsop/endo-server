@@ -18,6 +18,7 @@ public class User implements Serializable {
     private String password;
     private String email;
     private String profileImageUrl;
+    private byte[] profileImage;
     private Date lastLoginDate; // the last time you log in
     private Date lastLoginDateDisplay; // shows when the log in
     private Date joinDate;
@@ -29,7 +30,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(Long id, String userId, String firstName, String lastName, String username, String password, String email, String profileImageUrl, Date lastLoginDate, Date lastLoginDateDisplay, Date joinDate, String role, String[] authorities, boolean isActive, boolean isNotLocked) {
+    public User(Long id, String userId, String firstName, String lastName, String username, String password, String email, String profileImageUrl, byte[] profileImage, Date lastLoginDate, Date lastLoginDateDisplay, Date joinDate, String role, String[] authorities, boolean isActive, boolean isNotLocked) {
         this.id = id;
         this.userId = userId;
         this.firstName = firstName;
@@ -38,6 +39,7 @@ public class User implements Serializable {
         this.password = password;
         this.email = email;
         this.profileImageUrl = profileImageUrl;
+        this.profileImage = profileImage;
         this.lastLoginDate = lastLoginDate;
         this.lastLoginDateDisplay = lastLoginDateDisplay;
         this.joinDate = joinDate;
@@ -110,6 +112,14 @@ public class User implements Serializable {
 
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public byte[] getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(byte[] profileImage) {
+        this.profileImage = profileImage;
     }
 
     public Date getLastLoginDate() {

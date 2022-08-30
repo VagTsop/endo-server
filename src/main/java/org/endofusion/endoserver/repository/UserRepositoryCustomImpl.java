@@ -187,7 +187,8 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 "first_name = :firstName,\n " +
                 "last_name = :lastName,\n " +
                 "email = :email,\n " +
-                "is_active = :status\n " +
+                "is_active = :status,\n " +
+                "profile_image = :profileImage\n " +
                 "WHERE id = :id";
 
         MapSqlParameterSource in = new MapSqlParameterSource();
@@ -198,7 +199,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         in.addValue("lastName", userDto.getLastName());
         in.addValue("email", userDto.getEmail());
         in.addValue("status", userDto.getStatus());
-
+        in.addValue("profileImage", userDto.getProfileImage());
 
         return namedParameterJdbcTemplate.update(sqlQuery, in) > 0;
     }
@@ -212,7 +213,8 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 "u.first_name as firstName,\n" +
                 "u.last_name as lastName,\n" +
                 "u.email as email,\n" +
-                "u.is_active as status \n" +
+                "u.is_active as status, \n" +
+                "u.profile_image as profileImage \n" +
                 "FROM user AS u\n" +
                 "WHERE u.id = :id";
 
@@ -228,6 +230,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
             userDto.setLastName(resultSet.getNString("lastName"));
             userDto.setEmail(resultSet.getNString("email"));
             userDto.setStatus(resultSet.getBoolean("status"));
+            userDto.setProfileImage(resultSet.getBytes("profileImage"));
 
             return userDto;
         });

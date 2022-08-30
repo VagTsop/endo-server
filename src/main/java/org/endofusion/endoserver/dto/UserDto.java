@@ -17,6 +17,8 @@ public class UserDto extends GenericRequest {
 
     private Boolean status;
 
+    private byte[] profileImage;
+
     public UserDto() {
     }
 
@@ -38,6 +40,7 @@ public class UserDto extends GenericRequest {
         this.setUsername(request.getUsername());
         this.setEmail(request.getEmail());
         this.setStatus(request.getStatus());
+        this.setProfileImage(request.getProfileImage());
         if (isUpdate) {
             this.setId(id);
         }
@@ -89,5 +92,13 @@ public class UserDto extends GenericRequest {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public byte[] getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(byte[] profileImage) {
+        this.profileImage = profileImage;
     }
 }

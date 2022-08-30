@@ -14,6 +14,7 @@ public class UserRequest extends GenericRequest{
 
     private Boolean status;
 
+    private byte[] profileImage;
 
     public String getUserId() {
         return userId;
@@ -61,5 +62,13 @@ public class UserRequest extends GenericRequest{
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public byte[] getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(byte[] profileImage) {
+        this.profileImage = profileImage;
     }
 }
