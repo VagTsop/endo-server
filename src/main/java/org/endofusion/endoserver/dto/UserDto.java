@@ -17,6 +17,8 @@ public class UserDto extends GenericRequest {
 
     private Boolean status;
 
+    private Boolean locked;
+
     private byte[] profileImage;
 
     public UserDto() {
@@ -41,6 +43,7 @@ public class UserDto extends GenericRequest {
         this.setEmail(request.getEmail());
         this.setStatus(request.getStatus());
         this.setProfileImage(request.getProfileImage());
+        this.setLocked(request.getLocked());
         if (isUpdate) {
             this.setId(id);
         }
@@ -100,5 +103,13 @@ public class UserDto extends GenericRequest {
 
     public void setProfileImage(byte[] profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public Boolean getLocked() {
+        return locked;
+    }
+
+    public void setLocked(Boolean locked) {
+        this.locked = locked;
     }
 }

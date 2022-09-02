@@ -144,40 +144,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         return new PageImpl<>(res, pageable, total);
     }
 
-
-    @Override
-    public long createUser(UserDto userDto) {
-
-        String sqlQuery = " INSERT INTO user (\n" +
-                "user_id,\n" +
-                "username,\n" +
-                "first_name,\n" +
-                "last_name,\n" +
-                "email,\n" +
-                "is_active\n" +
-                ") VALUES (\n" +
-                ":userId,\n" +
-                ":username,\n" +
-                ":firstName,\n" +
-                ":lastName,\n" +
-                ":email,\n" +
-                ":status" +
-                ")";
-
-        MapSqlParameterSource in = new MapSqlParameterSource();
-        in.addValue("userId", userDto.getUserId());
-        in.addValue("username", userDto.getUsername());
-        in.addValue("firstName", userDto.getFirstName());
-        in.addValue("lastName", userDto.getLastName());
-        in.addValue("email", userDto.getEmail());
-        in.addValue("status", userDto.getStatus());
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update(sqlQuery, in, keyHolder);
-        return Objects.requireNonNull(keyHolder.getKey()).longValue();
-
-    }
-
     @Override
     public boolean updateUser(UserDto userDto) {
 
@@ -187,6 +153,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 "first_name = :firstName,\n " +
                 "last_name = :lastName,\n " +
                 "email = :email,\n " +
+                "is_not_locked = :locked,\n " +
                 "is_active = :status,\n " +
                 "profile_image = :profileImage\n " +
                 "WHERE id = :id";
@@ -199,6 +166,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         in.addValue("lastName", userDto.getLastName());
         in.addValue("email", userDto.getEmail());
         in.addValue("status", userDto.getStatus());
+        in.addValue("locked", userDto.getLocked());
         in.addValue("profileImage", userDto.getProfileImage());
 
         return namedParameterJdbcTemplate.update(sqlQuery, in) > 0;
@@ -214,6 +182,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 "u.last_name as lastName,\n" +
                 "u.email as email,\n" +
                 "u.is_active as status, \n" +
+                "u.is_not_locked as locked, \n" +
                 "u.profile_image as profileImage \n" +
                 "FROM user AS u\n" +
                 "WHERE u.id = :id";
@@ -230,6 +199,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
             userDto.setLastName(resultSet.getNString("lastName"));
             userDto.setEmail(resultSet.getNString("email"));
             userDto.setStatus(resultSet.getBoolean("status"));
+            userDto.setLocked(resultSet.getBoolean("locked"));
             userDto.setProfileImage(resultSet.getBytes("profileImage"));
 
             return userDto;

@@ -14,6 +14,8 @@ public class UserRequest extends GenericRequest{
 
     private Boolean status;
 
+    private Boolean locked;
+
     private byte[] profileImage;
 
     public String getUserId() {
@@ -62,6 +64,14 @@ public class UserRequest extends GenericRequest{
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public Boolean getLocked() {
+        return locked;
+    }
+
+    public void setLocked(Boolean locked) {
+        this.locked = locked;
     }
 
     public byte[] getProfileImage() {

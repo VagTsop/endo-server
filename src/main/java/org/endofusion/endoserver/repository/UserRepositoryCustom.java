@@ -19,8 +19,6 @@ public interface UserRepositoryCustom {
 
     List<UserDto> fetchEmails();
 
-    long createUser(UserDto instrumentDto);
-
     boolean updateUser(UserDto userDto);
 
     UserDto getUserById(long id);

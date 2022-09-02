@@ -360,8 +360,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setEmail(dto.getEmail());
         user.setJoinDate(new Date());
         user.setPassword(encodePassword(password));
-        user.setActive(false);
-        user.setNotLocked(true);
+        user.setActive(dto.getStatus());
+        user.setNotLocked(dto.getLocked());
         user.setRole(ROLE_USER.name());
         user.setAuthorities(ROLE_USER.getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileImageUrl(dto.getUsername()));
