@@ -41,11 +41,9 @@ public class EmailService {
         mainPart.setText("<section>\n" +
                 " <div><img style=\"width:150px;margin-top:10px\" src=\"cid:" + cid + "\" /></div>\n" +
                 " <p>Hello " + firstName + ",</p>\n" +
-                " <p>Welcome to [product name, service, subscription, etc.]! Thanks so much for [buying, joining, subscribing, signing-up for, etc.] We're looking forward to [helping you with X, supporting your X efforts, providing you with X], so you can [outcome of using our product, service, subscription, etc.].</p>\n" +
-                " <p>[Optional section: Where words are underlined, add hyperlinks]</p>\n" +
+                " <p>Welcome to Endofusion! Thanks so much for joining our platform. We're looking forward to helping you with our products, so you can ...</p>\n" +
                 " <p>We offer lots of ways to connect:</p>\n" +
                 " <ul class=\"default-list\">\n" +
-                " <li>Join us on [date] for [<u>event</u>]</li>\n" +
                 " <li>Follow us on social media [<u>Twitter</u>, <u>Facebook</u>, <u>Instagram</u>, <u>LinkedIn</u>]</li>\n" +
                 " <li><u>Subscribe to our newsletter</u> for special offers and discounts</li>\n" +
                 " <li>Watch our <u>YouTube videos</u> about [topic]</li>\n" +
@@ -85,7 +83,7 @@ public class EmailService {
                 "Please click the link below to verify your registration:<br>\n" +
                 "<h3><a href= " + verifyURL + " target=\"_self\">Activate Your Account</a></h3>\n" +
                 "Thank you,<br>\n" +
-                "Your company name", "US-ASCII", "html");
+                "Endofusion", "US-ASCII", "html");
         content.addBodyPart(mainPart);
         // Image part
         MimeBodyPart imagePart = new MimeBodyPart();
