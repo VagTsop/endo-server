@@ -323,8 +323,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public Page<UserDto> getUsersList(Pageable pageable, String userId, String username,
                                       String firstName,
-                                      String lastName, String email, Boolean status) {
-        return userRepository.getUsersList(pageable, new UserDto(userId, username, firstName, lastName, email, status));
+                                      String lastName, String email, Boolean status, Boolean locked) {
+        return userRepository.getUsersList(pageable, new UserDto(userId, username, firstName, lastName, email, status, locked));
     }
 
     @Override

@@ -17,7 +17,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Repository("UserRepositoryCustom")
@@ -100,6 +99,11 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
             in.addValue("status", "%" + dto.getStatus() + "%");
         }
 
+        if (dto.getLocked() != null) {
+            sqlWhereClause += "AND u.is_not_locked like :locked\n";
+            in.addValue("locked", "%" + dto.getLocked() + "%");
+        }
+
         List<String> validSortColumns = new ArrayList<String>();
         validSortColumns.add("ID");
         validSortColumns.add("FIRST_NAME");
@@ -107,6 +111,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         validSortColumns.add("USERNAME");
         validSortColumns.add("EMAIL");
         validSortColumns.add("STATUS");
+        validSortColumns.add("LOCKED");
 
         List<Sort.Order> sortOrders = pageable.getSort().stream().collect(Collectors.toList());
         Sort.Order order = sortOrders.get(0);
@@ -135,7 +140,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 rowCountSql, in, Integer.class);
 
         String sqlQuery = "Select u.id as id, u.user_id as userId, u.username as username, u.first_name as firstName,\n" +
-                "u.last_name as lastName, u.email as email, u.is_active as status \n" +
+                "u.last_name as lastName, u.email as email, u.is_active as status, u.is_not_locked as locked \n" +
 
                 sqlFromClause + sqlWhereClause + sqlPaginationClause;
 

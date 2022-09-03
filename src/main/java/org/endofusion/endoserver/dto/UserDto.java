@@ -24,13 +24,14 @@ public class UserDto extends GenericRequest {
     public UserDto() {
     }
 
-    public UserDto(String userId, String username, String firstName, String lastName, String email, Boolean status) {
+    public UserDto(String userId, String username, String firstName, String lastName, String email, Boolean status, Boolean locked) {
         this.userId = userId;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.status = status;
+        this.locked = locked;
     }
 
     public UserDto(UserRequest request, Long id, boolean isUpdate) {

@@ -34,7 +34,7 @@ public interface UserService {
     boolean resend(String code, String verificationCode) throws IOException, MessagingException, TokenNotFoundException;
 
     ////
-    Page<UserDto> getUsersList(Pageable pageable, String userId, String username, String firstName, String lastName, String email, Boolean status);
+    Page<UserDto> getUsersList(Pageable pageable, String userId, String username, String firstName, String lastName, String email, Boolean status, Boolean locked);
 
     List<UserDto> fetchUsernames();
 
