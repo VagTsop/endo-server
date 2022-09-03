@@ -42,7 +42,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.apache.logging.log4j.util.Strings.EMPTY;
 import static org.endofusion.endoserver.constant.FileConstant.*;
 import static org.endofusion.endoserver.constant.UserImplConstants.*;
-import static org.endofusion.endoserver.enumeration.Role.ROLE_USER;
+import static org.endofusion.endoserver.enumeration.Role.*;
 
 
 @Service
