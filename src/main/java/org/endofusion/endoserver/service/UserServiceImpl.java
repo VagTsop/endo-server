@@ -323,8 +323,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public Page<UserDto> getUsersList(Pageable pageable, String userId, String username,
                                       String firstName,
-                                      String lastName, String email, Boolean status) {
-        return userRepository.getUsersList(pageable, new UserDto(userId, username, firstName, lastName, email, status));
+                                      String lastName, String email, Boolean status, Boolean locked) {
+        return userRepository.getUsersList(pageable, new UserDto(userId, username, firstName, lastName, email, status, locked));
     }
 
     @Override
@@ -360,8 +360,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setEmail(dto.getEmail());
         user.setJoinDate(new Date());
         user.setPassword(encodePassword(password));
-        user.setActive(false);
-        user.setNotLocked(true);
+        user.setActive(dto.getStatus());
+        user.setNotLocked(dto.getLocked());
         user.setRole(ROLE_USER.name());
         user.setAuthorities(ROLE_USER.getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileImageUrl(dto.getUsername()));

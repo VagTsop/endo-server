@@ -190,9 +190,10 @@ public class UserController extends ExceptionHandling {
             @RequestParam Optional<String> firstName,
             @RequestParam Optional<String> lastName,
             @RequestParam Optional<String> email,
-            @RequestParam Optional<Boolean> status
+            @RequestParam Optional<Boolean> status,
+            @RequestParam Optional<Boolean> locked
     ) {
-        Page<UserDto> retVal = userService.getUsersList(pageable, userId.orElse(null), username.orElse(null), firstName.orElse(null), lastName.orElse(null), email.orElse(null), status.orElse(null));
+        Page<UserDto> retVal = userService.getUsersList(pageable, userId.orElse(null), username.orElse(null), firstName.orElse(null), lastName.orElse(null), email.orElse(null), status.orElse(null), locked.orElse(null));
         return ResponseEntity.status(HttpStatus.OK).body(retVal);
     }
 

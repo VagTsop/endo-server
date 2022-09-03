@@ -17,18 +17,21 @@ public class UserDto extends GenericRequest {
 
     private Boolean status;
 
+    private Boolean locked;
+
     private byte[] profileImage;
 
     public UserDto() {
     }
 
-    public UserDto(String userId, String username, String firstName, String lastName, String email, Boolean status) {
+    public UserDto(String userId, String username, String firstName, String lastName, String email, Boolean status, Boolean locked) {
         this.userId = userId;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.status = status;
+        this.locked = locked;
     }
 
     public UserDto(UserRequest request, Long id, boolean isUpdate) {
@@ -41,6 +44,7 @@ public class UserDto extends GenericRequest {
         this.setEmail(request.getEmail());
         this.setStatus(request.getStatus());
         this.setProfileImage(request.getProfileImage());
+        this.setLocked(request.getLocked());
         if (isUpdate) {
             this.setId(id);
         }
@@ -100,5 +104,13 @@ public class UserDto extends GenericRequest {
 
     public void setProfileImage(byte[] profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public Boolean getLocked() {
+        return locked;
+    }
+
+    public void setLocked(Boolean locked) {
+        this.locked = locked;
     }
 }

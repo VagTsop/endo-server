@@ -13,7 +13,8 @@ public class SortField {
         LAST_NAME("u.last_name"),
         USERNAME("u.username"),
         EMAIL("u.email"),
-        STATUS("u.is_active");
+        STATUS("u.is_active"),
+        LOCKED("u.is_not_locked");
 
         private String value;
 
