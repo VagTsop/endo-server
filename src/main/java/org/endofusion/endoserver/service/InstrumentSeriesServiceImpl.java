@@ -37,21 +37,13 @@ public class InstrumentSeriesServiceImpl implements InstrumentSeriesService {
     @Override
     public List<InstrumentSeriesResponse> getInstrumentSeriesList() {
         List<InstrumentSeriesResponse> instrumentSeriesResponseList = new ArrayList<>();
-        List<InstrumentDto> instrumentDtos;
-        List<InstrumentSeriesDetails> instrumentSeriesDetailsList = new ArrayList<>();
-        List<InstrumentSeriesDto> instrumentSeriesDtos;
-        Long instrumentSeriesCode;
+        List<InstrumentDto> instrumentDtos = this.fetchInstrumentsSeriesCodes();
+        List<InstrumentSeriesDto> instrumentSeriesDtos = instrumentSeriesRepository.getInstrumentSeriesList();
 
-        instrumentDtos = this.fetchInstrumentsSeriesCodes();
-
-        instrumentSeriesDtos = instrumentSeriesRepository.getInstrumentSeriesList();
-        InstrumentSeriesResponse instrumentSeriesResponse;
-
+        // loop list with instrumentCodes
         for (InstrumentDto tempInstrumentDto : instrumentDtos) {
-             instrumentSeriesCode = tempInstrumentDto.getInstrumentSeriesCode();
-
-
-            instrumentSeriesDetailsList = new ArrayList<>();
+           Long instrumentSeriesCode = tempInstrumentDto.getInstrumentSeriesCode(); // get instrument code
+             List<InstrumentSeriesDetails> instrumentSeriesDetailsList = new ArrayList<>(); // create instrument details list
             for (InstrumentSeriesDto tempInstrumentSeriesDto : instrumentSeriesDtos) {
                 if (tempInstrumentSeriesDto.getInstrumentSeriesCode() != tempInstrumentDto.getInstrumentSeriesCode()) {
                     continue;
@@ -63,7 +55,7 @@ public class InstrumentSeriesServiceImpl implements InstrumentSeriesService {
                     instrumentSeriesDetailsList.add(instrumentSeriesDetails);
                 }
             }
-            instrumentSeriesResponse = new InstrumentSeriesResponse(instrumentSeriesCode, instrumentSeriesDetailsList);
+            InstrumentSeriesResponse instrumentSeriesResponse = new InstrumentSeriesResponse(instrumentSeriesCode, instrumentSeriesDetailsList);
             instrumentSeriesResponseList.add(instrumentSeriesResponse);
         }
         return instrumentSeriesResponseList;
