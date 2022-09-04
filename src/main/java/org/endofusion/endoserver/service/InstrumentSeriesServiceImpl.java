@@ -25,6 +25,11 @@ public class InstrumentSeriesServiceImpl implements InstrumentSeriesService {
     }
 
     @Override
+    public List<InstrumentDto> fetchAvailableInstruments() {
+        return instrumentSeriesRepository.fetchAvailableInstruments();
+    }
+
+    @Override
     public List<InstrumentSeriesResponse> getInstrumentSeriesList() {
         List<InstrumentSeriesResponse> instrumentSeriesResponseList = new ArrayList<>();
         List<InstrumentDto> instrumentDtos;

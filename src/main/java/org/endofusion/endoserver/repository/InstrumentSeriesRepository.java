@@ -10,4 +10,6 @@ public interface InstrumentSeriesRepository {
     List<InstrumentSeriesDto> getInstrumentSeriesList();
 
     List<InstrumentDto> fetchInstrumentsSeriesCodes();
+
+    List<InstrumentDto> fetchAvailableInstruments();
 }

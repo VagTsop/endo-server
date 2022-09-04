@@ -34,6 +34,8 @@ public class InstrumentDto extends GenericRequest {
 
     private Long instrumentSeriesQrCode;
 
+    private Long InstrumentsCount;
+
     public InstrumentDto() {
     }
 
@@ -152,5 +154,13 @@ public class InstrumentDto extends GenericRequest {
 
     public void setInstrumentSeriesQrCode(Long instrumentSeriesQrCode) {
         this.instrumentSeriesQrCode = instrumentSeriesQrCode;
+    }
+
+    public Long getInstrumentsCount() {
+        return InstrumentsCount;
+    }
+
+    public void setInstrumentsCount(Long instrumentsCount) {
+        InstrumentsCount = instrumentsCount;
     }
 }

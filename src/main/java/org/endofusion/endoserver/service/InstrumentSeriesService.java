@@ -11,4 +11,5 @@ public interface InstrumentSeriesService {
 
     List<InstrumentDto> fetchInstrumentsSeriesCodes();
 
+    List<InstrumentDto> fetchAvailableInstruments();
 }

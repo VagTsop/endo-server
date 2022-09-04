@@ -25,6 +25,14 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
     }
 
     @Override
+    public List<InstrumentDto> fetchAvailableInstruments() {
+
+        String sqlQuery = "select i.name as name, COUNT(name) as instrumentsCount \n" +
+                "from instruments as i GROUP BY name \n";
+        return namedParameterJdbcTemplate.query(sqlQuery, new BeanPropertyRowMapper<>(InstrumentDto.class));
+    }
+
+    @Override
     public List<InstrumentSeriesDto> getInstrumentSeriesList() {
 
         String sqlFromClause = "From instruments as i\n" +
