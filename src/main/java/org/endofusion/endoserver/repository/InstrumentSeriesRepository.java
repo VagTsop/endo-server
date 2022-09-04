@@ -12,4 +12,6 @@ public interface InstrumentSeriesRepository {
     List<InstrumentDto> fetchInstrumentsSeriesCodes();
 
     List<InstrumentDto> fetchAvailableInstruments();
+
+    List<InstrumentDto> fetchInstrumentsByInstrumentSeriesCode(long qrCode);
 }

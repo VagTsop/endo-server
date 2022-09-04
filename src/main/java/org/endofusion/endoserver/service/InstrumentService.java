@@ -14,8 +14,6 @@ public interface InstrumentService {
 
     List<InstrumentDto> fetchInstrumentsSeriesCodes();
 
-    List<InstrumentDto> fetchInstrumentsByInstrumentSeriesCode(long qrCode);
-
     Page<InstrumentDto> getInstrumentsList(Pageable pageable, String name, Date purchaseDateFrom, Date purchaseDateTo, Collection<Long> instrumentSeriesCodesList);
 
     long createInstrument(InstrumentDto dto);

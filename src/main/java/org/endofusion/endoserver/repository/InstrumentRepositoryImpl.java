@@ -44,19 +44,6 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
     }
 
     @Override
-    public List<InstrumentDto> fetchInstrumentsByInstrumentSeriesCode(long qrCode) {
-
-        MapSqlParameterSource in = new MapSqlParameterSource();
-
-        String sqlQuery = "Select i.name as name, i.lot AS instrumentLot, i.description AS description, COUNT(name) as instrumentsCount \n" +
-                "From instruments as i \n" +
-                "where i.instrument_series_id = :qrCode GROUP BY name, description \n";
-        in.addValue("qrCode", qrCode);
-        return namedParameterJdbcTemplate.query(sqlQuery, in, new BeanPropertyRowMapper<>(InstrumentDto.class));
-    }
-
-
-    @Override
     public Page<InstrumentDto> getInstrumentsList(Pageable pageable, InstrumentDto dto) {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");

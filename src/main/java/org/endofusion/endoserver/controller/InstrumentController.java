@@ -51,13 +51,6 @@ public class InstrumentController {
         return ResponseEntity.status(HttpStatus.OK).body(retVal);
     }
 
-    @GetMapping("/fetch-instruments-by-instrument-series-code")
-    public ResponseEntity<List<InstrumentDto>> fetchInstrumentsByInstrumentSeriesCode(
-            @RequestParam long qrCode) {
-        List<InstrumentDto> retVal = instrumentService.fetchInstrumentsByInstrumentSeriesCode(qrCode);
-        return ResponseEntity.status(HttpStatus.OK).body(retVal);
-    }
-
     @GetMapping("/get-instrument-by-id")
     public ResponseEntity<InstrumentResponse> getById(@RequestParam Long id) {
         InstrumentDto instrumentDto = instrumentService.getInstrumentById(id);

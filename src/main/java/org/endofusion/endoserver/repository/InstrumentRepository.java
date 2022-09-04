@@ -12,8 +12,6 @@ public interface InstrumentRepository {
 
     List<InstrumentDto> fetchInstrumentsSeriesCodes();
 
-    List<InstrumentDto> fetchInstrumentsByInstrumentSeriesCode(long qrCode);
-
     Page<InstrumentDto> getInstrumentsList(Pageable pageable, InstrumentDto dto);
 
     long createInstrument(InstrumentDto instrumentDto);
