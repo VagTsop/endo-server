@@ -27,6 +27,6 @@ public class InstrumentSeriesDetails {
     }
 
     public void setInstrumentsCount(Long instrumentsCount) {
-        instrumentsCount = instrumentsCount;
+        this.instrumentsCount = instrumentsCount;
     }
 }
