@@ -1,6 +1,7 @@
 package org.endofusion.endoserver.controller;
 
 import org.endofusion.endoserver.dto.InstrumentDto;
+import org.endofusion.endoserver.dto.InstrumentSeriesDto;
 import org.endofusion.endoserver.response.InstrumentSeriesResponse;
 import org.endofusion.endoserver.service.InstrumentSeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,9 @@ public class InstrumentSeriesController {
     }
 
     @GetMapping("/fetch-instruments-by-instrument-series-code")
-    public ResponseEntity<List<InstrumentDto>> fetchInstrumentsByInstrumentSeriesCode(
+    public ResponseEntity<List<InstrumentSeriesDto>> fetchInstrumentsByInstrumentSeriesCode(
             @RequestParam long qrCode) {
-        List<InstrumentDto> retVal = instrumentSeriesService.fetchInstrumentsByInstrumentSeriesCode(qrCode);
+        List<InstrumentSeriesDto> retVal = instrumentSeriesService.fetchInstrumentsByInstrumentSeriesCode(qrCode);
         return ResponseEntity.status(HttpStatus.OK).body(retVal);
     }
 

@@ -6,6 +6,8 @@ public class InstrumentSeriesDto extends GenericRequest {
 
     private Long instrumentSeriesCode;
 
+    private String instrumentLot;
+
     private Long instrumentsCount;
 
     public InstrumentSeriesDto() {
@@ -17,6 +19,14 @@ public class InstrumentSeriesDto extends GenericRequest {
 
     public void setInstrumentSeriesCode(Long instrumentSeriesCode) {
         this.instrumentSeriesCode = instrumentSeriesCode;
+    }
+
+    public String getInstrumentLot() {
+        return instrumentLot;
+    }
+
+    public void setInstrumentLot(String instrumentLot) {
+        this.instrumentLot = instrumentLot;
     }
 
     public Long getInstrumentsCount() {

@@ -42,8 +42,6 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
 
         String groupByClause = "GROUP BY instrumentSeriesCode, name, description  order by instrumentSeriesCode \n";
 
-        MapSqlParameterSource in = new MapSqlParameterSource();
-
         String sqlQuery = "Select i.name AS name, i.description AS description, ins.id AS id,\n" +
                 "ins.instrument_series_qr_code  AS instrumentSeriesCode,  COUNT(name) as instrumentsCount \n" +
                 sqlFromClause + sqlWhereClause + groupByClause;
@@ -52,7 +50,7 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
     }
 
     @Override
-    public List<InstrumentDto> fetchInstrumentsByInstrumentSeriesCode(long qrCode) {
+    public List<InstrumentSeriesDto> fetchInstrumentsByInstrumentSeriesCode(long qrCode) {
 
         MapSqlParameterSource in = new MapSqlParameterSource();
 
@@ -60,6 +58,6 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
                 "From instruments as i \n" +
                 "where i.instrument_series_id = :qrCode GROUP BY name, description \n";
         in.addValue("qrCode", qrCode);
-        return namedParameterJdbcTemplate.query(sqlQuery, in, new BeanPropertyRowMapper<>(InstrumentDto.class));
+        return namedParameterJdbcTemplate.query(sqlQuery, in, new BeanPropertyRowMapper<>(InstrumentSeriesDto.class));
     }
 }
