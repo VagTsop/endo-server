@@ -27,7 +27,7 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
     @Override
     public List<InstrumentDto> fetchAvailableInstruments() {
 
-        String sqlQuery = "select i.name as name, COUNT(name) as instrumentsCount \n" +
+        String sqlQuery = "select i.id as id, i.name as name, COUNT(name) as instrumentsCount \n" +
                 "from instruments as i GROUP BY name \n";
         return namedParameterJdbcTemplate.query(sqlQuery, new BeanPropertyRowMapper<>(InstrumentDto.class));
     }
@@ -48,6 +48,7 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
 
         return namedParameterJdbcTemplate.query(sqlQuery, new BeanPropertyRowMapper<>(InstrumentSeriesDto.class));
     }
+    //SELECT products.productname, products.price, categories.categoryname FROM products INNER JOIN categories ON products.categoryid=categories.id;
 
     @Override
     public List<InstrumentSeriesDto> fetchInstrumentsByInstrumentSeriesCode(long qrCode) {

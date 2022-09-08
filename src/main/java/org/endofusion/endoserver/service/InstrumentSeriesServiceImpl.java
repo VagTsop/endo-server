@@ -45,7 +45,7 @@ public class InstrumentSeriesServiceImpl implements InstrumentSeriesService {
            Long instrumentSeriesCode = tempInstrumentDto.getInstrumentSeriesCode(); // get instrument code
              List<InstrumentSeriesDetails> instrumentSeriesDetailsList = new ArrayList<>(); // create instrument details list
             for (InstrumentSeriesDto tempInstrumentSeriesDto : instrumentSeriesDtos) {
-                if (tempInstrumentSeriesDto.getInstrumentSeriesCode() != tempInstrumentDto.getInstrumentSeriesCode()) {
+                if (tempInstrumentSeriesDto.getInstrumentSeriesCode().longValue() != instrumentSeriesCode.longValue()) {
                     continue;
                 } else {
                     InstrumentSeriesDetails instrumentSeriesDetails = new InstrumentSeriesDetails();
