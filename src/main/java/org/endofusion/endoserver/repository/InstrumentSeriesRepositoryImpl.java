@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,7 +29,7 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
     @Override
     public List<InstrumentDto> fetchAvailableInstruments() {
 
-        String sqlQuery = "select i.id as id, i.name as name, i.description AS description, COUNT(name) as instrumentsCount \n" +
+        String sqlQuery = "select i.id as id, i.name as name, i.description AS description, COUNT(name) as instrumentsCount, GROUP_CONCAT(`id`) as instrumentIdsList \n" +
                 "from instruments as i GROUP BY name, description \n";
         return namedParameterJdbcTemplate.query(sqlQuery, new BeanPropertyRowMapper<>(InstrumentDto.class));
     }
@@ -48,17 +50,46 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
 
         return namedParameterJdbcTemplate.query(sqlQuery, new BeanPropertyRowMapper<>(InstrumentSeriesDto.class));
     }
-    //SELECT products.productname, products.price, categories.categoryname FROM products INNER JOIN categories ON products.categoryid=categories.id;
 
     @Override
     public List<InstrumentSeriesDto> fetchInstrumentsByInstrumentSeriesCode(long qrCode) {
 
         MapSqlParameterSource in = new MapSqlParameterSource();
 
-        String sqlQuery = "Select i.name as name, i.lot AS instrumentLot, i.description AS description, COUNT(name) as instrumentsCount \n" +
-                "From instruments as i \n" +
-                "where i.instrument_series_id = :qrCode GROUP BY name, description \n";
+        String sqlQuery = "Select i.name as name, i.lot AS instrumentLot, i.description AS description, ins.instrument_series_qr_code as qrCode, COUNT(name) as instrumentsCount \n" +
+                "From instruments as i INNER JOIN instruments_series as ins ON i.instrument_series_id = ins.id \n" +
+                "and ins.instrument_series_qr_code= :qrCode GROUP BY name, description \n";
         in.addValue("qrCode", qrCode);
         return namedParameterJdbcTemplate.query(sqlQuery, in, new BeanPropertyRowMapper<>(InstrumentSeriesDto.class));
+    }
+
+
+
+    @Override
+    public long createInstrumentSeries(InstrumentSeriesDto dto) {
+
+        String sqlQueryOne = " INSERT INTO instruments_series (\n" +
+                "instrument_series_qr_code\n" +
+                ") VALUES (\n" +
+                ":instrumentSeriesCode" +
+                ")";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        MapSqlParameterSource in = new MapSqlParameterSource();
+        in.addValue("instrumentSeriesCode", dto.getInstrumentSeriesCode());
+
+                namedParameterJdbcTemplate.update(sqlQueryOne, in, keyHolder);
+
+        String sqlQueryTwo = " UPDATE instruments SET \n " +
+                "instrument_series_id = :keyholder,\n " +
+                "available = 0 \n " +
+                "WHERE instruments.id in (:instrumentIdsList)";
+
+        MapSqlParameterSource in2 = new MapSqlParameterSource();
+        in2.addValue("keyholder", keyHolder.getKey());
+        in2.addValue("instrumentIdsList", dto.getInstrumentIdsList());
+
+        namedParameterJdbcTemplate.update(sqlQueryTwo, in2);
+
+        return 0;
     }
 }

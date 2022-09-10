@@ -2,6 +2,7 @@ package org.endofusion.endoserver.controller;
 
 import org.endofusion.endoserver.dto.InstrumentDto;
 import org.endofusion.endoserver.dto.InstrumentSeriesDto;
+import org.endofusion.endoserver.request.InstrumentSeriesRequest;
 import org.endofusion.endoserver.response.InstrumentSeriesResponse;
 import org.endofusion.endoserver.service.InstrumentSeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,13 @@ public class InstrumentSeriesController {
 
         return ResponseEntity.status(HttpStatus.OK).body(dtos);
     }
+
+    @PostMapping("/create-instrument-series")
+    public ResponseEntity<Long> create(@RequestBody InstrumentSeriesRequest request) {
+        InstrumentSeriesDto dto = new InstrumentSeriesDto(request, null, false);
+        return ResponseEntity.status(HttpStatus.OK).body(instrumentSeriesService.createInstrumentSeries(dto));
+    }
+
 
     @GetMapping("/fetch-available-instruments")
     public ResponseEntity<List<InstrumentDto>> fetchAvailableInstruments() {
