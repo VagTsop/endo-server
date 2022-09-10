@@ -34,7 +34,9 @@ public class InstrumentDto extends GenericRequest {
 
     private Long instrumentSeriesQrCode;
 
-    private Long InstrumentsCount;
+    private Long instrumentsCount;
+
+    private Collection<Long> instrumentIdsList;
 
     public InstrumentDto() {
     }
@@ -55,6 +57,7 @@ public class InstrumentDto extends GenericRequest {
         this.setInstrumentPurchaseDate(request.getInstrumentPurchaseDate());
         this.setUserPhoto(request.getUserPhoto());
         this.setInstrumentNotes(request.getInstrumentNotes());
+        this.setInstrumentIdsList(request.getInstrumentIdsList());
         if (isUpdate) {
             this.setId(id);
         }
@@ -157,10 +160,18 @@ public class InstrumentDto extends GenericRequest {
     }
 
     public Long getInstrumentsCount() {
-        return InstrumentsCount;
+        return instrumentsCount;
     }
 
     public void setInstrumentsCount(Long instrumentsCount) {
-        InstrumentsCount = instrumentsCount;
+        this.instrumentsCount = instrumentsCount;
+    }
+
+    public Collection<Long> getInstrumentIdsList() {
+        return instrumentIdsList;
+    }
+
+    public void setInstrumentIdsList(Collection<Long> instrumentIdsList) {
+        this.instrumentIdsList = instrumentIdsList;
     }
 }

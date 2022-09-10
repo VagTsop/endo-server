@@ -4,7 +4,7 @@ public class InstrumentSeriesDetails {
 
     String instrumentName;
     String instrumentDescription;
-    Long InstrumentsCount;
+    Long instrumentsCount;
 
     public String getInstrumentName() {
         return instrumentName;
@@ -23,10 +23,10 @@ public class InstrumentSeriesDetails {
     }
 
     public Long getInstrumentsCount() {
-        return InstrumentsCount;
+        return instrumentsCount;
     }
 
     public void setInstrumentsCount(Long instrumentsCount) {
-        InstrumentsCount = instrumentsCount;
+        this.instrumentsCount = instrumentsCount;
     }
 }

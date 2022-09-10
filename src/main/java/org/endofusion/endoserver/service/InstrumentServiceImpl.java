@@ -28,11 +28,6 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public List<InstrumentDto> fetchInstrumentsByInstrumentSeriesCode(long qrCode) {
-        return instrumentRepository.fetchInstrumentsByInstrumentSeriesCode(qrCode);
-    }
-
-    @Override
     public Page<InstrumentDto> getInstrumentsList(Pageable pageable, String name,
                                                   Date purchaseDateFrom,
                                                   Date purchaseDateTo, Collection<Long> instrumentSeriesCodesList) {
