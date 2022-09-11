@@ -131,8 +131,8 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
                 "lot,\n" +
                 "manufacturer,\n" +
                 "purchase_date,\n" +
-                "user_photo,\n" +
-                "notes\n" +
+                "notes,\n" +
+                "available\n" +
                 ") VALUES (\n" +
                 ":name,\n" +
                 ":description,\n" +
@@ -140,8 +140,8 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
                 ":instrumentLot,\n" +
                 ":instrumentManufacturer,\n" +
                 ":instrumentPurchaseDate,\n" +
-                ":userPhoto,\n" +
-                ":instrumentNotes" +
+                ":instrumentNotes,\n" +
+                "1" +
                 ")";
 
         MapSqlParameterSource in = new MapSqlParameterSource();
@@ -152,7 +152,6 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
         in.addValue("instrumentLot", instrumentDto.getInstrumentLot());
         in.addValue("instrumentManufacturer", instrumentDto.getInstrumentManufacturer());
         in.addValue("instrumentPurchaseDate", instrumentDto.getInstrumentPurchaseDate());
-        in.addValue("userPhoto", instrumentDto.getUserPhoto());
         in.addValue("instrumentNotes", instrumentDto.getInstrumentNotes());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
