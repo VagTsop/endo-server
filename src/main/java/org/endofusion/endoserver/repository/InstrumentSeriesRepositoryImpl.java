@@ -30,7 +30,7 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
     public List<InstrumentDto> fetchAvailableInstruments() {
 
         String sqlQuery = "select i.id as id, i.name as name, i.description AS description, COUNT(name) as instrumentsCount, GROUP_CONCAT(`id`) as instrumentIdsList \n" +
-                "from instruments as i GROUP BY name, description \n";
+                "from instruments as i WHERE i.available = 1 GROUP BY name, description \n";
         return namedParameterJdbcTemplate.query(sqlQuery, new BeanPropertyRowMapper<>(InstrumentDto.class));
     }
 
@@ -90,6 +90,6 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
 
         namedParameterJdbcTemplate.update(sqlQueryTwo, in2);
 
-        return 0;
+        return 1;
     }
 }
