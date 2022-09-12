@@ -65,4 +65,9 @@ public class InstrumentSeriesServiceImpl implements InstrumentSeriesService {
         }
         return instrumentSeriesResponseList;
     }
+
+    @Override
+    public InstrumentSeriesDto getInstrumentSeriesById(long id) {
+        return instrumentSeriesRepository.getInstrumentSeriesById(id);
+    }
 }

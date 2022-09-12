@@ -49,4 +49,9 @@ public class InstrumentSeriesController {
         return ResponseEntity.status(HttpStatus.OK).body(retVal);
     }
 
+    @GetMapping("/get-instrument-series-by-id")
+    public ResponseEntity<InstrumentSeriesResponse> getById(@RequestParam Long id) {
+        InstrumentSeriesDto instrumentSeriesDto = instrumentSeriesService.getInstrumentSeriesById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(new InstrumentSeriesResponse(instrumentSeriesDto));
+    }
 }

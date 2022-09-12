@@ -17,4 +17,7 @@ public interface InstrumentSeriesService {
     List<InstrumentDto> fetchAvailableInstruments();
 
     long createInstrumentSeries(InstrumentSeriesDto dto);
+
+    InstrumentSeriesDto getInstrumentSeriesById(long id);
+
 }
