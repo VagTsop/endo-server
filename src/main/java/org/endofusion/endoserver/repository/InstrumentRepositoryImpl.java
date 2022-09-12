@@ -170,7 +170,6 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
                 "lot = :instrumentLot,\n " +
                 "manufacturer = :instrumentManufacturer,\n " +
                 "purchase_date = :instrumentPurchaseDate,\n " +
-                "user_photo = :userPhoto,\n " +
                 "notes = :instrumentNotes\n " +
                 "WHERE id = :id";
 
@@ -182,7 +181,6 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
         in.addValue("instrumentLot", instrumentDto.getInstrumentLot());
         in.addValue("instrumentManufacturer", instrumentDto.getInstrumentManufacturer());
         in.addValue("instrumentPurchaseDate", instrumentDto.getInstrumentPurchaseDate());
-        in.addValue("userPhoto", instrumentDto.getUserPhoto());
         in.addValue("instrumentNotes", instrumentDto.getInstrumentNotes());
 
         return namedParameterJdbcTemplate.update(sqlQuery, in) > 0;
@@ -198,7 +196,6 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
                 "i.lot as instrumentLot,\n" +
                 "i.manufacturer as instrumentManufacturer,\n" +
                 "i.purchase_date as instrumentPurchaseDate,\n" +
-                "i.user_photo as userPhoto,\n" +
                 "i.notes as instrumentNotes \n" +
                 "FROM instruments AS i\n" +
                 "WHERE i.id = :instrumentId";
@@ -215,7 +212,6 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
             instrumentDto.setInstrumentLot(resultSet.getNString("instrumentLot"));
             instrumentDto.setInstrumentManufacturer(resultSet.getNString("instrumentManufacturer"));
             instrumentDto.setInstrumentPurchaseDate(resultSet.getDate("instrumentPurchaseDate"));
-            instrumentDto.setUserPhoto(resultSet.getBytes("userPhoto"));
             instrumentDto.setInstrumentNotes(resultSet.getNString("instrumentNotes"));
 
             return instrumentDto;

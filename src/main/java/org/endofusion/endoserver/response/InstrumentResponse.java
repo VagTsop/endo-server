@@ -13,16 +13,6 @@ public class InstrumentResponse extends GenericRequest {
     private String instrumentManufacturer;
     private Date instrumentPurchaseDate;
     private String instrumentNotes;
-    @JsonProperty("userPhoto")
-    private byte[] userPhoto;
-
-    public byte[] getUserPhoto() {
-        return userPhoto;
-    }
-
-    public void setUserPhoto(byte[] userPhoto) {
-        this.userPhoto = userPhoto;
-    }
 
     public String getInstrumentRef() {
         return instrumentRef;
@@ -72,7 +62,6 @@ public class InstrumentResponse extends GenericRequest {
         this.setInstrumentLot(instrumentDto.getInstrumentLot());
         this.setInstrumentManufacturer(instrumentDto.getInstrumentManufacturer());
         this.setInstrumentPurchaseDate(instrumentDto.getInstrumentPurchaseDate());
-        this.setUserPhoto(instrumentDto.getUserPhoto());
         this.setInstrumentNotes(instrumentDto.getInstrumentNotes());
     }
 }

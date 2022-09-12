@@ -1,6 +1,5 @@
 package org.endofusion.endoserver.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.endofusion.endoserver.request.GenericRequest;
 import org.endofusion.endoserver.request.InstrumentRequest;
 
@@ -10,9 +9,6 @@ import java.util.Date;
 public class InstrumentDto extends GenericRequest {
 
     private Long instrumentSeriesId;
-
-    @JsonProperty("userPhoto")
-    private byte[] userPhoto;
 
     private String instrumentRef;
 
@@ -55,20 +51,11 @@ public class InstrumentDto extends GenericRequest {
         this.setInstrumentLot(request.getInstrumentLot());
         this.setInstrumentManufacturer(request.getInstrumentManufacturer());
         this.setInstrumentPurchaseDate(request.getInstrumentPurchaseDate());
-        this.setUserPhoto(request.getUserPhoto());
         this.setInstrumentNotes(request.getInstrumentNotes());
         this.setInstrumentIdsList(request.getInstrumentIdsList());
         if (isUpdate) {
             this.setId(id);
         }
-    }
-
-    public byte[] getUserPhoto() {
-        return userPhoto;
-    }
-
-    public void setUserPhoto(byte[] userPhoto) {
-        this.userPhoto = userPhoto;
     }
 
     public Long getInstrumentSeriesId() {

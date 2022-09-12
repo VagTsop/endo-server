@@ -19,17 +19,6 @@ public class InstrumentRequest extends GenericRequest {
 
     private Collection<Long> instrumentIdsList;
 
-    @JsonProperty("userPhoto")
-    private byte[] userPhoto;
-
-    public byte[] getUserPhoto() {
-        return userPhoto;
-    }
-
-    public void setUserPhoto(byte[] userPhoto) {
-        this.userPhoto = userPhoto;
-    }
-
     public String getInstrumentRef() {
         return instrumentRef;
     }
