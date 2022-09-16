@@ -99,8 +99,9 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
         String sqlQueryOne = "";
         String sqlQueryTwo = "";
         String sqlQueryThree = "";
+        String sqlQueryFour = "";
 
-        if (instrumentSeriesDto.getConnectedInstrumentsIds().size() > 0) {
+        if (instrumentSeriesDto.getConnectedInstrumentsIds().size() > 0 && instrumentSeriesDto.getUnconnectedInstrumentsIds().size() > 0) {
 
             sqlQueryOne = " UPDATE instruments SET \n " +
                     "instrument_series_id = null, \n " +
@@ -122,7 +123,8 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
             in2.addValue("connectedInstrumentsIds", instrumentSeriesDto.getConnectedInstrumentsIds());
 
             return namedParameterJdbcTemplate.update(sqlQueryTwo, in2) > 0;
-        } else {
+
+        } else if (instrumentSeriesDto.getConnectedInstrumentsIds().size() == 0) {
             sqlQueryThree = " UPDATE instruments SET \n " +
                     "instrument_series_id = null, \n " +
                     "available = 1 \n " +
@@ -132,6 +134,15 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
             in.addValue("id", instrumentSeriesDto.getId());
 
             return namedParameterJdbcTemplate.update(sqlQueryThree, in) > 0;
+        } else {
+            sqlQueryFour = " UPDATE instruments SET \n " +
+                    "instrument_series_id = :id, \n" +
+                    "available = 0 \n " +
+                    "WHERE instruments.instrument_series_id IS NULL";
+
+            MapSqlParameterSource in = new MapSqlParameterSource();
+            in.addValue("id", instrumentSeriesDto.getId());
+            return namedParameterJdbcTemplate.update(sqlQueryFour, in) > 0;
         }
     }
 
