@@ -22,7 +22,8 @@ public class InstrumentSeriesResponse extends GenericRequest {
     public InstrumentSeriesResponse() {
     }
 
-    public InstrumentSeriesResponse(Long instrumentSeriesCode, List<InstrumentSeriesDetails> instrumentSeriesDetails) {
+    public InstrumentSeriesResponse(Long id, Long instrumentSeriesCode, List<InstrumentSeriesDetails> instrumentSeriesDetails) {
+        this.id = id;
         this.instrumentSeriesCode = instrumentSeriesCode;
         this.instrumentSeriesDetails = instrumentSeriesDetails;
     }

@@ -37,7 +37,7 @@ public class InstrumentSeriesController {
     }
 
     @PutMapping("/update-instrument-series")
-    public ResponseEntity<Boolean> update(@RequestParam long id, @RequestBody InstrumentSeriesRequest request) {
+    public ResponseEntity<Boolean> update(@RequestParam Long id, @RequestBody InstrumentSeriesRequest request) {
         InstrumentSeriesDto instrumentSeriesDto = new InstrumentSeriesDto(request, id, true);
         return ResponseEntity.status(HttpStatus.OK).body(instrumentSeriesService.updateInstrumentSeries(instrumentSeriesDto));
     }
