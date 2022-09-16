@@ -8,6 +8,8 @@ public class InstrumentSeriesRequest {
 
     private Collection<Long> instrumentIdsList;
 
+    private Collection<String> connectedInstrumentsIds;
+
     public Long getInstrumentSeriesCode() {
         return instrumentSeriesCode;
     }
@@ -22,5 +24,13 @@ public class InstrumentSeriesRequest {
 
     public void setInstrumentIdsList(Collection<Long> instrumentIdsList) {
         this.instrumentIdsList = instrumentIdsList;
+    }
+
+    public Collection<String> getConnectedInstrumentsIds() {
+        return connectedInstrumentsIds;
+    }
+
+    public void setConnectedInstrumentsIds(Collection<String> connectedInstrumentsIds) {
+        this.connectedInstrumentsIds = connectedInstrumentsIds;
     }
 }

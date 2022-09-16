@@ -2,6 +2,7 @@ package org.endofusion.endoserver.controller;
 
 import org.endofusion.endoserver.dto.InstrumentDto;
 import org.endofusion.endoserver.dto.InstrumentSeriesDto;
+import org.endofusion.endoserver.request.InstrumentRequest;
 import org.endofusion.endoserver.request.InstrumentSeriesRequest;
 import org.endofusion.endoserver.response.InstrumentSeriesResponse;
 import org.endofusion.endoserver.service.InstrumentSeriesService;
@@ -35,6 +36,11 @@ public class InstrumentSeriesController {
         return ResponseEntity.status(HttpStatus.OK).body(instrumentSeriesService.createInstrumentSeries(dto));
     }
 
+    @PutMapping("/update-instrument-series")
+    public ResponseEntity<Boolean> update(@RequestParam long id, @RequestBody InstrumentSeriesRequest request) {
+        InstrumentSeriesDto instrumentSeriesDto = new InstrumentSeriesDto(request, id, true);
+        return ResponseEntity.status(HttpStatus.OK).body(instrumentSeriesService.updateInstrumentSeries(instrumentSeriesDto));
+    }
 
     @GetMapping("/fetch-available-instruments")
     public ResponseEntity<List<InstrumentDto>> fetchAvailableInstruments() {

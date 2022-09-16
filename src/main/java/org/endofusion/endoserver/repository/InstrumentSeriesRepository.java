@@ -17,5 +17,7 @@ public interface InstrumentSeriesRepository {
 
     long createInstrumentSeries(InstrumentSeriesDto instrumentSeriesDto);
 
+    boolean updateInstrumentSeries(InstrumentSeriesDto instrumentSeriesDto);
+
     InstrumentSeriesDto getInstrumentSeriesById(long id);
 }

@@ -1,7 +1,5 @@
 package org.endofusion.endoserver.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Collection;
 import java.util.Date;
 

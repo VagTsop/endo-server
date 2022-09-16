@@ -63,6 +63,6 @@ public class InstrumentSeriesDto extends GenericRequest {
 
     public InstrumentSeriesDto(InstrumentSeriesRequest request, Long id, boolean isUpdate) {
         this.instrumentSeriesCode = (request.getInstrumentSeriesCode());
-        this.instrumentIdsList = (request.getInstrumentIdsList());
+        this.connectedInstrumentsIds = (request.getConnectedInstrumentsIds());
     }
 }

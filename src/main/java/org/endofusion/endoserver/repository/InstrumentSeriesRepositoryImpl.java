@@ -29,8 +29,8 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
     @Override
     public List<InstrumentDto> fetchAvailableInstruments() {
 
-        String sqlQuery = "select i.id as id, i.name as name, i.description AS description, COUNT(name) as instrumentsCount, GROUP_CONCAT(`id`) as instrumentIdsList \n" +
-                "from instruments as i GROUP BY name, description \n";
+        String sqlQuery = "select i.id as id, i.name as name, i.description AS description \n" +
+                "from instruments as i  \n";
         return namedParameterJdbcTemplate.query(sqlQuery, new BeanPropertyRowMapper<>(InstrumentDto.class));
     }
 
@@ -86,7 +86,7 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
 
         MapSqlParameterSource in2 = new MapSqlParameterSource();
         in2.addValue("keyholder", keyHolder.getKey());
-        in2.addValue("instrumentIdsList", dto.getInstrumentIdsList());
+        in2.addValue("instrumentIdsList", dto.getConnectedInstrumentsIds());
 
         namedParameterJdbcTemplate.update(sqlQueryTwo, in2);
 
@@ -94,15 +94,55 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
     }
 
     @Override
+    public boolean updateInstrumentSeries(InstrumentSeriesDto instrumentSeriesDto) {
+
+        String sqlQueryOne = "";
+        String sqlQueryTwo = "";
+
+        if (instrumentSeriesDto.getConnectedInstrumentsIds() != null) {
+
+             sqlQueryOne = " UPDATE instruments SET \n " +
+                    "available = 0 \n " +
+                    "WHERE instruments.id in (:connectedInstrumentsIds)";
+
+            MapSqlParameterSource in = new MapSqlParameterSource();
+            in.addValue("connectedInstrumentsIds", instrumentSeriesDto.getConnectedInstrumentsIds());
+
+            return namedParameterJdbcTemplate.update(sqlQueryOne, in) > 0;
+        } else {
+            sqlQueryOne = " UPDATE instruments SET \n " +
+                    "instrument_series_id = null, \n " +
+                    "available = 1 \n " +
+                    "WHERE instruments.id in (:connectedInstrumentsIds)";
+
+            MapSqlParameterSource in = new MapSqlParameterSource();
+            in.addValue("connectedInstrumentsIds", instrumentSeriesDto.getConnectedInstrumentsIds());
+
+            return namedParameterJdbcTemplate.update(sqlQueryOne, in) > 0;
+        }
+    }
+
+    @Override
     public InstrumentSeriesDto getInstrumentSeriesById(long id) {
 
         String sqlQuery = "SELECT GROUP_CONCAT(i.id) as instrumentIdsList, ins.instrument_series_qr_code as instrumentSeriesCode \n" +
                 "FROM instruments AS i\n" +
-                "inner join instruments_series as ins on i.instrument_series_id = ins.id AND ins.instrument_series_qr_code = :id";
-
-        MapSqlParameterSource in = new MapSqlParameterSource("id", id);
+                "inner join instruments_series as ins on i.instrument_series_id = ins.id AND ins.instrument_series_qr_code = :qrId";
+        MapSqlParameterSource in = new MapSqlParameterSource("qrId", id);
 
         return namedParameterJdbcTemplate.queryForObject(sqlQuery, in, new BeanPropertyRowMapper<>(InstrumentSeriesDto.class));
-
     }
+
+    //    @Override
+//    public InstrumentSeriesDto getInstrumentSeriesById(long id) {
+//
+//        String sqlQuery = "SELECT GROUP_CONCAT(i.id) as instrumentIdsList, ins.instrument_series_qr_code as instrumentSeriesCode \n" +
+//                "FROM instruments AS i\n" +
+//                "inner join instruments_series as ins on i.instrument_series_id = ins.id AND ins.instrument_series_qr_code = :id";
+//
+//        MapSqlParameterSource in = new MapSqlParameterSource("id", id);
+//
+//        return namedParameterJdbcTemplate.queryForObject(sqlQuery, in, new BeanPropertyRowMapper<>(InstrumentSeriesDto.class));
+//
+//    }
 }
