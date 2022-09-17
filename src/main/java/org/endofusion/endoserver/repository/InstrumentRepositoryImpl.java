@@ -38,7 +38,7 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
     @Override
     public List<InstrumentDto> fetchInstrumentsSeriesCodes() {
 
-        String sqlQuery = "select ins.instrument_series_qr_code as instrumentSeriesCode \n" +
+        String sqlQuery = "select ins.id as id, ins.instrument_series_qr_code as instrumentSeriesCode \n" +
                 "from instruments_series as ins \n";
         return namedParameterJdbcTemplate.query(sqlQuery, new BeanPropertyRowMapper<>(InstrumentDto.class));
     }
