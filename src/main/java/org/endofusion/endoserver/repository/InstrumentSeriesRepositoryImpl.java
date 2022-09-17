@@ -132,7 +132,6 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
 
             MapSqlParameterSource in = new MapSqlParameterSource();
             in.addValue("id", instrumentSeriesDto.getId());
-
             return namedParameterJdbcTemplate.update(sqlQueryThree, in) > 0;
         } else {
             sqlQueryFour = " UPDATE instruments SET \n " +
@@ -151,7 +150,7 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
 
         String sqlQuery = "SELECT GROUP_CONCAT(i.id) as instrumentIdsList, ins.instrument_series_qr_code as instrumentSeriesCode \n" +
                 "FROM instruments AS i\n" +
-                "inner join instruments_series as ins on i.instrument_series_id = ins.id AND ins.id = :qrId";
+                "right join instruments_series as ins on i.instrument_series_id = ins.id AND ins.id = :qrId";
         MapSqlParameterSource in = new MapSqlParameterSource("qrId", id);
 
         return namedParameterJdbcTemplate.queryForObject(sqlQuery, in, new BeanPropertyRowMapper<>(InstrumentSeriesDto.class));
