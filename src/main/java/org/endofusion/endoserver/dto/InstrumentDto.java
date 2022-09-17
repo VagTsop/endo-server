@@ -32,7 +32,6 @@ public class InstrumentDto extends GenericRequest {
 
     private Long instrumentsCount;
 
-    private Collection<Long> instrumentIdsList;
 
     public InstrumentDto() {
     }
@@ -52,7 +51,6 @@ public class InstrumentDto extends GenericRequest {
         this.setInstrumentManufacturer(request.getInstrumentManufacturer());
         this.setInstrumentPurchaseDate(request.getInstrumentPurchaseDate());
         this.setInstrumentNotes(request.getInstrumentNotes());
-        this.setInstrumentIdsList(request.getInstrumentIdsList());
         if (isUpdate) {
             this.setId(id);
         }
@@ -152,13 +150,5 @@ public class InstrumentDto extends GenericRequest {
 
     public void setInstrumentsCount(Long instrumentsCount) {
         this.instrumentsCount = instrumentsCount;
-    }
-
-    public Collection<Long> getInstrumentIdsList() {
-        return instrumentIdsList;
-    }
-
-    public void setInstrumentIdsList(Collection<Long> instrumentIdsList) {
-        this.instrumentIdsList = instrumentIdsList;
     }
 }

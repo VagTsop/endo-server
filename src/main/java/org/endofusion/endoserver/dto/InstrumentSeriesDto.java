@@ -72,11 +72,11 @@ public class InstrumentSeriesDto extends GenericRequest {
     }
 
     public InstrumentSeriesDto(InstrumentSeriesRequest request, Long id, boolean isUpdate) {
-        this.instrumentSeriesCode = (request.getInstrumentSeriesCode());
-        this.connectedInstrumentsIds = (request.getConnectedInstrumentsIds());
+        this.setInstrumentSeriesCode(request.getInstrumentSeriesCode());
+        this.setConnectedInstrumentsIds(request.getConnectedInstrumentsIds());
         if (isUpdate) {
             this.setId(id);
-            this.unconnectedInstrumentsIds = (request.getUnconnectedInstrumentsIds());
+            this.setUnconnectedInstrumentsIds(request.getUnconnectedInstrumentsIds());
         }
     }
 }
