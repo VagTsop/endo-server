@@ -79,6 +79,10 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
 
                 namedParameterJdbcTemplate.update(sqlQueryOne, in, keyHolder);
 
+        if (dto.getConnectedInstrumentsIds().size() == 0) {
+            return 1;
+        }
+
         String sqlQueryTwo = " UPDATE instruments SET \n " +
                 "instrument_series_id = :keyholder,\n " +
                 "available = 0 \n " +
