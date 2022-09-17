@@ -17,9 +17,6 @@ public class InstrumentSeriesDto extends GenericRequest {
 
     private Collection<String> unconnectedInstrumentsIds;
 
-    private Collection<Long> instrumentIdsList;
-
-
     public InstrumentSeriesDto() {
     }
 
@@ -61,14 +58,6 @@ public class InstrumentSeriesDto extends GenericRequest {
 
     public void setUnconnectedInstrumentsIds(Collection<String> unconnectedInstrumentsIds) {
         this.unconnectedInstrumentsIds = unconnectedInstrumentsIds;
-    }
-
-    public Collection<Long> getInstrumentIdsList() {
-        return instrumentIdsList;
-    }
-
-    public void setInstrumentIdsList(Collection<Long> instrumentIdsList) {
-        this.instrumentIdsList = instrumentIdsList;
     }
 
     public InstrumentSeriesDto(InstrumentSeriesRequest request, Long id, boolean isUpdate) {

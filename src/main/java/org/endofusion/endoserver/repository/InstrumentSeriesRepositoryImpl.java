@@ -82,11 +82,11 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
         String sqlQueryTwo = " UPDATE instruments SET \n " +
                 "instrument_series_id = :keyholder,\n " +
                 "available = 0 \n " +
-                "WHERE instruments.id in (:instrumentIdsList)";
+                "WHERE instruments.id in (:connectedInstrumentsIds)";
 
         MapSqlParameterSource in2 = new MapSqlParameterSource();
         in2.addValue("keyholder", keyHolder.getKey());
-        in2.addValue("instrumentIdsList", dto.getConnectedInstrumentsIds());
+        in2.addValue("connectedInstrumentsIds", dto.getConnectedInstrumentsIds());
 
         namedParameterJdbcTemplate.update(sqlQueryTwo, in2);
 
@@ -148,7 +148,7 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
     @Override
     public InstrumentSeriesDto getInstrumentSeriesById(long id) {
 
-        String sqlQuery = "SELECT GROUP_CONCAT(i.id) as instrumentIdsList, ins.instrument_series_qr_code as instrumentSeriesCode \n" +
+        String sqlQuery = "SELECT GROUP_CONCAT(i.id) as connectedInstrumentsIds, ins.instrument_series_qr_code as instrumentSeriesCode \n" +
                 "FROM instruments AS i\n" +
                 "right join instruments_series as ins on i.instrument_series_id = ins.id AND ins.id = :id";
         MapSqlParameterSource in = new MapSqlParameterSource("id", id);

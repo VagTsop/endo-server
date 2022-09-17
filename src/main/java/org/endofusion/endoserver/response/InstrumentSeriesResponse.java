@@ -17,7 +17,7 @@ public class InstrumentSeriesResponse extends GenericRequest {
 
     private List<InstrumentSeriesDetails> instrumentSeriesDetails;
 
-    private Collection<Long> connectedInstrumentsIds;
+    private Collection<String> connectedInstrumentsIds;
 
     public InstrumentSeriesResponse() {
     }
@@ -44,11 +44,11 @@ public class InstrumentSeriesResponse extends GenericRequest {
         this.instrumentSeriesCode = instrumentSeriesCode;
     }
 
-    public Collection<Long> getConnectedInstrumentsIds() {
+    public Collection<String> getConnectedInstrumentsIds() {
         return connectedInstrumentsIds;
     }
 
-    public void setConnectedInstrumentsIds(Collection<Long> connectedInstrumentsIds) {
+    public void setConnectedInstrumentsIds(Collection<String> connectedInstrumentsIds) {
         this.connectedInstrumentsIds = connectedInstrumentsIds;
     }
 
@@ -70,7 +70,7 @@ public class InstrumentSeriesResponse extends GenericRequest {
 
     public InstrumentSeriesResponse(InstrumentSeriesDto instrumentSeriesDto) {
         this.setInstrumentSeriesCode(instrumentSeriesDto.getInstrumentSeriesCode());
-        this.setConnectedInstrumentsIds(instrumentSeriesDto.getInstrumentIdsList());
+        this.setConnectedInstrumentsIds(instrumentSeriesDto.getConnectedInstrumentsIds());
         this.setName(instrumentSeriesDto.getName());
         this.setDescription(instrumentSeriesDto.getDescription());
         this.setInstrumentsCount(instrumentSeriesDto.getInstrumentsCount());

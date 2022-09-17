@@ -6,8 +6,6 @@ public class InstrumentSeriesRequest {
 
     private Long instrumentSeriesCode;
 
-    private Collection<Long> instrumentIdsList;
-
     private Collection<String> connectedInstrumentsIds;
 
     private Collection<String> unconnectedInstrumentsIds;
@@ -18,14 +16,6 @@ public class InstrumentSeriesRequest {
 
     public void setInstrumentSeriesCode(Long instrumentSeriesCode) {
         this.instrumentSeriesCode = instrumentSeriesCode;
-    }
-
-    public Collection<Long> getInstrumentIdsList() {
-        return instrumentIdsList;
-    }
-
-    public void setInstrumentIdsList(Collection<Long> instrumentIdsList) {
-        this.instrumentIdsList = instrumentIdsList;
     }
 
     public Collection<String> getConnectedInstrumentsIds() {
