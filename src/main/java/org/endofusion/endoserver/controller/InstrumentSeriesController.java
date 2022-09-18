@@ -23,7 +23,7 @@ public class InstrumentSeriesController {
     private InstrumentSeriesService instrumentSeriesService;
 
     @RequestMapping("/get-instrument-series-list")
-    public ResponseEntity<List<InstrumentSeriesResponse>> getInstrumentList() {
+    public ResponseEntity<List<InstrumentSeriesResponse>> getInstrumentSeriesList() {
 
         List<InstrumentSeriesResponse> dtos = instrumentSeriesService.getInstrumentSeriesList();
 

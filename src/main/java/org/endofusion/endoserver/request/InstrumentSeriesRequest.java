@@ -4,17 +4,17 @@ import java.util.Collection;
 
 public class InstrumentSeriesRequest {
 
-    private Long instrumentSeriesCode;
+    private String instrumentSeriesCode;
 
     private Collection<String> connectedInstrumentsIds;
 
     private Collection<String> unconnectedInstrumentsIds;
 
-    public Long getInstrumentSeriesCode() {
+    public String getInstrumentSeriesCode() {
         return instrumentSeriesCode;
     }
 
-    public void setInstrumentSeriesCode(Long instrumentSeriesCode) {
+    public void setInstrumentSeriesCode(String instrumentSeriesCode) {
         this.instrumentSeriesCode = instrumentSeriesCode;
     }
 

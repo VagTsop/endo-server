@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public class InstrumentSeriesDto extends GenericRequest {
 
-    private Long instrumentSeriesCode;
+    private String instrumentSeriesCode;
 
     private String instrumentLot;
 
@@ -20,11 +20,11 @@ public class InstrumentSeriesDto extends GenericRequest {
     public InstrumentSeriesDto() {
     }
 
-    public Long getInstrumentSeriesCode() {
+    public String getInstrumentSeriesCode() {
         return instrumentSeriesCode;
     }
 
-    public void setInstrumentSeriesCode(Long instrumentSeriesCode) {
+    public void setInstrumentSeriesCode(String instrumentSeriesCode) {
         this.instrumentSeriesCode = instrumentSeriesCode;
     }
 

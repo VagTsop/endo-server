@@ -13,7 +13,7 @@ public class InstrumentSeriesResponse extends GenericRequest {
 
     private Long instrumentsCount;
 
-    private Long instrumentSeriesCode;
+    private String instrumentSeriesCode;
 
     private List<InstrumentSeriesDetails> instrumentSeriesDetails;
 
@@ -22,7 +22,7 @@ public class InstrumentSeriesResponse extends GenericRequest {
     public InstrumentSeriesResponse() {
     }
 
-    public InstrumentSeriesResponse(Long id, Long instrumentSeriesCode, List<InstrumentSeriesDetails> instrumentSeriesDetails) {
+    public InstrumentSeriesResponse(Long id, String instrumentSeriesCode, List<InstrumentSeriesDetails> instrumentSeriesDetails) {
         this.id = id;
         this.instrumentSeriesCode = instrumentSeriesCode;
         this.instrumentSeriesDetails = instrumentSeriesDetails;
@@ -36,11 +36,11 @@ public class InstrumentSeriesResponse extends GenericRequest {
         this.instrumentSeriesId = instrumentSeriesId;
     }
 
-    public Long getInstrumentSeriesCode() {
+    public String getInstrumentSeriesCode() {
         return instrumentSeriesCode;
     }
 
-    public void setInstrumentSeriesCode(Long instrumentSeriesCode) {
+    public void setInstrumentSeriesCode(String instrumentSeriesCode) {
         this.instrumentSeriesCode = instrumentSeriesCode;
     }
 
