@@ -14,7 +14,7 @@ public interface InstrumentService {
 
     List<InstrumentDto> fetchInstrumentsSeriesCodes();
 
-    Page<InstrumentDto> getInstrumentsList(Pageable pageable, String name, Date purchaseDateFrom, Date purchaseDateTo, Collection<Long> instrumentSeriesCodesList);
+    Page<InstrumentDto> getInstrumentsList(Pageable pageable, String name, Date purchaseDateFrom, Date purchaseDateTo, Collection<String> instrumentSeriesCodesList);
 
     long createInstrument(InstrumentDto dto);
 

@@ -30,7 +30,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     public Page<InstrumentDto> getInstrumentsList(Pageable pageable, String name,
                                                   Date purchaseDateFrom,
-                                                  Date purchaseDateTo, Collection<Long> instrumentSeriesCodesList) {
+                                                  Date purchaseDateTo, Collection<String> instrumentSeriesCodesList) {
         return instrumentRepository.getInstrumentsList(pageable, new InstrumentDto(name, purchaseDateFrom, purchaseDateTo, instrumentSeriesCodesList));
     }
 

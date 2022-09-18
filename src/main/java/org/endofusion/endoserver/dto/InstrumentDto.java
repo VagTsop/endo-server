@@ -22,7 +22,7 @@ public class InstrumentDto extends GenericRequest {
 
     private Long instrumentSeriesCode;
 
-    private Collection<Long> instrumentSeriesCodesList;
+    private Collection<String> instrumentSeriesCodesList;
 
     private Date purchaseDateFrom;
 
@@ -36,7 +36,7 @@ public class InstrumentDto extends GenericRequest {
     public InstrumentDto() {
     }
 
-    public InstrumentDto(String name, Date purchaseDateFrom, Date purchaseDateTo, Collection<Long> instrumentSeriesCodesList) {
+    public InstrumentDto(String name, Date purchaseDateFrom, Date purchaseDateTo, Collection<String> instrumentSeriesCodesList) {
         this.name = name;
         this.purchaseDateFrom = purchaseDateFrom;
         this.purchaseDateTo = purchaseDateTo;
@@ -112,11 +112,11 @@ public class InstrumentDto extends GenericRequest {
         this.instrumentSeriesCode = instrumentSeriesCode;
     }
 
-    public Collection<Long> getInstrumentSeriesCodesList() {
+    public Collection<String> getInstrumentSeriesCodesList() {
         return instrumentSeriesCodesList;
     }
 
-    public void setInstrumentSeriesCodesList(Collection<Long> instrumentSeriesCodesList) {
+    public void setInstrumentSeriesCodesList(Collection<String> instrumentSeriesCodesList) {
         this.instrumentSeriesCodesList = instrumentSeriesCodesList;
     }
 
