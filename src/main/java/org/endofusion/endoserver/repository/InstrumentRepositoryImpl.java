@@ -71,7 +71,7 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
         }
 
         if (dto.getInstrumentSeriesCodesList() != null) {
-            sqlWhereClause += "AND i.instrument_series_id in ( :instrumentSeriesCodesList)";
+            sqlWhereClause += "AND i.in/fetch-instruments-by-instrument-series-codestrument_series_id in ( :instrumentSeriesCodesList)";
             in.addValue("instrumentSeriesCodesList", dto.getInstrumentSeriesCodesList());
         }
 

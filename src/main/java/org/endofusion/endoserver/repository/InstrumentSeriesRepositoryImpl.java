@@ -52,7 +52,7 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
     }
 
     @Override
-    public List<InstrumentSeriesDto> fetchInstrumentsByInstrumentSeriesCode(long qrCode) {
+    public List<InstrumentSeriesDto> fetchInstrumentsByInstrumentSeriesCode(String qrCode) {
 
         MapSqlParameterSource in = new MapSqlParameterSource();
 

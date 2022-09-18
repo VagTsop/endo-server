@@ -40,7 +40,7 @@ public class InstrumentSeriesServiceImpl implements InstrumentSeriesService {
     }
 
     @Override
-    public List<InstrumentSeriesDto> fetchInstrumentsByInstrumentSeriesCode(long qrCode) {
+    public List<InstrumentSeriesDto> fetchInstrumentsByInstrumentSeriesCode(String qrCode) {
         return instrumentSeriesRepository.fetchInstrumentsByInstrumentSeriesCode(qrCode);
     }
 

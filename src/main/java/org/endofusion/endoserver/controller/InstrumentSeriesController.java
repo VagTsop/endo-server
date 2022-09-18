@@ -50,7 +50,7 @@ public class InstrumentSeriesController {
 
     @GetMapping("/fetch-instruments-by-instrument-series-code")
     public ResponseEntity<List<InstrumentSeriesDto>> fetchInstrumentsByInstrumentSeriesCode(
-            @RequestParam long qrCode) {
+            @RequestParam String qrCode) {
         List<InstrumentSeriesDto> retVal = instrumentSeriesService.fetchInstrumentsByInstrumentSeriesCode(qrCode);
         return ResponseEntity.status(HttpStatus.OK).body(retVal);
     }

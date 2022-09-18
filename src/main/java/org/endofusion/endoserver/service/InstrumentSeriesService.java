@@ -12,7 +12,7 @@ public interface InstrumentSeriesService {
 
     List<InstrumentDto> fetchInstrumentsSeriesCodes();
 
-    List<InstrumentSeriesDto> fetchInstrumentsByInstrumentSeriesCode(long qrCode);
+    List<InstrumentSeriesDto> fetchInstrumentsByInstrumentSeriesCode(String qrCode);
 
     List<InstrumentDto> fetchAvailableInstruments();
 
