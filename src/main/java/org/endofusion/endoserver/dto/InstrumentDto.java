@@ -28,7 +28,7 @@ public class InstrumentDto extends GenericRequest {
 
     private Date purchaseDateTo;
 
-    private Long instrumentSeriesQrCode;
+    private String instrumentSeriesQrCode;
 
     private Long instrumentsCount;
 
@@ -136,11 +136,11 @@ public class InstrumentDto extends GenericRequest {
         this.purchaseDateTo = purchaseDateTo;
     }
 
-    public Long getInstrumentSeriesQrCode() {
+    public String getInstrumentSeriesQrCode() {
         return instrumentSeriesQrCode;
     }
 
-    public void setInstrumentSeriesQrCode(Long instrumentSeriesQrCode) {
+    public void setInstrumentSeriesQrCode(String instrumentSeriesQrCode) {
         this.instrumentSeriesQrCode = instrumentSeriesQrCode;
     }
 

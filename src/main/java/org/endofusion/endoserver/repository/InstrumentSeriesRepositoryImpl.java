@@ -30,7 +30,7 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
     public List<InstrumentDto> fetchAvailableInstruments() {
 
         String sqlQuery = "select i.id as id, i.name as name, i.description AS description \n" +
-                "from instruments as i  \n";
+                "from instruments as i where available = 1 \n";
         return namedParameterJdbcTemplate.query(sqlQuery, new BeanPropertyRowMapper<>(InstrumentDto.class));
     }
 
@@ -150,13 +150,21 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
     }
 
     @Override
-    public InstrumentSeriesDto getInstrumentSeriesById(long id) {
+    public List<InstrumentDto> getInstrumentSeriesById(long id) {
 
-        String sqlQuery = "SELECT GROUP_CONCAT(i.id) as connectedInstrumentsIds, ins.instrument_series_qr_code as instrumentSeriesCode \n" +
-                "FROM instruments AS i\n" +
-                "right join instruments_series as ins on i.instrument_series_id = ins.id AND ins.id = :id";
+        String sqlQuery = "SELECT i.id as id, i.name as name, i.description AS description, ins.instrument_series_qr_code as instrumentSeriesCode \n" +
+                "FROM instruments as i \n" +
+                "INNER JOIN instruments_series as ins on i.instrument_series_id = ins.id AND ins.id = :id";
+
         MapSqlParameterSource in = new MapSqlParameterSource("id", id);
 
-        return namedParameterJdbcTemplate.queryForObject(sqlQuery, in, new BeanPropertyRowMapper<>(InstrumentSeriesDto.class));
+        List<InstrumentDto> instrumentSeries = namedParameterJdbcTemplate.query(sqlQuery, in, new BeanPropertyRowMapper<>(InstrumentDto.class));
+
+        if(instrumentSeries.isEmpty()) {
+            String sqlQueryTwo = "select instrument_series_qr_code as instrumentSeriesCode from instruments_series where id = :id";
+            return namedParameterJdbcTemplate.query(sqlQueryTwo, in, new BeanPropertyRowMapper<>(InstrumentDto.class));
+        }
+
+        return instrumentSeries;
     }
 }

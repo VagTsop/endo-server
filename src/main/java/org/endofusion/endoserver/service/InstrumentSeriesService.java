@@ -20,5 +20,5 @@ public interface InstrumentSeriesService {
 
     boolean updateInstrumentSeries(InstrumentSeriesDto dto);
 
-    InstrumentSeriesDto getInstrumentSeriesById(long id);
+    List<InstrumentDto> getInstrumentSeriesById(long id);
 }

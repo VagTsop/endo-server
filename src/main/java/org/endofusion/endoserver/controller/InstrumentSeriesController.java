@@ -56,8 +56,8 @@ public class InstrumentSeriesController {
     }
 
     @GetMapping("/get-instrument-series-by-id")
-    public ResponseEntity<InstrumentSeriesResponse> getById(@RequestParam Long id) {
-        InstrumentSeriesDto instrumentSeriesDto = instrumentSeriesService.getInstrumentSeriesById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(new InstrumentSeriesResponse(instrumentSeriesDto));
+    public ResponseEntity<List<InstrumentDto>> getById(@RequestParam Long id) {
+        List<InstrumentDto> retVal = instrumentSeriesService.getInstrumentSeriesById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(retVal);
     }
 }

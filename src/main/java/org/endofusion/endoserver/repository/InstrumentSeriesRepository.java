@@ -19,5 +19,5 @@ public interface InstrumentSeriesRepository {
 
     boolean updateInstrumentSeries(InstrumentSeriesDto instrumentSeriesDto);
 
-    InstrumentSeriesDto getInstrumentSeriesById(long id);
+    List<InstrumentDto> getInstrumentSeriesById(long id);
 }

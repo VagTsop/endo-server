@@ -73,7 +73,7 @@ public class InstrumentSeriesServiceImpl implements InstrumentSeriesService {
     }
 
     @Override
-    public InstrumentSeriesDto getInstrumentSeriesById(long id) {
+    public List<InstrumentDto> getInstrumentSeriesById(long id) {
         return instrumentSeriesRepository.getInstrumentSeriesById(id);
     }
 }
