@@ -60,4 +60,9 @@ public class InstrumentSeriesController {
         List<InstrumentDto> retVal = instrumentSeriesService.getInstrumentSeriesById(id);
         return ResponseEntity.status(HttpStatus.OK).body(retVal);
     }
+
+    @RequestMapping("/delete-instrument-series")
+    public ResponseEntity<Boolean> deleteInstrumentSeries(@RequestBody Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(instrumentSeriesService.deleteInstrumentSeries(id));
+    }
 }

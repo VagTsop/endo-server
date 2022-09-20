@@ -76,4 +76,9 @@ public class InstrumentSeriesServiceImpl implements InstrumentSeriesService {
     public List<InstrumentDto> getInstrumentSeriesById(long id) {
         return instrumentSeriesRepository.getInstrumentSeriesById(id);
     }
+
+    @Override
+    public boolean deleteInstrumentSeries(Long id) {
+        return instrumentSeriesRepository.deleteInstrumentSeries(id);
+    }
 }

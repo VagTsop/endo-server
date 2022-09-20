@@ -167,4 +167,22 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
 
         return instrumentSeries;
     }
+
+    @Override
+    public boolean deleteInstrumentSeries(Long id) {
+        MapSqlParameterSource in = new MapSqlParameterSource("id", id);
+        String sqlQuery = "";
+        String sqlQueryTwo = "";
+
+        sqlQuery = " UPDATE instruments SET \n " +
+                "instrument_series_id = null, \n " +
+                "available = 1 \n " +
+                "WHERE instruments.instrument_series_id = :id";
+
+        namedParameterJdbcTemplate.update(sqlQuery, in);
+
+        sqlQueryTwo = " DELETE FROM instruments_series WHERE id = :id";
+
+        return namedParameterJdbcTemplate.update(sqlQueryTwo, in) > 0;
+    }
 }

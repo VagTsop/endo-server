@@ -21,4 +21,6 @@ public interface InstrumentSeriesService {
     boolean updateInstrumentSeries(InstrumentSeriesDto dto);
 
     List<InstrumentDto> getInstrumentSeriesById(long id);
+
+    boolean deleteInstrumentSeries(Long id);
 }

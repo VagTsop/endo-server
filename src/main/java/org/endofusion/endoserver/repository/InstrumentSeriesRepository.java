@@ -20,4 +20,6 @@ public interface InstrumentSeriesRepository {
     boolean updateInstrumentSeries(InstrumentSeriesDto instrumentSeriesDto);
 
     List<InstrumentDto> getInstrumentSeriesById(long id);
+
+    boolean deleteInstrumentSeries(Long id);
 }
