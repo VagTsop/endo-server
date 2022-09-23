@@ -1,6 +1,5 @@
 package org.endofusion.endoserver.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.endofusion.endoserver.request.GenericRequest;
 import org.endofusion.endoserver.request.InstrumentRequest;
 
@@ -10,9 +9,6 @@ import java.util.Date;
 public class InstrumentDto extends GenericRequest {
 
     private Long instrumentSeriesId;
-
-    @JsonProperty("userPhoto")
-    private byte[] userPhoto;
 
     private String instrumentRef;
 
@@ -24,24 +20,23 @@ public class InstrumentDto extends GenericRequest {
 
     private String instrumentNotes;
 
-    private Long instrumentSeriesCode;
+    private String instrumentSeriesCode;
 
-    private Collection<Long> instrumentSeriesCodesList;
+    private Collection<String> instrumentSeriesCodesList;
 
     private Date purchaseDateFrom;
 
     private Date purchaseDateTo;
 
-    private Long instrumentSeriesQrCode;
+    private String instrumentSeriesQrCode;
 
     private Long instrumentsCount;
 
-    private Collection<Long> instrumentIdsList;
 
     public InstrumentDto() {
     }
 
-    public InstrumentDto(String name, Date purchaseDateFrom, Date purchaseDateTo, Collection<Long> instrumentSeriesCodesList) {
+    public InstrumentDto(String name, Date purchaseDateFrom, Date purchaseDateTo, Collection<String> instrumentSeriesCodesList) {
         this.name = name;
         this.purchaseDateFrom = purchaseDateFrom;
         this.purchaseDateTo = purchaseDateTo;
@@ -55,20 +50,10 @@ public class InstrumentDto extends GenericRequest {
         this.setInstrumentLot(request.getInstrumentLot());
         this.setInstrumentManufacturer(request.getInstrumentManufacturer());
         this.setInstrumentPurchaseDate(request.getInstrumentPurchaseDate());
-        this.setUserPhoto(request.getUserPhoto());
         this.setInstrumentNotes(request.getInstrumentNotes());
-        this.setInstrumentIdsList(request.getInstrumentIdsList());
         if (isUpdate) {
             this.setId(id);
         }
-    }
-
-    public byte[] getUserPhoto() {
-        return userPhoto;
-    }
-
-    public void setUserPhoto(byte[] userPhoto) {
-        this.userPhoto = userPhoto;
     }
 
     public Long getInstrumentSeriesId() {
@@ -119,19 +104,19 @@ public class InstrumentDto extends GenericRequest {
         this.instrumentNotes = instrumentNotes;
     }
 
-    public Long getInstrumentSeriesCode() {
+    public String getInstrumentSeriesCode() {
         return instrumentSeriesCode;
     }
 
-    public void setInstrumentSeriesCode(Long instrumentSeriesCode) {
+    public void setInstrumentSeriesCode(String instrumentSeriesCode) {
         this.instrumentSeriesCode = instrumentSeriesCode;
     }
 
-    public Collection<Long> getInstrumentSeriesCodesList() {
+    public Collection<String> getInstrumentSeriesCodesList() {
         return instrumentSeriesCodesList;
     }
 
-    public void setInstrumentSeriesCodesList(Collection<Long> instrumentSeriesCodesList) {
+    public void setInstrumentSeriesCodesList(Collection<String> instrumentSeriesCodesList) {
         this.instrumentSeriesCodesList = instrumentSeriesCodesList;
     }
 
@@ -151,11 +136,11 @@ public class InstrumentDto extends GenericRequest {
         this.purchaseDateTo = purchaseDateTo;
     }
 
-    public Long getInstrumentSeriesQrCode() {
+    public String getInstrumentSeriesQrCode() {
         return instrumentSeriesQrCode;
     }
 
-    public void setInstrumentSeriesQrCode(Long instrumentSeriesQrCode) {
+    public void setInstrumentSeriesQrCode(String instrumentSeriesQrCode) {
         this.instrumentSeriesQrCode = instrumentSeriesQrCode;
     }
 
@@ -165,13 +150,5 @@ public class InstrumentDto extends GenericRequest {
 
     public void setInstrumentsCount(Long instrumentsCount) {
         this.instrumentsCount = instrumentsCount;
-    }
-
-    public Collection<Long> getInstrumentIdsList() {
-        return instrumentIdsList;
-    }
-
-    public void setInstrumentIdsList(Collection<Long> instrumentIdsList) {
-        this.instrumentIdsList = instrumentIdsList;
     }
 }

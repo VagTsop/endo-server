@@ -13,7 +13,13 @@ public interface InstrumentSeriesRepository {
 
     List<InstrumentDto> fetchAvailableInstruments();
 
-    List<InstrumentSeriesDto> fetchInstrumentsByInstrumentSeriesCode(long qrCode);
+    List<InstrumentSeriesDto> fetchInstrumentsByInstrumentSeriesCode(String qrCode);
 
     long createInstrumentSeries(InstrumentSeriesDto instrumentSeriesDto);
+
+    boolean updateInstrumentSeries(InstrumentSeriesDto instrumentSeriesDto);
+
+    List<InstrumentDto> getInstrumentSeriesById(long id);
+
+    boolean deleteInstrumentSeries(Long id);
 }

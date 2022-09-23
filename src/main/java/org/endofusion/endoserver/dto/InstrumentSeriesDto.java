@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public class InstrumentSeriesDto extends GenericRequest {
 
-    private Long instrumentSeriesCode;
+    private String instrumentSeriesCode;
 
     private String instrumentLot;
 
@@ -15,17 +15,16 @@ public class InstrumentSeriesDto extends GenericRequest {
 
     private Collection<String> connectedInstrumentsIds;
 
-    private Collection<Long> instrumentIdsList;
-
+    private Collection<String> unconnectedInstrumentsIds;
 
     public InstrumentSeriesDto() {
     }
 
-    public Long getInstrumentSeriesCode() {
+    public String getInstrumentSeriesCode() {
         return instrumentSeriesCode;
     }
 
-    public void setInstrumentSeriesCode(Long instrumentSeriesCode) {
+    public void setInstrumentSeriesCode(String instrumentSeriesCode) {
         this.instrumentSeriesCode = instrumentSeriesCode;
     }
 
@@ -53,16 +52,20 @@ public class InstrumentSeriesDto extends GenericRequest {
         this.connectedInstrumentsIds = connectedInstrumentsIds;
     }
 
-    public Collection<Long> getInstrumentIdsList() {
-        return instrumentIdsList;
+    public Collection<String> getUnconnectedInstrumentsIds() {
+        return unconnectedInstrumentsIds;
     }
 
-    public void setInstrumentIdsList(Collection<Long> instrumentIdsList) {
-        this.instrumentIdsList = instrumentIdsList;
+    public void setUnconnectedInstrumentsIds(Collection<String> unconnectedInstrumentsIds) {
+        this.unconnectedInstrumentsIds = unconnectedInstrumentsIds;
     }
 
     public InstrumentSeriesDto(InstrumentSeriesRequest request, Long id, boolean isUpdate) {
-        this.instrumentSeriesCode = (request.getInstrumentSeriesCode());
-        this.instrumentIdsList = (request.getInstrumentIdsList());
+        this.setInstrumentSeriesCode(request.getInstrumentSeriesCode());
+        this.setConnectedInstrumentsIds(request.getConnectedInstrumentsIds());
+        if (isUpdate) {
+            this.setId(id);
+            this.setUnconnectedInstrumentsIds(request.getUnconnectedInstrumentsIds());
+        }
     }
 }

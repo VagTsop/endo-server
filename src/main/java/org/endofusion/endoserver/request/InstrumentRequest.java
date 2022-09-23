@@ -1,7 +1,5 @@
 package org.endofusion.endoserver.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Collection;
 import java.util.Date;
 
@@ -16,19 +14,6 @@ public class InstrumentRequest extends GenericRequest {
     private Date instrumentPurchaseDate;
 
     private String instrumentNotes;
-
-    private Collection<Long> instrumentIdsList;
-
-    @JsonProperty("userPhoto")
-    private byte[] userPhoto;
-
-    public byte[] getUserPhoto() {
-        return userPhoto;
-    }
-
-    public void setUserPhoto(byte[] userPhoto) {
-        this.userPhoto = userPhoto;
-    }
 
     public String getInstrumentRef() {
         return instrumentRef;
@@ -68,13 +53,5 @@ public class InstrumentRequest extends GenericRequest {
 
     public void setInstrumentNotes(String instrumentNotes) {
         this.instrumentNotes = instrumentNotes;
-    }
-
-    public Collection<Long> getInstrumentIdsList() {
-        return instrumentIdsList;
-    }
-
-    public void setInstrumentIdsList(Collection<Long> instrumentIdsList) {
-        this.instrumentIdsList = instrumentIdsList;
     }
 }

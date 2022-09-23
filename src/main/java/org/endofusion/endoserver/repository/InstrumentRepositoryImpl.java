@@ -38,7 +38,7 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
     @Override
     public List<InstrumentDto> fetchInstrumentsSeriesCodes() {
 
-        String sqlQuery = "select ins.instrument_series_qr_code as instrumentSeriesCode \n" +
+        String sqlQuery = "select ins.id as id, ins.instrument_series_qr_code as instrumentSeriesCode \n" +
                 "from instruments_series as ins \n";
         return namedParameterJdbcTemplate.query(sqlQuery, new BeanPropertyRowMapper<>(InstrumentDto.class));
     }
@@ -131,8 +131,8 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
                 "lot,\n" +
                 "manufacturer,\n" +
                 "purchase_date,\n" +
-                "user_photo,\n" +
-                "notes\n" +
+                "notes,\n" +
+                "available\n" +
                 ") VALUES (\n" +
                 ":name,\n" +
                 ":description,\n" +
@@ -140,8 +140,8 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
                 ":instrumentLot,\n" +
                 ":instrumentManufacturer,\n" +
                 ":instrumentPurchaseDate,\n" +
-                ":userPhoto,\n" +
-                ":instrumentNotes" +
+                ":instrumentNotes,\n" +
+                "1" +
                 ")";
 
         MapSqlParameterSource in = new MapSqlParameterSource();
@@ -152,7 +152,6 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
         in.addValue("instrumentLot", instrumentDto.getInstrumentLot());
         in.addValue("instrumentManufacturer", instrumentDto.getInstrumentManufacturer());
         in.addValue("instrumentPurchaseDate", instrumentDto.getInstrumentPurchaseDate());
-        in.addValue("userPhoto", instrumentDto.getUserPhoto());
         in.addValue("instrumentNotes", instrumentDto.getInstrumentNotes());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -171,7 +170,6 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
                 "lot = :instrumentLot,\n " +
                 "manufacturer = :instrumentManufacturer,\n " +
                 "purchase_date = :instrumentPurchaseDate,\n " +
-                "user_photo = :userPhoto,\n " +
                 "notes = :instrumentNotes\n " +
                 "WHERE id = :id";
 
@@ -183,7 +181,6 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
         in.addValue("instrumentLot", instrumentDto.getInstrumentLot());
         in.addValue("instrumentManufacturer", instrumentDto.getInstrumentManufacturer());
         in.addValue("instrumentPurchaseDate", instrumentDto.getInstrumentPurchaseDate());
-        in.addValue("userPhoto", instrumentDto.getUserPhoto());
         in.addValue("instrumentNotes", instrumentDto.getInstrumentNotes());
 
         return namedParameterJdbcTemplate.update(sqlQuery, in) > 0;
@@ -199,7 +196,6 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
                 "i.lot as instrumentLot,\n" +
                 "i.manufacturer as instrumentManufacturer,\n" +
                 "i.purchase_date as instrumentPurchaseDate,\n" +
-                "i.user_photo as userPhoto,\n" +
                 "i.notes as instrumentNotes \n" +
                 "FROM instruments AS i\n" +
                 "WHERE i.id = :instrumentId";
@@ -216,7 +212,6 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
             instrumentDto.setInstrumentLot(resultSet.getNString("instrumentLot"));
             instrumentDto.setInstrumentManufacturer(resultSet.getNString("instrumentManufacturer"));
             instrumentDto.setInstrumentPurchaseDate(resultSet.getDate("instrumentPurchaseDate"));
-            instrumentDto.setUserPhoto(resultSet.getBytes("userPhoto"));
             instrumentDto.setInstrumentNotes(resultSet.getNString("instrumentNotes"));
 
             return instrumentDto;

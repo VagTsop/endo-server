@@ -32,7 +32,7 @@ public class InstrumentController {
             @RequestParam Optional<String> name,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<Date> purchaseDateFrom,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Optional<Date> purchaseDateTo,
-            @RequestParam Optional<Collection<Long>> instrumentSeriesCodesList
+            @RequestParam Optional<Collection<String>> instrumentSeriesCodesList
 
     ) {
         Page<InstrumentDto> retVal = instrumentService.getInstrumentsList(pageable, name.orElse(null), purchaseDateFrom.orElse(null), purchaseDateTo.orElse(null), instrumentSeriesCodesList.orElse(null));

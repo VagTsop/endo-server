@@ -1,21 +1,29 @@
 package org.endofusion.endoserver.response;
 
 import org.endofusion.endoserver.dto.InstrumentSeriesDetails;
+import org.endofusion.endoserver.dto.InstrumentSeriesDto;
+import org.endofusion.endoserver.request.GenericRequest;
 
+import java.util.Collection;
 import java.util.List;
 
-public class InstrumentSeriesResponse {
+public class InstrumentSeriesResponse extends GenericRequest {
 
     private Long instrumentSeriesId;
 
-    private Long instrumentSeriesCode;
+    private Long instrumentsCount;
+
+    private String instrumentSeriesCode;
 
     private List<InstrumentSeriesDetails> instrumentSeriesDetails;
+
+    private Collection<String> connectedInstrumentsIds;
 
     public InstrumentSeriesResponse() {
     }
 
-    public InstrumentSeriesResponse(Long instrumentSeriesCode, List<InstrumentSeriesDetails> instrumentSeriesDetails) {
+    public InstrumentSeriesResponse(Long id, String instrumentSeriesCode, List<InstrumentSeriesDetails> instrumentSeriesDetails) {
+        this.id = id;
         this.instrumentSeriesCode = instrumentSeriesCode;
         this.instrumentSeriesDetails = instrumentSeriesDetails;
     }
@@ -28,12 +36,20 @@ public class InstrumentSeriesResponse {
         this.instrumentSeriesId = instrumentSeriesId;
     }
 
-    public Long getInstrumentSeriesCode() {
+    public String getInstrumentSeriesCode() {
         return instrumentSeriesCode;
     }
 
-    public void setInstrumentSeriesCode(Long instrumentSeriesCode) {
+    public void setInstrumentSeriesCode(String instrumentSeriesCode) {
         this.instrumentSeriesCode = instrumentSeriesCode;
+    }
+
+    public Collection<String> getConnectedInstrumentsIds() {
+        return connectedInstrumentsIds;
+    }
+
+    public void setConnectedInstrumentsIds(Collection<String> connectedInstrumentsIds) {
+        this.connectedInstrumentsIds = connectedInstrumentsIds;
     }
 
     public List<InstrumentSeriesDetails> getInstrumentSeriesDetails() {
@@ -44,4 +60,19 @@ public class InstrumentSeriesResponse {
         this.instrumentSeriesDetails = instrumentSeriesDetails;
     }
 
+    public Long getInstrumentsCount() {
+        return instrumentsCount;
+    }
+
+    public void setInstrumentsCount(Long instrumentsCount) {
+        this.instrumentsCount = instrumentsCount;
+    }
+
+    public InstrumentSeriesResponse(InstrumentSeriesDto instrumentSeriesDto) {
+        this.setInstrumentSeriesCode(instrumentSeriesDto.getInstrumentSeriesCode());
+        this.setConnectedInstrumentsIds(instrumentSeriesDto.getConnectedInstrumentsIds());
+        this.setName(instrumentSeriesDto.getName());
+        this.setDescription(instrumentSeriesDto.getDescription());
+        this.setInstrumentsCount(instrumentSeriesDto.getInstrumentsCount());
+    }
 }

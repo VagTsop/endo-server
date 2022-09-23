@@ -2,6 +2,7 @@ package org.endofusion.endoserver.controller;
 
 import org.endofusion.endoserver.dto.InstrumentDto;
 import org.endofusion.endoserver.dto.InstrumentSeriesDto;
+import org.endofusion.endoserver.request.InstrumentRequest;
 import org.endofusion.endoserver.request.InstrumentSeriesRequest;
 import org.endofusion.endoserver.response.InstrumentSeriesResponse;
 import org.endofusion.endoserver.service.InstrumentSeriesService;
@@ -22,7 +23,7 @@ public class InstrumentSeriesController {
     private InstrumentSeriesService instrumentSeriesService;
 
     @RequestMapping("/get-instrument-series-list")
-    public ResponseEntity<List<InstrumentSeriesResponse>> getInstrumentList() {
+    public ResponseEntity<List<InstrumentSeriesResponse>> getInstrumentSeriesList() {
 
         List<InstrumentSeriesResponse> dtos = instrumentSeriesService.getInstrumentSeriesList();
 
@@ -35,6 +36,11 @@ public class InstrumentSeriesController {
         return ResponseEntity.status(HttpStatus.OK).body(instrumentSeriesService.createInstrumentSeries(dto));
     }
 
+    @PutMapping("/update-instrument-series")
+    public ResponseEntity<Boolean> update(@RequestParam Long id, @RequestBody InstrumentSeriesRequest request) {
+        InstrumentSeriesDto instrumentSeriesDto = new InstrumentSeriesDto(request, id, true);
+        return ResponseEntity.status(HttpStatus.OK).body(instrumentSeriesService.updateInstrumentSeries(instrumentSeriesDto));
+    }
 
     @GetMapping("/fetch-available-instruments")
     public ResponseEntity<List<InstrumentDto>> fetchAvailableInstruments() {
@@ -44,9 +50,19 @@ public class InstrumentSeriesController {
 
     @GetMapping("/fetch-instruments-by-instrument-series-code")
     public ResponseEntity<List<InstrumentSeriesDto>> fetchInstrumentsByInstrumentSeriesCode(
-            @RequestParam long qrCode) {
+            @RequestParam String qrCode) {
         List<InstrumentSeriesDto> retVal = instrumentSeriesService.fetchInstrumentsByInstrumentSeriesCode(qrCode);
         return ResponseEntity.status(HttpStatus.OK).body(retVal);
     }
 
+    @GetMapping("/get-instrument-series-by-id")
+    public ResponseEntity<List<InstrumentDto>> getById(@RequestParam Long id) {
+        List<InstrumentDto> retVal = instrumentSeriesService.getInstrumentSeriesById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(retVal);
+    }
+
+    @RequestMapping("/delete-instrument-series")
+    public ResponseEntity<Boolean> deleteInstrumentSeries(@RequestBody Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(instrumentSeriesService.deleteInstrumentSeries(id));
+    }
 }

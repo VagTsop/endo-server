@@ -16,7 +16,7 @@ public interface InstrumentRepository {
 
     long createInstrument(InstrumentDto instrumentDto);
 
-    boolean updateInstrument(InstrumentDto sicDto);
+    boolean updateInstrument(InstrumentDto instrumentDto);
 
     InstrumentDto getInstrumentById(long id);
 

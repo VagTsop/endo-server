@@ -35,7 +35,12 @@ public class InstrumentSeriesServiceImpl implements InstrumentSeriesService {
     }
 
     @Override
-    public List<InstrumentSeriesDto> fetchInstrumentsByInstrumentSeriesCode(long qrCode) {
+    public boolean updateInstrumentSeries(InstrumentSeriesDto dto) {
+        return instrumentSeriesRepository.updateInstrumentSeries(dto);
+    }
+
+    @Override
+    public List<InstrumentSeriesDto> fetchInstrumentsByInstrumentSeriesCode(String qrCode) {
         return instrumentSeriesRepository.fetchInstrumentsByInstrumentSeriesCode(qrCode);
     }
 
@@ -47,10 +52,11 @@ public class InstrumentSeriesServiceImpl implements InstrumentSeriesService {
 
         // loop list with instrumentCodes
         for (InstrumentDto tempInstrumentDto : instrumentDtos) {
-           Long instrumentSeriesCode = tempInstrumentDto.getInstrumentSeriesCode(); // get instrument code
+             Long id = tempInstrumentDto.getId();
+             String instrumentSeriesCode = tempInstrumentDto.getInstrumentSeriesCode(); // get instrument code
              List<InstrumentSeriesDetails> instrumentSeriesDetailsList = new ArrayList<>(); // create instrument details list
             for (InstrumentSeriesDto tempInstrumentSeriesDto : instrumentSeriesDtos) {
-                if (tempInstrumentSeriesDto.getInstrumentSeriesCode().longValue() != instrumentSeriesCode.longValue()) {
+                if (!tempInstrumentSeriesDto.getInstrumentSeriesCode().equals(instrumentSeriesCode)) {
                     continue;
                 } else {
                     InstrumentSeriesDetails instrumentSeriesDetails = new InstrumentSeriesDetails();
@@ -60,9 +66,19 @@ public class InstrumentSeriesServiceImpl implements InstrumentSeriesService {
                     instrumentSeriesDetailsList.add(instrumentSeriesDetails);
                 }
             }
-            InstrumentSeriesResponse instrumentSeriesResponse = new InstrumentSeriesResponse(instrumentSeriesCode, instrumentSeriesDetailsList);
+            InstrumentSeriesResponse instrumentSeriesResponse = new InstrumentSeriesResponse(id,instrumentSeriesCode, instrumentSeriesDetailsList);
             instrumentSeriesResponseList.add(instrumentSeriesResponse);
         }
         return instrumentSeriesResponseList;
+    }
+
+    @Override
+    public List<InstrumentDto> getInstrumentSeriesById(long id) {
+        return instrumentSeriesRepository.getInstrumentSeriesById(id);
+    }
+
+    @Override
+    public boolean deleteInstrumentSeries(Long id) {
+        return instrumentSeriesRepository.deleteInstrumentSeries(id);
     }
 }
