@@ -11,7 +11,11 @@ import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
-    User register(String firstName, String lastName, String username, String email, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException;
+    User register(String firstName, String lastName, String username, String email, String password, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException;
+
+    void passwordReset(String email, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException, EmailNotFoundException;
+
+    String changePassword(String code, String password) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException, EmailNotFoundException, TokenNotFoundException;
 
     List<User> getUsers();
 

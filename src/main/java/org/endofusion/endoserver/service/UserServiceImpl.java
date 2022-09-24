@@ -82,12 +82,71 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
     }
 
+    public void passwordReset(String email, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException, EmailNotFoundException {
+
+        User user = userRepository.findUserByEmail(email);
+
+        if (user == null) {
+            throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
+        }
+
+        String randomCode = UUID.randomUUID().toString();
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                randomCode,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(20),
+                user
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        emailService.sendResetPasswordEmail(user, siteURL, confirmationToken);
+    }
+
     @Override
-    public User register(String firstName, String lastName, String username, String email, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException {
-       // validateNewUsernameAndEmail(EMPTY, username, email);
+    public String changePassword(String code, String passsword) throws TokenNotFoundException {
+      //  user.setPassword(encodePassword(password));
+     //   userRepository.save(user);
+        ConfirmationToken confirmationToken = confirmationTokenService
+                .getToken(code)
+                .orElseThrow(() ->
+                        new TokenNotFoundException(TOKEN_NOT_FOUND));
+
+        if (confirmationToken.getConfirmedAt() != null) {
+            return EmailStatus.ALREADY_CONFIRMED;
+        }
+
+        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            return EmailStatus.EXPIRED;
+        }
+
+        confirmationTokenService.setConfirmedAt(code);
+        User newPassword = confirmationToken.getUser();
+        newPassword.setPassword(encodePassword(passsword));
+        return "Password Changed Successfully";
+    }
+
+    @Override
+    public void resetPassword(String email) throws MessagingException, EmailNotFoundException, IOException {
+        User user = userRepository.findUserByEmail(email);
+        if (user == null) {
+            throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
+        }
+        String password = generatePassword();
+        user.setPassword(encodePassword(password));
+        userRepository.save(user);
+        LOGGER.info("New user password: " + password);
+        emailService.sendNewPasswordEmail(user.getFirstName(), password, user.getEmail());
+    }
+
+        @Override
+    public User register(String firstName, String lastName, String username, String email, String password, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException {
+        validateNewUsernameAndEmail(EMPTY, username, email);
         User user = new User();
         user.setUserId(generateUserId());
-        String password = generatePassword();
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setUsername(username);
@@ -201,19 +260,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.save(currentUser);
         saveProfileImage(currentUser, profileImage);
         return currentUser;
-    }
-
-    @Override
-    public void resetPassword(String email) throws MessagingException, EmailNotFoundException, IOException {
-        User user = userRepository.findUserByEmail(email);
-        if (user == null) {
-            throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
-        }
-        String password = generatePassword();
-        user.setPassword(encodePassword(password));
-        userRepository.save(user);
-        LOGGER.info("New user password: " + password);
-        emailService.sendNewPasswordEmail(user.getFirstName(), password, user.getEmail());
     }
 
     @Override

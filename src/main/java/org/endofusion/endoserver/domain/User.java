@@ -26,6 +26,8 @@ public class User implements Serializable {
     private String[] authorities;
     private boolean isActive;
     private boolean isNotLocked;
+    @Transient
+    private String code;
 
     public User() {
     }
@@ -176,5 +178,13 @@ public class User implements Serializable {
 
     public void setNotLocked(boolean notLocked) {
         isNotLocked = notLocked;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

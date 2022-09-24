@@ -67,15 +67,35 @@ public class UserController extends ExceptionHandling {
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody User user, HttpServletRequest request) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException {
-        User newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail(), getSiteURL(request));
+        User newUser = userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail(), user.getPassword(), getSiteURL(request));
         return new ResponseEntity<>(newUser, OK);
     }
+
+    @PostMapping("/password-reset")
+    public ResponseEntity<HttpResponse> passwordReset(@RequestBody String email, HttpServletRequest request) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException, EmailNotFoundException {
+        userService.passwordReset(email, getPasswordResetURL(request));
+        return response(OK, EMAIL_SENT + email);
+    }
+
+    @RequestMapping(value = "/change-password", method = RequestMethod.POST)
+    public ResponseEntity<HttpResponse> changePassword(@PathParam("code") String code, @RequestBody String password) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException, EmailNotFoundException, TokenNotFoundException {
+        String message = userService.changePassword(code,password);
+        return response(OK, message);
+    }
+
 
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
         String port = Integer.toString(request.getLocalPort());
 
         return siteURL.replace(port, "4200").replace(request.getServletPath(), "/register");
+    }
+
+    private String getPasswordResetURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+        String port = Integer.toString(request.getLocalPort());
+
+        return siteURL.replace(port, "4200").replace(request.getServletPath(), "/password-reset");
     }
 
     @RequestMapping(value = "/verify", method = RequestMethod.POST)
