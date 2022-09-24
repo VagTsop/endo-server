@@ -82,9 +82,43 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
     }
 
+    public void passwordReset(String email, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException, EmailNotFoundException {
+
+        User user = userRepository.findUserByEmail(email);
+
+        if (user == null) {
+            throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
+        }
+
+        String randomCode = UUID.randomUUID().toString();
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                randomCode,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(20),
+                user
+        );
+
+        emailService.sendResetPasswordEmail(user, siteURL, confirmationToken);
+    }
+
+
     @Override
+    public void resetPassword(String email) throws MessagingException, EmailNotFoundException, IOException {
+        User user = userRepository.findUserByEmail(email);
+        if (user == null) {
+            throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
+        }
+        String password = generatePassword();
+        user.setPassword(encodePassword(password));
+        userRepository.save(user);
+        LOGGER.info("New user password: " + password);
+        emailService.sendNewPasswordEmail(user.getFirstName(), password, user.getEmail());
+    }
+
+        @Override
     public User register(String firstName, String lastName, String username, String email, String password, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException {
-       // validateNewUsernameAndEmail(EMPTY, username, email);
+        validateNewUsernameAndEmail(EMPTY, username, email);
         User user = new User();
         user.setUserId(generateUserId());
         user.setFirstName(firstName);
@@ -200,19 +234,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.save(currentUser);
         saveProfileImage(currentUser, profileImage);
         return currentUser;
-    }
-
-    @Override
-    public void resetPassword(String email) throws MessagingException, EmailNotFoundException, IOException {
-        User user = userRepository.findUserByEmail(email);
-        if (user == null) {
-            throw new EmailNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
-        }
-        String password = generatePassword();
-        user.setPassword(encodePassword(password));
-        userRepository.save(user);
-        LOGGER.info("New user password: " + password);
-        emailService.sendNewPasswordEmail(user.getFirstName(), password, user.getEmail());
     }
 
     @Override

@@ -71,11 +71,24 @@ public class UserController extends ExceptionHandling {
         return new ResponseEntity<>(newUser, OK);
     }
 
+    @PostMapping("/password-reset")
+    public ResponseEntity<HttpResponse> passwordReset(@RequestBody String email, HttpServletRequest request) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException, EmailNotFoundException {
+        userService.passwordReset(email, getPasswordResetURL(request));
+        return response(OK, EMAIL_SENT + email);
+    }
+
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
         String port = Integer.toString(request.getLocalPort());
 
         return siteURL.replace(port, "4200").replace(request.getServletPath(), "/register");
+    }
+
+    private String getPasswordResetURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+        String port = Integer.toString(request.getLocalPort());
+
+        return siteURL.replace(port, "4200").replace(request.getServletPath(), "/password-reset");
     }
 
     @RequestMapping(value = "/verify", method = RequestMethod.POST)
