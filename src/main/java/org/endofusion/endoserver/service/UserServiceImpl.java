@@ -99,9 +99,35 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 user
         );
 
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
         emailService.sendResetPasswordEmail(user, siteURL, confirmationToken);
     }
 
+    @Override
+    public String changePassword(String code, String passsword) throws TokenNotFoundException {
+      //  user.setPassword(encodePassword(password));
+     //   userRepository.save(user);
+        ConfirmationToken confirmationToken = confirmationTokenService
+                .getToken(code)
+                .orElseThrow(() ->
+                        new TokenNotFoundException(TOKEN_NOT_FOUND));
+
+        if (confirmationToken.getConfirmedAt() != null) {
+            return EmailStatus.ALREADY_CONFIRMED;
+        }
+
+        LocalDateTime expiredAt = confirmationToken.getExpiresAt();
+
+        if (expiredAt.isBefore(LocalDateTime.now())) {
+            return EmailStatus.EXPIRED;
+        }
+
+        confirmationTokenService.setConfirmedAt(code);
+        User newPassword = confirmationToken.getUser();
+        newPassword.setPassword(encodePassword(passsword));
+        return "Password Changed Successfully";
+    }
 
     @Override
     public void resetPassword(String email) throws MessagingException, EmailNotFoundException, IOException {

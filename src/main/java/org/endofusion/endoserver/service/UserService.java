@@ -15,6 +15,8 @@ public interface UserService {
 
     void passwordReset(String email, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException, EmailNotFoundException;
 
+    String changePassword(String code, String password) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException, EmailNotFoundException, TokenNotFoundException;
+
     List<User> getUsers();
 
     User findUserByUsername(String username);

@@ -77,6 +77,13 @@ public class UserController extends ExceptionHandling {
         return response(OK, EMAIL_SENT + email);
     }
 
+    @RequestMapping(value = "/change-password", method = RequestMethod.POST)
+    public ResponseEntity<HttpResponse> changePassword(@PathParam("code") String code, @RequestBody String password) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException, EmailNotFoundException, TokenNotFoundException {
+        String message = userService.changePassword(code,password);
+        return response(OK, message);
+    }
+
+
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
         String port = Integer.toString(request.getLocalPort());
