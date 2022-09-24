@@ -43,6 +43,7 @@ import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 @RequestMapping(path = {"/", "/api/user"})
 public class UserController extends ExceptionHandling {
     public static final String EMAIL_SENT = "An email with a new password was sent to: ";
+    public static final String RESET_PASSWORD_EMAIL_SENT = "An email for reset password was sent to: ";
     public static final String USER_DELETED_SUCCESSFULLY = "User deleted successfully";
     public static final String RESEND_VERIFICATION_EMAIL = "A New Verification Email has been sent to your Email Account";
     private AuthenticationManager authenticationManager;
@@ -74,7 +75,7 @@ public class UserController extends ExceptionHandling {
     @PostMapping("/password-reset")
     public ResponseEntity<HttpResponse> passwordReset(@RequestBody String email, HttpServletRequest request) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException, EmailNotFoundException {
         userService.passwordReset(email, getPasswordResetURL(request));
-        return response(OK, EMAIL_SENT + email);
+        return response(OK, RESET_PASSWORD_EMAIL_SENT + email);
     }
 
     @RequestMapping(value = "/change-password", method = RequestMethod.POST)
