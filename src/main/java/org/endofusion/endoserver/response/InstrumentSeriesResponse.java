@@ -15,6 +15,8 @@ public class InstrumentSeriesResponse extends GenericRequest {
 
     private String instrumentSeriesCode;
 
+    private String instrumentLot;
+
     private List<InstrumentSeriesDetails> instrumentSeriesDetails;
 
     private Collection<String> connectedInstrumentsIds;
@@ -60,6 +62,14 @@ public class InstrumentSeriesResponse extends GenericRequest {
         this.instrumentSeriesDetails = instrumentSeriesDetails;
     }
 
+    public String getInstrumentLot() {
+        return instrumentLot;
+    }
+
+    public void setInstrumentLot(String instrumentLot) {
+        this.instrumentLot = instrumentLot;
+    }
+
     public Long getInstrumentsCount() {
         return instrumentsCount;
     }
@@ -73,6 +83,7 @@ public class InstrumentSeriesResponse extends GenericRequest {
         this.setConnectedInstrumentsIds(instrumentSeriesDto.getConnectedInstrumentsIds());
         this.setName(instrumentSeriesDto.getName());
         this.setDescription(instrumentSeriesDto.getDescription());
+        this.setInstrumentLot(instrumentSeriesDto.getInstrumentLot());
         this.setInstrumentsCount(instrumentSeriesDto.getInstrumentsCount());
     }
 }

@@ -4,6 +4,7 @@ public class InstrumentSeriesDetails {
 
     String instrumentName;
     String instrumentDescription;
+    String instrumentLot;
     Long instrumentsCount;
 
     public String getInstrumentName() {
@@ -20,6 +21,14 @@ public class InstrumentSeriesDetails {
 
     public void setInstrumentDescription(String instrumentDescription) {
         this.instrumentDescription = instrumentDescription;
+    }
+
+    public String getInstrumentLot() {
+        return instrumentLot;
+    }
+
+    public void setInstrumentLot(String instrumentLot) {
+        this.instrumentLot = instrumentLot;
     }
 
     public Long getInstrumentsCount() {

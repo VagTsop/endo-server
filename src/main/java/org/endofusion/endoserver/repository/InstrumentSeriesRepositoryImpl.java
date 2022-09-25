@@ -29,7 +29,7 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
     @Override
     public List<InstrumentDto> fetchAvailableInstruments() {
 
-        String sqlQuery = "select i.id as id, i.name as name, i.description AS description \n" +
+        String sqlQuery = "select i.id as id, i.name as name, i.description AS description, i.lot AS instrumentLot \n" +
                 "from instruments as i where available = 1 \n";
         return namedParameterJdbcTemplate.query(sqlQuery, new BeanPropertyRowMapper<>(InstrumentDto.class));
     }
@@ -44,7 +44,7 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
 
         String groupByClause = "GROUP BY instrumentSeriesCode, name, description  order by instrumentSeriesCode \n";
 
-        String sqlQuery = "Select i.name AS name, i.description AS description, ins.id AS id,\n" +
+        String sqlQuery = "Select i.name AS name, i.description AS description, i.lot AS instrumentLot, ins.id AS id,\n" +
                 "ins.instrument_series_qr_code  AS instrumentSeriesCode,  COUNT(name) as instrumentsCount \n" +
                 sqlFromClause + sqlWhereClause + groupByClause;
 
@@ -152,7 +152,7 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
     @Override
     public List<InstrumentDto> getInstrumentSeriesById(long id) {
 
-        String sqlQuery = "SELECT i.id as id, i.name as name, i.description AS description, ins.instrument_series_qr_code as instrumentSeriesCode \n" +
+        String sqlQuery = "SELECT i.id as id, i.name as name, i.description AS description, i.lot AS instrumentLot, ins.instrument_series_qr_code as instrumentSeriesCode \n" +
                 "FROM instruments as i \n" +
                 "INNER JOIN instruments_series as ins on i.instrument_series_id = ins.id AND ins.id = :id";
 

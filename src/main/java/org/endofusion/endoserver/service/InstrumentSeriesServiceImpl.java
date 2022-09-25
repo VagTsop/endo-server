@@ -62,6 +62,7 @@ public class InstrumentSeriesServiceImpl implements InstrumentSeriesService {
                     InstrumentSeriesDetails instrumentSeriesDetails = new InstrumentSeriesDetails();
                     instrumentSeriesDetails.setInstrumentName(tempInstrumentSeriesDto.getName());
                     instrumentSeriesDetails.setInstrumentDescription(tempInstrumentSeriesDto.getDescription());
+                    instrumentSeriesDetails.setInstrumentLot(tempInstrumentSeriesDto.getInstrumentLot());
                     instrumentSeriesDetails.setInstrumentsCount(tempInstrumentSeriesDto.getInstrumentsCount());
                     instrumentSeriesDetailsList.add(instrumentSeriesDetails);
                 }
