@@ -3,7 +3,6 @@ package org.endofusion.endoserver.response;
 import org.endofusion.endoserver.dto.InstrumentSeriesDetails;
 import org.endofusion.endoserver.dto.InstrumentSeriesDto;
 import org.endofusion.endoserver.request.GenericRequest;
-
 import java.util.Collection;
 import java.util.List;
 

@@ -2,7 +2,6 @@ package org.endofusion.endoserver.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.http.HttpStatus;
-
 import java.util.Date;
 
 public class HttpResponse {

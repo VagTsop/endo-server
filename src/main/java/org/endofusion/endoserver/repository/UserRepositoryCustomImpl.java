@@ -1,6 +1,5 @@
 package org.endofusion.endoserver.repository;
 
-import org.endofusion.endoserver.dto.InstrumentDto;
 import org.endofusion.endoserver.dto.SortField;
 import org.endofusion.endoserver.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -159,8 +155,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 "last_name = :lastName,\n " +
                 "email = :email,\n " +
                 "is_not_locked = :locked,\n " +
-                "is_active = :status,\n " +
-                "profile_image = :profileImage\n " +
+                "is_active = :status \n " +
                 "WHERE id = :id";
 
         MapSqlParameterSource in = new MapSqlParameterSource();
@@ -172,7 +167,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         in.addValue("email", userDto.getEmail());
         in.addValue("status", userDto.getStatus());
         in.addValue("locked", userDto.getLocked());
-        in.addValue("profileImage", userDto.getProfileImage());
 
         return namedParameterJdbcTemplate.update(sqlQuery, in) > 0;
     }
@@ -187,8 +181,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 "u.last_name as lastName,\n" +
                 "u.email as email,\n" +
                 "u.is_active as status, \n" +
-                "u.is_not_locked as locked, \n" +
-                "u.profile_image as profileImage \n" +
+                "u.is_not_locked as locked \n" +
                 "FROM user AS u\n" +
                 "WHERE u.id = :id";
 
@@ -205,7 +198,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
             userDto.setEmail(resultSet.getNString("email"));
             userDto.setStatus(resultSet.getBoolean("status"));
             userDto.setLocked(resultSet.getBoolean("locked"));
-            userDto.setProfileImage(resultSet.getBytes("profileImage"));
 
             return userDto;
         });

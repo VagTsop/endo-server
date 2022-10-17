@@ -2,7 +2,6 @@ package org.endofusion.endoserver.dto;
 
 import org.endofusion.endoserver.request.GenericRequest;
 import org.endofusion.endoserver.request.InstrumentRequest;
-
 import java.util.Collection;
 import java.util.Date;
 

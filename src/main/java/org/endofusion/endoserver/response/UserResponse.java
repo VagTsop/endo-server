@@ -12,7 +12,6 @@ public class UserResponse extends GenericRequest {
     private String email;
     private Boolean status;
     private Boolean locked;
-    private byte[] profileImage;
 
     public UserResponse(UserDto userDto) {
         this.setId(userDto.getId());
@@ -23,7 +22,6 @@ public class UserResponse extends GenericRequest {
         this.setEmail(userDto.getEmail());
         this.setStatus(userDto.getStatus());
         this.setLocked(userDto.getLocked());
-        this.setProfileImage(userDto.getProfileImage());
     }
 
     public String getUserId() {
@@ -80,13 +78,5 @@ public class UserResponse extends GenericRequest {
 
     public void setLocked(Boolean locked) {
         this.locked = locked;
-    }
-
-    public byte[] getProfileImage() {
-        return profileImage;
-    }
-
-    public void setProfileImage(byte[] profileImage) {
-        this.profileImage = profileImage;
     }
 }

@@ -4,7 +4,6 @@ import com.sun.mail.smtp.SMTPTransport;
 import org.endofusion.endoserver.domain.User;
 import org.endofusion.endoserver.domain.token.ConfirmationToken;
 import org.springframework.stereotype.Service;
-
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -15,7 +14,6 @@ import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
-
 import static javax.mail.Message.RecipientType.CC;
 import static javax.mail.Message.RecipientType.TO;
 import static org.endofusion.endoserver.constant.EmailConstant.*;

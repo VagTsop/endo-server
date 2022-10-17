@@ -3,7 +3,6 @@ package org.endofusion.endoserver.service;
 import org.endofusion.endoserver.dto.InstrumentDto;
 import org.endofusion.endoserver.dto.InstrumentSeriesDto;
 import org.endofusion.endoserver.response.InstrumentSeriesResponse;
-
 import java.util.List;
 
 public interface InstrumentSeriesService {

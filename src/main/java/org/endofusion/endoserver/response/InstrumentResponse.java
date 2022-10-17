@@ -1,9 +1,7 @@
 package org.endofusion.endoserver.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.endofusion.endoserver.dto.InstrumentDto;
 import org.endofusion.endoserver.request.GenericRequest;
-
 import java.util.Date;
 
 public class InstrumentResponse extends GenericRequest {
