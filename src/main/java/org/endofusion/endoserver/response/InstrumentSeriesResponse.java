@@ -3,7 +3,6 @@ package org.endofusion.endoserver.response;
 import org.endofusion.endoserver.dto.InstrumentSeriesDetails;
 import org.endofusion.endoserver.dto.InstrumentSeriesDto;
 import org.endofusion.endoserver.request.GenericRequest;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -14,6 +13,8 @@ public class InstrumentSeriesResponse extends GenericRequest {
     private Long instrumentsCount;
 
     private String instrumentSeriesCode;
+
+    private String instrumentLot;
 
     private List<InstrumentSeriesDetails> instrumentSeriesDetails;
 
@@ -60,6 +61,14 @@ public class InstrumentSeriesResponse extends GenericRequest {
         this.instrumentSeriesDetails = instrumentSeriesDetails;
     }
 
+    public String getInstrumentLot() {
+        return instrumentLot;
+    }
+
+    public void setInstrumentLot(String instrumentLot) {
+        this.instrumentLot = instrumentLot;
+    }
+
     public Long getInstrumentsCount() {
         return instrumentsCount;
     }
@@ -73,6 +82,7 @@ public class InstrumentSeriesResponse extends GenericRequest {
         this.setConnectedInstrumentsIds(instrumentSeriesDto.getConnectedInstrumentsIds());
         this.setName(instrumentSeriesDto.getName());
         this.setDescription(instrumentSeriesDto.getDescription());
+        this.setInstrumentLot(instrumentSeriesDto.getInstrumentLot());
         this.setInstrumentsCount(instrumentSeriesDto.getInstrumentsCount());
     }
 }

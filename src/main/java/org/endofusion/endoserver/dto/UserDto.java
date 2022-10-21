@@ -9,6 +9,8 @@ public class UserDto extends GenericRequest {
 
     private String username;
 
+    private String password;
+
     private String firstName;
 
     private String lastName;
@@ -18,8 +20,6 @@ public class UserDto extends GenericRequest {
     private Boolean status;
 
     private Boolean locked;
-
-    private byte[] profileImage;
 
     public UserDto() {
     }
@@ -42,8 +42,8 @@ public class UserDto extends GenericRequest {
         this.setLastName(request.getLastName());
         this.setUsername(request.getUsername());
         this.setEmail(request.getEmail());
+        this.setPassword(request.getPassword());
         this.setStatus(request.getStatus());
-        this.setProfileImage(request.getProfileImage());
         this.setLocked(request.getLocked());
         if (isUpdate) {
             this.setId(id);
@@ -64,6 +64,14 @@ public class UserDto extends GenericRequest {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFirstName() {
@@ -96,14 +104,6 @@ public class UserDto extends GenericRequest {
 
     public void setStatus(Boolean status) {
         this.status = status;
-    }
-
-    public byte[] getProfileImage() {
-        return profileImage;
-    }
-
-    public void setProfileImage(byte[] profileImage) {
-        this.profileImage = profileImage;
     }
 
     public Boolean getLocked() {

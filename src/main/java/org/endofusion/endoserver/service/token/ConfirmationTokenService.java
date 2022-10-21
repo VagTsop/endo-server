@@ -1,9 +1,7 @@
 package org.endofusion.endoserver.service.token;
 
 import org.endofusion.endoserver.domain.token.ConfirmationToken;
-
 import java.util.Optional;
-
 
 public interface ConfirmationTokenService {
 

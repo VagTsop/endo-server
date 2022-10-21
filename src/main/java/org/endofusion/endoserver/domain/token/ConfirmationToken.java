@@ -1,7 +1,6 @@
 package org.endofusion.endoserver.domain.token;
 
 import org.endofusion.endoserver.domain.User;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;

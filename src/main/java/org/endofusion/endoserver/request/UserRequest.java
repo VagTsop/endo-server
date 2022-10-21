@@ -12,11 +12,11 @@ public class UserRequest extends GenericRequest{
 
     private String email;
 
+    private String password;
+
     private Boolean status;
 
     private Boolean locked;
-
-    private byte[] profileImage;
 
     public String getUserId() {
         return userId;
@@ -58,6 +58,14 @@ public class UserRequest extends GenericRequest{
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Boolean getStatus() {
         return status;
     }
@@ -72,13 +80,5 @@ public class UserRequest extends GenericRequest{
 
     public void setLocked(Boolean locked) {
         this.locked = locked;
-    }
-
-    public byte[] getProfileImage() {
-        return profileImage;
-    }
-
-    public void setProfileImage(byte[] profileImage) {
-        this.profileImage = profileImage;
     }
 }

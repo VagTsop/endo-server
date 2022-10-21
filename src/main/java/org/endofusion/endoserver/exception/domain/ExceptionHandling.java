@@ -100,12 +100,6 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR_MSG);
     }
 
-    @ExceptionHandler(NotAnImageFileException.class)
-    public ResponseEntity<HttpResponse> notAnImageFileException(NotAnImageFileException exception) {
-        LOGGER.error(exception.getMessage());
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
-    }
-
     @ExceptionHandler(NoResultException.class)
     public ResponseEntity<HttpResponse> notFoundException(NoResultException exception) {
         LOGGER.error(exception.getMessage());

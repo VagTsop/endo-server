@@ -7,7 +7,6 @@ import org.endofusion.endoserver.repository.InstrumentSeriesRepository;
 import org.endofusion.endoserver.response.InstrumentSeriesResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +61,7 @@ public class InstrumentSeriesServiceImpl implements InstrumentSeriesService {
                     InstrumentSeriesDetails instrumentSeriesDetails = new InstrumentSeriesDetails();
                     instrumentSeriesDetails.setInstrumentName(tempInstrumentSeriesDto.getName());
                     instrumentSeriesDetails.setInstrumentDescription(tempInstrumentSeriesDto.getDescription());
+                    instrumentSeriesDetails.setInstrumentLot(tempInstrumentSeriesDto.getInstrumentLot());
                     instrumentSeriesDetails.setInstrumentsCount(tempInstrumentSeriesDto.getInstrumentsCount());
                     instrumentSeriesDetailsList.add(instrumentSeriesDetails);
                 }

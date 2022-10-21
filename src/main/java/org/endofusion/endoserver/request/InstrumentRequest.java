@@ -1,6 +1,5 @@
 package org.endofusion.endoserver.request;
 
-import java.util.Collection;
 import java.util.Date;
 
 public class InstrumentRequest extends GenericRequest {

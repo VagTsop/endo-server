@@ -2,7 +2,6 @@ package org.endofusion.endoserver.dto;
 
 import org.endofusion.endoserver.request.GenericRequest;
 import org.endofusion.endoserver.request.InstrumentSeriesRequest;
-
 import java.util.Collection;
 
 public class InstrumentSeriesDto extends GenericRequest {

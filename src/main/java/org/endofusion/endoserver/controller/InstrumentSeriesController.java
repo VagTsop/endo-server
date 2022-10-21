@@ -2,7 +2,6 @@ package org.endofusion.endoserver.controller;
 
 import org.endofusion.endoserver.dto.InstrumentDto;
 import org.endofusion.endoserver.dto.InstrumentSeriesDto;
-import org.endofusion.endoserver.request.InstrumentRequest;
 import org.endofusion.endoserver.request.InstrumentSeriesRequest;
 import org.endofusion.endoserver.response.InstrumentSeriesResponse;
 import org.endofusion.endoserver.service.InstrumentSeriesService;
@@ -10,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 
 @CrossOrigin(origins = "*")
 @RestController
