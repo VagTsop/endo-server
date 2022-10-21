@@ -28,7 +28,6 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import static org.apache.logging.log4j.util.Strings.EMPTY;
 import static org.endofusion.endoserver.constant.UserImplConstants.*;
 import static org.endofusion.endoserver.enumeration.Role.*;
 
@@ -277,11 +276,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public long createUser(UserDto dto, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, MessagingException {
-
+        String randomPassword = RandomStringUtils.randomAlphanumeric(10);
        // validateNewUsernameAndEmail(EMPTY, dto.getUsername(),  dto.getEmail());
         User user = new User();
         user.setUserId(dto.getUserId());
-        user.setPassword(encodePassword(dto.getPassword()));
+        user.setPassword(encodePassword(randomPassword));
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setUsername(dto.getUsername());
@@ -304,7 +303,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        emailService.sendVerificationEmail(user, siteURL, confirmationToken);
+        emailService.sendVerificationEmailWithPassword(user,randomPassword, siteURL, confirmationToken);
         LOGGER.info("New user password: " + user.getPassword());
 
         return user.getId();

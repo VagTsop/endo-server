@@ -87,7 +87,7 @@ public class UserController extends ExceptionHandling {
         return response(OK, message);
     }
 
-    @RequestMapping(value = "/resend", method = RequestMethod.POST)
+    @PostMapping("/resend")
     public ResponseEntity<HttpResponse> resendToken(@PathParam("code") String code, HttpServletRequest request) throws IOException, MessagingException, TokenNotFoundException {
         userService.resend(code, getSiteURL(request));
         return response(OK, RESEND_VERIFICATION_EMAIL);

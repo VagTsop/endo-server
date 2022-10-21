@@ -11,17 +11,6 @@ public class SecurityConstant {
     public static final String FORBIDDEN_MESSAGE = "You need to log in to access this page";
     public static final String ACCESS_DENIED_MESSAGE = "You do not have permission to access this page";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
-    public static final String[] PUBLIC_URLS = { "/api/user/login", "/api/user/register", "/api/user/password-reset", "/api/user/change-password/**", "/api/user/verify/**", "/api/user/resend/**" };
+    public static final String[] PUBLIC_URLS = { "/api/user/login", "/api/user/register", "/api/user/password-reset", "/api/user/change-password", "/api/user/verify", "/api/user/resend" };
   //  public static final String[] PUBLIC_URLS = { "**" };
 }
-
-
-//    if (httpRequest.url.includes(`${this.authenticationService.host}/user/change-password?code=${httpRequest.url./password-resetsplit('=')[1]}`)) {
-//            return httpHandler.handle(httpRequest);
-//            }
-//            if (httpRequest.url.includes(`${this.authenticationService.host}/user/verify?code=${httpRequest.body}`)) {
-//            return httpHandler.handle(httpRequest);
-//            }
-//            if (httpRequest.url.includes(`${this.authenticationSPUBLIC_URLService.host}/user/resend?code=${httpRequest.body}`)) {
-//            return httpHandler.handle(httpRequest);
-//            }
