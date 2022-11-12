@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        emailService.sendResetPasswordEmail(user, siteURL, confirmationToken);
+        emailService.sendEmail(user, siteURL, confirmationToken,4, null);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setPassword(encodePassword(password));
         user.setActive(false);
         user.setNotLocked(true);
-        user.setRole(ROLE_USER.name());
+        user.setRole(ROLE_ADMIN.name());
         user.setAuthorities(ROLE_USER.getAuthorities());
         String randomCode = UUID.randomUUID().toString();
         userRepository.save(user);
@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        emailService.sendVerificationEmail(user, siteURL, confirmationToken);
+        emailService.sendEmail(user, siteURL, confirmationToken, 1, null);
         LOGGER.info("New user password: " + password);
         return user;
     }
@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
             confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-            emailService.sendVerificationEmail(confirmationToken.getUser(), siteURL, confirmationToken);
+            emailService.sendEmail(confirmationToken.getUser(), siteURL, confirmationToken, 1,null);
         }
 
         return true;
@@ -187,7 +187,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         confirmationTokenService.setConfirmedAt(verificationCode);
 
         enableUser(confirmationToken.getUser().getEmail());
-        emailService.sendNewPasswordEmail(confirmationToken.getUser().getFirstName(), confirmationToken.getUser().getPassword(), confirmationToken.getUser().getEmail());
+        emailService.sendEmail(confirmationToken.getUser(),null,null, 2,null);
         return EmailStatus.VALID;
     }
 
@@ -290,28 +290,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setNotLocked(dto.getLocked());
         user.setRole(ROLE_USER.name());
         user.setAuthorities(ROLE_USER.getAuthorities());
-
         String randomCode = UUID.randomUUID().toString();
         userRepository.save(user);
-
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 randomCode,
                 LocalDateTime.now(),
                 LocalDateTime.now().plusMinutes(20),
                 user
         );
-
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-
-        emailService.sendVerificationEmailWithPassword(user,randomPassword, siteURL, confirmationToken);
-        LOGGER.info("New user password: " + user.getPassword());
-
+       emailService.sendEmail(user, siteURL, confirmationToken,3, randomPassword);
+        LOGGER.info("New user password: " + randomPassword);
         return user.getId();
     }
 
     @Override
     public boolean updateUser(UserDto dto) {
-
         return userRepository.updateUser(dto);
     }
 
