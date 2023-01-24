@@ -41,7 +41,7 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
 
         String sqlWhereClause = "WHERE i.id is not null\n";
 
-        String groupByClause = "GROUP BY instrumentSeriesCode, name, description  order by instrumentSeriesCode \n";
+        String groupByClause = "GROUP BY instrumentSeriesCode, name, description, instrumentLot, id  order by instrumentSeriesCode \n";
 
         String sqlQuery = "Select i.name AS name, i.description AS description, i.lot AS instrumentLot, ins.id AS id,\n" +
                 "ins.instrument_series_qr_code  AS instrumentSeriesCode,  COUNT(name) as instrumentsCount \n" +
@@ -57,7 +57,7 @@ public class InstrumentSeriesRepositoryImpl implements InstrumentSeriesRepositor
 
         String sqlQuery = "Select i.name as name, i.lot AS instrumentLot, i.description AS description, ins.instrument_series_qr_code as qrCode, COUNT(name) as instrumentsCount \n" +
                 "From instruments as i INNER JOIN instruments_series as ins ON i.instrument_series_id = ins.id \n" +
-                "and ins.instrument_series_qr_code= :qrCode GROUP BY name, description \n";
+                "and ins.instrument_series_qr_code= :qrCode GROUP BY name, instrumentLot, description, qrCode  \n";
         in.addValue("qrCode", qrCode);
         return namedParameterJdbcTemplate.query(sqlQuery, in, new BeanPropertyRowMapper<>(InstrumentSeriesDto.class));
     }
