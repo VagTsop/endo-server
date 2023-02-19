@@ -21,10 +21,19 @@ spec:
           - containerPort: 8080
           env:  
             - name: SPRING.DATASOURCE.URL
-              value: jdbc:mysql://mysql/endo?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC
+              valueFrom: 
+                 secretKeyRef:
+                   name: secret
+                   key: spring.datasource.url
             - name: SPRING.DATASOURCE.USERNAME
-              value: root
+              valueFrom: 
+                 secretKeyRef:
+                   name: secret
+                   key: spring.datasource.username
             - name: SPRING.DATASOURCE.PASSWORD
-              value: root
+              valueFrom: 
+                 secretKeyRef:
+                   name: secret
+                   key: spring.datasource.password
       imagePullSecrets:
         - name: dbsecret
