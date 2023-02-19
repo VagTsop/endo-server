@@ -83,7 +83,7 @@ public class EmailService {
         content.addBodyPart(messageBodyPart);
         messageBodyPart = new MimeBodyPart();
         DataSource fds = new FileDataSource
-                ("usr/src/endofusion.jpg");
+                ("usr/local/endofusion.jpg");
         messageBodyPart.setDataHandler(new DataHandler(fds));
         messageBodyPart.setHeader("Content-ID","<image>");
         messageBodyPart.setFileName("Endofusion");

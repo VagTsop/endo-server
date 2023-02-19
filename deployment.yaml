@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: endo-server-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: endo-server
+      tier: backend
+  template:
+    metadata: 
+      labels:
+        app: endo-server
+        tier: backend
+    spec: 
+      containers:
+        - name: endo-server-java
+          image: vagtsop/endo-endo-server-container:latest
+          ports:
+          - containerPort: 8080
+          env:  
+            - name: SPRING.DATASOURCE.URL
+              value: jdbc:mysql://mysql/endo?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC
+            - name: SPRING.DATASOURCE.USERNAME
+              value: root
+            - name: SPRING.DATASOURCE.PASSWORD
+              value: root
+      imagePullSecrets:
+        - name: dbsecret
