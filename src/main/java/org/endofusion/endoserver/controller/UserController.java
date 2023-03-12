@@ -72,13 +72,13 @@ public class UserController extends ExceptionHandling {
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
         String port = Integer.toString(request.getLocalPort());
-        return siteURL.replace("endo-server-service:8080", "http://127.0.0.1:57155").replace(request.getServletPath(), "/register");
+        return siteURL.replace("endo-server-service:8080", "testendo.mooo.com").replace(request.getServletPath(), "/register");
     }
 
     private String getPasswordResetURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
         String port = Integer.toString(request.getLocalPort());
-        return siteURL.replace("endo-server-service:8080","http://127.0.0.1:57155").replace(request.getServletPath(), "/password-reset");
+        return siteURL.replace("endo-server-service:8080","testendo.mooo.com").replace(request.getServletPath(), "/password-reset");
     }
 
     @RequestMapping(value = "/verify", method = RequestMethod.POST)
