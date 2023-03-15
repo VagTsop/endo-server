@@ -65,7 +65,7 @@ public class ExceptionHandling implements ErrorController {
 
     @ExceptionHandler(TokenNotFoundException.class)
     public ResponseEntity<HttpResponse> TokenNotFoundException(TokenNotFoundException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+        return createHttpResponse(NOT_FOUND, exception.getMessage());
     }
 
     @ExceptionHandler(UsernameExistException.class)
@@ -75,12 +75,12 @@ public class ExceptionHandling implements ErrorController {
 
     @ExceptionHandler(EmailNotFoundException.class)
     public ResponseEntity<HttpResponse> emailNotFoundException(EmailNotFoundException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+        return createHttpResponse(NOT_FOUND, exception.getMessage());
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<HttpResponse> userNotFoundException(UserNotFoundException exception) {
-        return createHttpResponse(BAD_REQUEST, exception.getMessage());
+        return createHttpResponse(NOT_FOUND, exception.getMessage());
     }
 
 //    @ExceptionHandler(NoHandlerFoundException.class)

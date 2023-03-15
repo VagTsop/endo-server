@@ -93,8 +93,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public String changePassword(String code, String passsword) throws TokenNotFoundException {
-      //  user.setPassword(encodePassword(password));
-     //   userRepository.save(user);
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(code)
                 .orElseThrow(() ->
@@ -118,7 +116,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         @Override
     public User register(String firstName, String lastName, String username, String email, String password, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException, IOException {
-       // validateNewUsernameAndEmail(EMPTY, username, email);
+        validateNewUsernameAndEmail("", username, email);
         User user = new User();
         user.setUserId(generateUserId());
         user.setFirstName(firstName);
@@ -129,7 +127,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setPassword(encodePassword(password));
         user.setActive(false);
         user.setNotLocked(true);
-        user.setRole(ROLE_ADMIN.name());
+        user.setRole(ROLE_USER.name());
         user.setAuthorities(ROLE_USER.getAuthorities());
         String randomCode = UUID.randomUUID().toString();
         userRepository.save(user);
@@ -277,7 +275,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public long createUser(UserDto dto, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, MessagingException {
         String randomPassword = RandomStringUtils.randomAlphanumeric(10);
-       // validateNewUsernameAndEmail(EMPTY, dto.getUsername(),  dto.getEmail());
+        validateNewUsernameAndEmail("", dto.getUsername(),  dto.getEmail());
         User user = new User();
         user.setUserId(dto.getUserId());
         user.setPassword(encodePassword(randomPassword));

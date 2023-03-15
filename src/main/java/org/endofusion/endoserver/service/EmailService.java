@@ -90,7 +90,7 @@ public class EmailService {
         content.addBodyPart(messageBodyPart);
         message.setFrom(new InternetAddress(FROM_EMAIL));
         message.setRecipients(TO, InternetAddress.parse(user.getEmail(), false));
-        message.setRecipients(CC, InternetAddress.parse(CC_EMAIL, false));
+     // message.setRecipients(CC, InternetAddress.parse(CC_EMAIL, false));
         message.setSubject(EMAIL_SUBJECT);
         message.setContent(content);
         message.setSentDate(new Date());
