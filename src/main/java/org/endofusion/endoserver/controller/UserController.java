@@ -10,6 +10,7 @@ import org.endofusion.endoserver.request.UserRequest;
 import org.endofusion.endoserver.response.UserResponse;
 import org.endofusion.endoserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -31,6 +32,11 @@ import static org.endofusion.endoserver.constant.UserImplConstants.*;
 @RestController
 @RequestMapping(path = {"/", "/api/user"})
 public class UserController extends ExceptionHandling {
+    @Value("${front.domain}")
+    private String frontDomain;
+    @Value("${back.domain}")
+    private String backDomain;
+
     private AuthenticationManager authenticationManager;
     private UserService userService;
     private JWTTokenProvider jwtTokenProvider;
@@ -71,12 +77,12 @@ public class UserController extends ExceptionHandling {
 
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
-        return siteURL.replace("http://endo-server-service:8080", "https://testendo.mooo.com").replace(request.getServletPath(), "/register");
+        return siteURL.replace(backDomain, frontDomain).replace(request.getServletPath(), "/register");
     }
 
     private String getPasswordResetURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
-        return siteURL.replace("http://endo-server-service:8080", "https://testendo.mooo.com").replace(request.getServletPath(), "/password-reset");
+        return siteURL.replace(backDomain, frontDomain).replace(request.getServletPath(), "/password-reset");
     }
 
     @RequestMapping(value = "/verify", method = RequestMethod.POST)

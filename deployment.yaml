@@ -35,5 +35,25 @@ spec:
                  secretKeyRef:
                    name: secret
                    key: spring.datasource.password
+            - name: JWT.SECRET
+              valueFrom: 
+                 secretKeyRef:
+                   name: secret
+                   key: jwt.secret
+            - name: FRONT.DOMAIN
+              valueFrom: 
+                 secretKeyRef:
+                   name: secret
+                   key: front.domain
+            - name: BACK.DOMAIN
+              valueFrom: 
+                 secretKeyRef:
+                   name: secret
+                   key: back.domain
+            - name: IMAGE.PATH
+              valueFrom: 
+                 secretKeyRef:
+                   name: secret
+                   key: image.path
       imagePullSecrets:
         - name: dbsecret

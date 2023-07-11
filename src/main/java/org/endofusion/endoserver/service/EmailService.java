@@ -3,6 +3,7 @@ package org.endofusion.endoserver.service;
 import com.sun.mail.smtp.SMTPTransport;
 import org.endofusion.endoserver.domain.User;
 import org.endofusion.endoserver.domain.token.ConfirmationToken;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -24,6 +25,8 @@ import static org.endofusion.endoserver.constant.EmailType.*;
 
 @Service
 public class EmailService {
+    @Value("${IMAGE.PATH}")
+    private String imagePath;
 
     public void sendEmail(User user, String siteUrl, ConfirmationToken confirmationToken, int emailIdentifier, String randomPassword) throws MessagingException {
         Message message = createEmail(user, siteUrl, confirmationToken, emailIdentifier, randomPassword);
@@ -83,7 +86,7 @@ public class EmailService {
         content.addBodyPart(messageBodyPart);
         messageBodyPart = new MimeBodyPart();
         DataSource fds = new FileDataSource
-                ("usr/local/endofusion.jpg");
+                (imagePath);
         messageBodyPart.setDataHandler(new DataHandler(fds));
         messageBodyPart.setHeader("Content-ID","<image>");
         messageBodyPart.setFileName("Endofusion");
