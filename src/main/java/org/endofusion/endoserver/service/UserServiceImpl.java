@@ -29,8 +29,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import static org.endofusion.endoserver.constant.UserImplConstants.*;
-import static org.endofusion.endoserver.enumeration.Role.*;
-
 
 @Service
 @Transactional
@@ -127,8 +125,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setPassword(encodePassword(password));
         user.setActive(false);
         user.setNotLocked(true);
-        user.setRole(ROLE_USER.name());
-        user.setAuthorities(ROLE_USER.getAuthorities());
+        user.setRole("ROLE_USER");
+        user.setAuthorities(new String[]{"ROLE_USER"});
         String randomCode = UUID.randomUUID().toString();
         userRepository.save(user);
 
@@ -272,6 +270,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.fetchEmails();
     }
 
+    public long fetchLastUserId(){
+        return userRepository.fetchLastUserId();
+    }
+
     @Override
     public long createUser(UserDto dto, String siteURL) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, MessagingException {
         String randomPassword = RandomStringUtils.randomAlphanumeric(10);
@@ -286,8 +288,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setJoinDate(new Date());
         user.setActive(dto.getStatus());
         user.setNotLocked(dto.getLocked());
-        user.setRole(ROLE_USER.name());
-        user.setAuthorities(ROLE_USER.getAuthorities());
+        user.setRole(dto.getRole().getName());
+        user.setAuthorities(dto.getRole().getAuthorities());
         String randomCode = UUID.randomUUID().toString();
         userRepository.save(user);
         ConfirmationToken confirmationToken = new ConfirmationToken(
@@ -297,7 +299,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 user
         );
         confirmationTokenService.saveConfirmationToken(confirmationToken);
-       emailService.sendEmail(user, siteURL, confirmationToken,3, randomPassword);
+        emailService.sendEmail(user, siteURL, confirmationToken, 3, randomPassword);
         LOGGER.info("New user password: " + randomPassword);
         return user.getId();
     }

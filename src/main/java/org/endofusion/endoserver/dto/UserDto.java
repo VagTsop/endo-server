@@ -2,6 +2,7 @@ package org.endofusion.endoserver.dto;
 
 import org.endofusion.endoserver.request.GenericRequest;
 import org.endofusion.endoserver.request.UserRequest;
+import org.endofusion.endoserver.response.RoleDTO;
 
 public class UserDto extends GenericRequest {
 
@@ -16,6 +17,8 @@ public class UserDto extends GenericRequest {
     private String lastName;
 
     private String email;
+
+    private RoleDTO role;
 
     private Boolean status;
 
@@ -34,6 +37,17 @@ public class UserDto extends GenericRequest {
         this.locked = locked;
     }
 
+    public UserDto(String userId, String username, String firstName, String lastName, String email, RoleDTO role, Boolean status, Boolean locked) {
+        this.userId = userId;
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.role = role;
+        this.status = status;
+        this.locked = locked;
+    }
+
     public UserDto(UserRequest request, Long id, boolean isUpdate) {
         this.setName(request.getName());
         this.setDescription(request.getDescription());
@@ -42,6 +56,7 @@ public class UserDto extends GenericRequest {
         this.setLastName(request.getLastName());
         this.setUsername(request.getUsername());
         this.setEmail(request.getEmail());
+        this.setRole(request.getRole());
         this.setPassword(request.getPassword());
         this.setStatus(request.getStatus());
         this.setLocked(request.getLocked());
@@ -113,4 +128,10 @@ public class UserDto extends GenericRequest {
     public void setLocked(Boolean locked) {
         this.locked = locked;
     }
+
+    public RoleDTO getRole() {
+        return role;
+    }
+
+    public void setRole(RoleDTO role) { this.role = role;}
 }

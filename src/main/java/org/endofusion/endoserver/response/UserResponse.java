@@ -10,6 +10,7 @@ public class UserResponse extends GenericRequest {
     private String firstName;
     private String lastName;
     private String email;
+    private RoleDTO role;
     private Boolean status;
     private Boolean locked;
 
@@ -20,6 +21,7 @@ public class UserResponse extends GenericRequest {
         this.setFirstName(userDto.getFirstName());
         this.setLastName(userDto.getLastName());
         this.setEmail(userDto.getEmail());
+        this.setRole(userDto.getRole());
         this.setStatus(userDto.getStatus());
         this.setLocked(userDto.getLocked());
     }
@@ -58,6 +60,14 @@ public class UserResponse extends GenericRequest {
 
     public String getEmail() {
         return email;
+    }
+
+    public void setRole(RoleDTO role) {
+        this.role =  role;
+    }
+
+    public RoleDTO getRole() {
+        return role;
     }
 
     public void setEmail(String email) {

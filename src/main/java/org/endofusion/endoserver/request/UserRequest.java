@@ -1,5 +1,7 @@
 package org.endofusion.endoserver.request;
 
+import org.endofusion.endoserver.response.RoleDTO;
+
 public class UserRequest extends GenericRequest{
 
     private String userId;
@@ -11,6 +13,8 @@ public class UserRequest extends GenericRequest{
     private String lastName;
 
     private String email;
+
+    private RoleDTO role;
 
     private String password;
 
@@ -81,4 +85,10 @@ public class UserRequest extends GenericRequest{
     public void setLocked(Boolean locked) {
         this.locked = locked;
     }
+
+    public RoleDTO getRole() {
+        return role;
+    }
+
+    public void setRole(RoleDTO role) { this.role = role;}
 }

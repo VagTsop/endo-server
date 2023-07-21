@@ -23,4 +23,6 @@ public interface UserRepositoryCustom {
     UserDto getUserById(long id);
 
     boolean deleteUser(Long id);
+
+    long fetchLastUserId();
 }

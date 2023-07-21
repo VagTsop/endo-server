@@ -41,4 +41,6 @@ public interface UserService {
     UserDto getUserById(long id);
 
     boolean deleteUser(Long id);
+
+    long fetchLastUserId();
 }

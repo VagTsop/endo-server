@@ -2,6 +2,7 @@ package org.endofusion.endoserver.repository;
 
 import org.endofusion.endoserver.dto.SortField;
 import org.endofusion.endoserver.dto.UserDto;
+import org.endofusion.endoserver.response.RoleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -106,6 +107,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         validSortColumns.add("LAST_NAME");
         validSortColumns.add("USERNAME");
         validSortColumns.add("EMAIL");
+        validSortColumns.add("ROLE");
         validSortColumns.add("STATUS");
         validSortColumns.add("LOCKED");
 
@@ -136,7 +138,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 rowCountSql, in, Integer.class);
 
         String sqlQuery = "Select u.id as id, u.user_id as userId, u.username as username, u.first_name as firstName,\n" +
-                "u.last_name as lastName, u.email as email, u.is_active as status, u.is_not_locked as locked \n" +
+                "u.last_name as lastName, u.email as email,u.role as name, u.is_active as status, u.is_not_locked as locked \n" +
 
                 sqlFromClause + sqlWhereClause + sqlPaginationClause;
 
@@ -154,6 +156,8 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 "first_name = :firstName,\n " +
                 "last_name = :lastName,\n " +
                 "email = :email,\n " +
+                "role = :name,\n " +
+                "authorities = :authorities,\n " +
                 "is_not_locked = :locked,\n " +
                 "is_active = :status \n " +
                 "WHERE id = :id";
@@ -165,6 +169,8 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         in.addValue("firstName", userDto.getFirstName());
         in.addValue("lastName", userDto.getLastName());
         in.addValue("email", userDto.getEmail());
+        in.addValue("name", userDto.getRole().getName());
+        in.addValue("authorities", userDto.getRole().getAuthorities());
         in.addValue("status", userDto.getStatus());
         in.addValue("locked", userDto.getLocked());
 
@@ -180,6 +186,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 "u.first_name as firstName,\n" +
                 "u.last_name as lastName,\n" +
                 "u.email as email,\n" +
+                "u.role as name,\n" +
                 "u.is_active as status, \n" +
                 "u.is_not_locked as locked \n" +
                 "FROM user AS u\n" +
@@ -190,12 +197,15 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         return namedParameterJdbcTemplate.queryForObject(sqlQuery, in, (resultSet, i) -> {
 
             UserDto userDto = new UserDto();
+            RoleDTO roleDto = new RoleDTO();
             userDto.setId(resultSet.getLong("id"));
             userDto.setUserId(resultSet.getNString("userId"));
             userDto.setUsername(resultSet.getNString("username"));
             userDto.setFirstName(resultSet.getNString("firstName"));
             userDto.setLastName(resultSet.getNString("lastName"));
             userDto.setEmail(resultSet.getNString("email"));
+            roleDto.setName(resultSet.getNString("name"));
+            userDto.setRole(roleDto);
             userDto.setStatus(resultSet.getBoolean("status"));
             userDto.setLocked(resultSet.getBoolean("locked"));
 
@@ -214,5 +224,11 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         namedParameterJdbcTemplate.update(sqlQueryTwo, in);
 
         return true;
+    }
+
+    public long fetchLastUserId() {
+        String sqlQueryOne = "SELECT MAX(user_id) AS last_user_id FROM user;";
+        Long lastUserId = namedParameterJdbcTemplate.queryForObject(sqlQueryOne, new MapSqlParameterSource(), Long.class);
+        return (lastUserId != null) ? lastUserId : 0L; // Returning 0 if no user ID is found.
     }
 }

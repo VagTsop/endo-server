@@ -4,9 +4,11 @@ import org.endofusion.endoserver.domain.HttpResponse;
 import org.endofusion.endoserver.domain.User;
 import org.endofusion.endoserver.domain.UserPrincipal;
 import org.endofusion.endoserver.dto.UserDto;
+import org.endofusion.endoserver.enumeration.Role;
 import org.endofusion.endoserver.exception.domain.*;
 import org.endofusion.endoserver.provider.JWTTokenProvider;
 import org.endofusion.endoserver.request.UserRequest;
+import org.endofusion.endoserver.response.RoleDTO;
 import org.endofusion.endoserver.response.UserResponse;
 import org.endofusion.endoserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +25,10 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import static org.endofusion.endoserver.constant.SecurityConstant.JWT_TOKEN_HEADER;
 import static org.springframework.http.HttpStatus.*;
 import static org.endofusion.endoserver.constant.UserImplConstants.*;
@@ -131,6 +135,24 @@ public class UserController extends ExceptionHandling {
     public ResponseEntity<List<UserDto>> fetchUsernames() {
         List<UserDto> retVal = userService.fetchUsernames();
         return ResponseEntity.status(HttpStatus.OK).body(retVal);
+    }
+
+    @GetMapping("/fetch-roles")
+    public ResponseEntity<List<RoleDTO>> fetchRoles() {
+        List<RoleDTO> rolesWithAuthorities = Arrays.stream(Role.values())
+                .map(role -> {
+                    RoleDTO roleDTO = new RoleDTO();
+                    roleDTO.setName(role.name());
+                    roleDTO.setAuthorities(role.getAuthorities());
+                    return roleDTO;
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK).body(rolesWithAuthorities);
+    }
+    @GetMapping("/fetch-last-userid")
+    public ResponseEntity<Long>  fetchLastUserId(){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.fetchLastUserId());
     }
 
     @GetMapping("/fetch-firstnames")
