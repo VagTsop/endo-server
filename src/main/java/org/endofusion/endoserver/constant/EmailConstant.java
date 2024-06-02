@@ -3,7 +3,7 @@ package org.endofusion.endoserver.constant;
 public class EmailConstant {
     public static final String SIMPLE_MAIL_TRANSFER_PROTOCOL = "smtp";
     public static final String USERNAME = "vatsop52@gmail.com";
-    public static final String PASSWORD = "rqrzxksbwnfwnmty";
+    public static final String PASSWORD = "irbf vzof efof hhtg";
     public static final String FROM_EMAIL = "vatsop52@gmail.com";
     public static final String CC_EMAIL = "vatsop52@gmail.com";
     public static final String EMAIL_SUBJECT = "Endofusion";

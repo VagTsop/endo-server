@@ -53,6 +53,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().sessionManagement().sessionCreationPolicy(STATELESS)
                 .and().authorizeRequests()
                 .antMatchers(PUBLIC_URLS).permitAll()
+       //         .antMatchers("/ws/**").permitAll()
                 .antMatchers("/api/instruments/**").hasRole("ADMIN")
                 .antMatchers("/api/instruments-series/**").hasRole("ADMIN")
                 .antMatchers("/api/instruments-series/fetch-instruments-by-instrument-series-code").hasAnyRole("ADMIN","USER")

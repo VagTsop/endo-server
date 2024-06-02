@@ -125,8 +125,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setPassword(encodePassword(password));
         user.setActive(false);
         user.setNotLocked(true);
-        user.setRole("ROLE_USER");
-        user.setAuthorities(new String[]{"ROLE_USER"});
+        user.setRole("ROLE_ADMIN");
+        user.setAuthorities(new String[]{"ROLE_ADMIN","ROLE_USER"});
         String randomCode = UUID.randomUUID().toString();
         userRepository.save(user);
 
